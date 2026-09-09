@@ -1,5 +1,6 @@
 # Mathematics-Notes
-This repository will act as a place to keep my digitized notes from class, self study, and research. I am currently catching up my notes for Laplace transforms/Fourier Series and analysis and so they might not be completely up to date.
+This repository will act as a place to keep my digitized notes from class, self study, and research. I am currently catching up my notes for Laplace transforms/Fourier Series and analysis and so they might not be completely up to date.\
+
 I have finished the following books:
 - *Introduction to Laplace Transforms and Fourier Series* by Phil Dyke \
 
