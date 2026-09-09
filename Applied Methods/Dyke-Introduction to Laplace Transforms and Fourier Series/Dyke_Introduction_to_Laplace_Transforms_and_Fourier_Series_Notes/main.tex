@@ -1,0 +1,1850 @@
+\documentclass{report}
+\usepackage{graphicx} % Required for inserting images
+\usepackage[english]{babel}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amssymb}
+\usepackage[margin=.75in]{geometry}
+\usepackage{hyperref}
+\usepackage{amsfonts}
+\usepackage{mathrsfs}
+\usepackage[version=4]{mhchem}
+\usepackage{bigints}
+\usepackage{caption}
+\usepackage{xpatch}
+\usepackage{xr}
+\usepackage{enumitem}
+\externaldocument{VlahovskaResearch}
+\makeatletter
+\xpatchcmd{\@thm}{\thm@headpunct{.}}{\thm@headpunct{}}{}{}
+\makeatother
+
+\title{Phil Dyke-Introduction to Laplace Transforms and Fourier Series Notes}
+\author{Kyle Wang}
+\date{August 2026}
+\setlength{\parindent}{0pt}
+
+\newtheorem{theorem}{Theorem}[chapter]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+\newtheorem{exercise}{Exercise}[chapter]
+\theoremstyle{remark}
+\newtheorem*{work}{Work}
+
+\newcommand{\lapt}[1]{\mathscr{L}\left\{ #1\right\}}
+\newcommand{\inlt}[1]{\mathscr{L}^{-1} \left\{ #1 \right\}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\twen}{\hspace{20pt}}
+\newcommand{\od}[2]{\frac{d #1}{d#2}}
+\newcommand{\odt}[2]{\frac{d^2 #1}{d#2^2}}
+\newcommand{\pull}{\! \! \!}
+
+\begin{document}
+
+\maketitle
+\newpage
+\tableofcontents
+\newpage
+\begin{abstract}
+    This is the digitization of the notes and exercises to Phil Dyke's book on Laplace Transforms and Fourier series from Springer Undergraduate Mathematics Series. This is the first math book that I've read cover to cover and I quite like it. It was part of the reason why I switched into applied math and provides a lot of useful insights that help with higher level math. Part of the later exercises may not be included due to work done on a chalkboard (and I was too lazy to copy them over) or in another notebook which was lost due to water damage unfortunately.
+\end{abstract}
+\newpage
+\chapter{Introduction}
+\section{Elementary Properties}
+For a function $F(x)$ to have a Laplace transform, it must be of exponential order and be piecewise continuous on the interval $[0,\infty)$. To be of ``exponential order`` means that there exists an $M,\alpha \in \R$ and $M,\alpha >0$ such that $|F(x)| \leq Me^{\alpha t}$. We also assume that the function is Riemann integrable. We shall begin by proving some basic properties. Phil Dyke adopts the convention 
+\begin{equation*}
+    \lapt{F(t)} = f(s)
+\end{equation*}
+and as such, I will be adopting the same convention for consistency.
+\begin{theorem}[Linearity]
+\begin{equation*}
+    \lapt{aF_1(t) + bF_2(t)} = a\lapt{F_1(t)} + b\lapt{F_2(t)}
+\end{equation*}
+\end{theorem}
+\begin{proof}
+    \begin{equation*}
+    \begin{split}
+        \lapt{aF_1(t) + bF_2(t)}& = \int^\infty_0 (aF_1+bF_2)e^{-st} dt \\
+        &=a\int^\infty_0F_1e^{-st}dt + b\int^\infty_0F_2e^{-st}dt \\
+        &= a\lapt{F_1(t)} + b\lapt{F_2(t)}
+    \end{split}
+    \end{equation*}
+    This is assuming both $F_1$ and $F_2$ are of exponential order such that 
+    \begin{equation*}
+        |F_1(t)| \leq M_1 e^{\alpha_1t} \twen |F_2(t)| \leq M_2e^{\alpha_2t}
+    \end{equation*} 
+    and \begin{equation*}
+        \begin{split}
+            |aF_2+bF_2| &\leq |a||F_1| + |b||F_2| \\
+            &\leq (|a|M_1+|b|M_2)e^{\max\{ \alpha_1,\alpha_2 \}t}
+        \end{split}
+    \end{equation*}
+\end{proof}
+\begin{theorem}[First Shift Theorem]
+    If $F(t)$ is of exponential order such that $|F(t)| \leq Me^{\alpha t}$ for two positive numbers $M,\alpha \in \R$, then  $\lapt{e^{-bt}F(t)}=f(s+b)$ if $b\leq \alpha$.\label{theo:fst}
+\end{theorem}
+\begin{proof}
+    \begin{equation*}
+        \begin{split}
+            \lapt{e^{-bt}F(t)}&= \int^\infty_0 e^{-bt}F(t) e^{-st}dt \\ 
+            &= \int^\infty_0 F(t)e^{-(s+b)t}dt\\
+            &=f(s+b)
+        \end{split}
+    \end{equation*}
+\end{proof}
+We shall now find the Laplace transform of $F(t) = t$. We shall use integration by parts. 
+\begin{equation*}
+\begin{split}
+    \lapt{t} &= \int^\infty_0 te^{-st} dt \\
+    &= - \frac{t}{s}e^{-st} \Bigg|^\infty_0 - \frac{1}{s^2} e^{-st}\Bigg|^\infty_0 \\
+   & =0- \frac{1}{s^2}(0-1) \\
+   &= \frac{1}{s^2}
+\end{split}
+\end{equation*}
+\begin{corollary}
+The Laplace transform of $t^n$ is 
+    \begin{equation}
+        \lapt{t^n} = \frac{n!}{s^{n+1}}
+    \end{equation} \label{cor:tn}
+\end{corollary}
+\begin{proof}
+    \begin{equation*}
+    \begin{split}
+        \lapt{t^n} &= \int^\infty_0t^ne^{-st}dt\\
+        &= - \frac{t^n}{s}e^{-st}\Bigg|^\infty_0 + \int^\infty_0 \frac{nt^{n-1}}{s}e^{-st} dt \\
+        &= \frac{n}{s} \lapt{t^{n-1}}
+    \end{split}
+    \end{equation*}
+    One can verify the this result easily for the base case $n=2$. Now let's establish the recurrence relation
+    \begin{equation*}
+        \begin{split}
+            \lapt{t^{n+1}} = \frac{n+1}{s}\lapt{t^n} = \frac{n+1}{s}\frac{n!}{s^{n+1}} = \frac{(n+1)!}{s^{n+2}}
+        \end{split}
+    \end{equation*}
+\end{proof}
+The only trigonometric functions with valid Laplace Transforms are cosine and sine as the others all have singularities in finite time. We shall now find the Laplace Transforms of these two functions by considering the Laplace transform of $e^{it}$ by recalling Euler's formula.
+\begin{equation*}
+\begin{split}
+    e^{it} &= \cos t+i\sin t \\
+    \lapt{e^{it}} &= \lapt{\cos t} + i\lapt{\sin t}
+\end{split}
+\end{equation*}
+We get the above relation by the linearity property of the Laplace Transform and therefore the real part and imaginary parts of $\lapt{e^{it}}$ will correspond to the transforms of cos and sin respectively.
+\begin{equation*}
+    \begin{split}
+        \lapt{e^{it}} &=\int^\infty_0 e^{(i-s)t}dt \\
+        &=\frac{e^{(i-s)t}}{i-s} \Bigg|^\infty_0 \\
+        &=\frac{1}{s-i} \frac{s+i}{s+i} = \frac{s}{s^2+1} + i\frac{1}{s^2+1}
+    \end{split}
+\end{equation*}
+We have therefore established that 
+\begin{equation*}
+    \lapt{\cos t} = \frac{s}{s^2+1} \twen \lapt{\sin t} = \frac{1}{s^2+1}
+\end{equation*}
+If we do the same thing but for a generalized exponential $e^{ait}$ we get that 
+\begin{equation*}
+    \lapt{e^{ait}} = \frac{s}{s^2+a^2} +i\frac{a}{s^2+a^2}
+\end{equation*}
+\begin{example}
+    Find the Laplace transform of the sawtooth function 
+    \begin{equation*}
+    \begin{split}
+        F(t) &= \begin{cases}
+            t & 0\leq t \leq t_0 \\
+            2t_0-t & t_0 \leq t \leq 2t_0 \\
+            0 & t \geq 2t_0
+        \end{cases}
+        \\ \lapt{F(t)} &= \int^{t_0}_0te^{-st}dt + \int^{2t_0}_{t_0} (2t_0-t)e^{-st}dt \\
+        &=\frac{4}{s^2}e^{-st_0}\sinh ^2\left(\tfrac{1}{2} st_0\right)
+        \end{split}
+    \end{equation*}
+\end{example}
+\begin{theorem}
+    If $\lapt{F(t)} = f(s)$ then $\lapt{tF(t)} = -\od{}{s}f(s)$ and generally $\lapt{t^nF(t)} = (-1)^n \frac{d^n}{ds^n} f(s)$ \label{theo:1.5}
+\end{theorem}
+\begin{proof}
+    \begin{equation*}
+        \od{}{s}\lapt{F(t)} = \od{}{s} \int^\infty_0F(t)e^{-st}dt = -\int^\infty_0 te^{-st}dt = -\lapt{te^{-st}} 
+    \end{equation*}
+    To prove the more general case, we shall proceed with induction under the assumption that $\lapt{t^nF(t)} = (-1)^n \od{^n}{s^n}f(s)$
+    \begin{equation*}
+        \begin{split}
+            \lapt{t^nF(t)} &= (-1)^n \od{^n}{s^n}f(s) \\
+            \od{}{s}\lapt{t^nF(t)} &= (-1)^n \od{^{n+1}}{s^{n+1}}f(s)\\
+            \od{}{s} \int^\infty_0 t^nF(t)e^{-st}dt &= (-1)^n \od{^{n+1}}{s^{n+1}}f(s) \\
+            \int^\infty_0t^{n+1}F(t)e^{-st}dt &=(-1)^n \od{^{n+1}}{s^{n+1}} f(s) 
+        \end{split}
+    \end{equation*}
+    and the proof is complete.
+\end{proof}
+\section{Exercises}
+
+\addtocounter{exercise}{1}
+% Exercise 2
+\begin{exercise}
+    Determine from first principles the Laplace transform of the following functions: 
+    \begin{enumerate}[label=(\alph*)]
+        \item $e^{kt}$
+        \item $t^2$
+        \item $\cosh t$
+    \end{enumerate}
+\end{exercise}
+\begin{work}
+    I'm not doing this from first principles since it's kind of tedious and just integration by parts like twenty times so I will just be applying the theorems directly.
+    \begin{enumerate} [label=(\alph*)]
+        \item Applying the First Shift Theorem \ref{theo:fst} for $F(t)=1$ we get
+        \begin{equation*}
+            \lapt{e^{kt}} = \frac{1}{s-k}
+        \end{equation*}
+        \item Applying Corollary \ref{cor:tn} we get
+        \begin{equation*}
+            \lapt{t^2} = \frac{2}{s^3}
+        \end{equation*}
+        \item \begin{equation*}
+        \begin{split}
+            \lapt{\cosh t} &= \frac{1}{2}\left( \lapt{e^t} + \lapt{e^{-t}}\right) = \frac{1}{2} \left( \frac{1}{s-1}+\frac{1}{s+1} \right) \\
+            &=\frac{2s}{2(s^2-1)} = \frac{s}{s^2-1}
+        \end{split}
+    \end{equation*}
+    \end{enumerate}
+    
+\end{work}
+
+% Exercise 3
+\begin{exercise}
+    Find the Laplace transforms of the following functions: 
+    \begin{enumerate}  [label=(\alph*)]
+        \item $t^2e^{-3t}$ 
+        \item $4t+6e^{4t}$ 
+        \item $e^{-4t}\sin(5t)$
+    \end{enumerate}
+\end{exercise}
+\begin{work} 
+\leavevmode
+    \begin{enumerate}[label=(\alph*)]
+        \item Applying the First Shift Theorem \ref{theo:fst} we get
+        \begin{equation*}
+            \lapt{t^2e^{-3t}} = \frac{2}{(s+3)^3}
+        \end{equation*}
+        \item Applying linearity we get
+        \begin{equation*}
+            \lapt{4t}+6\lapt{e^{4t}} = \frac{4}{s^2}+\frac{6}{s-4}
+        \end{equation*}
+        \item Applying the First Shift Theorem \ref{theo:fst} and subbing it into the Laplace Transform of a general exponential, we have 
+        \begin{equation*}
+            \lapt{e^{-4t}\sin (5t)} = \frac{5}{(s+4)^2+25}
+        \end{equation*}
+    \end{enumerate}
+\end{work}
+
+% Exercise 4
+\begin{exercise}
+    Find the Laplace Transform of the function $F(t)$ where $F(t)$ is given by 
+    \begin{equation*}
+        F(t) = \begin{cases}
+            t &0\leq t< 1 \\
+            2-t & 1 \leq t<2\\
+            0 & \text{otherwise}
+        \end{cases}
+    \end{equation*}
+\end{exercise}
+\begin{work}
+\begin{equation*}
+    \begin{split}
+        \lapt{F(t)} &= \int^1_0te^{-st} + \int^2_1 (2-t)e^{-st}dt \\
+        &= \frac{1}{s^2} - \frac{s+1}{s^2}e^{-s} + \frac{e^{-2s}((s-1)e^s+1)}{s^2} \\
+        &=\frac{1-(s+1)e^{-s}+((s-1)e^s+1)e^{-2s}}{s^2}\\
+        &=\frac{1-(s+1)e^{-s}+e^{-2s}+(s-1)e^{-s}}{s^2}\\ 
+        &= \frac{e^{-2s}-2e^{-s}+1}{s^2}\\
+        &=\frac{(e^{-s}-1)^2}{s^2}
+    \end{split}
+\end{equation*}
+\end{work}
+
+% Exercise 5
+\begin{exercise}
+    Use the property of Theorem \ref{theo:1.5} to determine the following Laplace transforms
+    \begin{enumerate} [label=(\alph*)]
+        \item $te^{2t}$ 
+        \item $t\cos (t)$ 
+        \item $t^2 \cos (t)$
+    \end{enumerate}
+\end{exercise}
+\begin{work}
+\leavevmode
+    \begin{enumerate} [label=(\alph*)]
+        \item \begin{equation*}
+            \lapt{te^{2t}}=-\od{}{s} \frac{1}{s-2} = \frac{1}{(s-2)^2}
+        \end{equation*}
+        \item \begin{equation*}
+            \lapt{t\cos t} =-\od{}{s} \frac{s}{s^2+1} = -\frac{s^2+1-2s^2}{(s^2+1)^2} = \frac{s^2-1}{(s^2+1)^2}
+        \end{equation*}
+        \item \begin{equation*}
+            \lapt{t^2\cos t}=-\od{}{s} \frac{s^2-1}{(s^2+1)^2} = \frac{2s(s^2+1)^2-(s^2-1)2(s^2+1)2s}{(s^2+1)^4} = \frac{2s^3-6s}{(s^2+1)^3}
+        \end{equation*}
+    \end{enumerate}
+\end{work}
+
+% Exercise 6
+\begin{exercise}
+    Find the Laplace transforms of the following functions:
+    \begin{enumerate} [label =(\alph*)]
+        \item $\sin(\omega t+\phi)$\\
+        \item $e^{5t}\cos t$
+    \end{enumerate}
+\end{exercise}
+\begin{work}
+\leavevmode
+    \begin{enumerate} [label=(\alph*)]
+        \item \begin{equation*}
+            \lapt{\sin(\omega t+\phi)} = \int^\infty_0 e^{-st}\sin (\omega t+\phi)dt =\frac{s\sin\phi+\omega \cos \phi}{\omega^2+s^2}
+        \end{equation*}
+        \item \begin{equation*}
+            \lapt{e^{5t}\cosh t} = \frac{s}{(s-5)^2-6^2}
+        \end{equation*}
+    \end{enumerate}
+\end{work}
+
+% Exercise 7
+\begin{exercise}
+    If $G(at+b)=F(t)$, determine the Laplace transform of G in terms of $\lapt{F} =\bar{f}(s)$ and a finite integral.
+\end{exercise}
+\begin{work}
+    Let us begin by considering the substitution $t=au+b$ so that $dt=adu$ for the integral 
+    \begin{equation*}
+        \lapt{G(t)} = \int^\infty_0e^{-st}G(t)dt
+    \end{equation*}
+    We therefore have that $G(t) = G(au+b) = F(u)$ and the above equation equals 
+    \begin{equation*}
+    \begin{split}
+        \int^\infty_{-b/a} ae^{-s(au+b)}F(u)du &= \int^\infty_{-b/a}ae^{-aus}e^{-sb}F(u)du \\
+        &=ae^{-sb}\int^\infty_{-b/a} e^{-asu}F(u)du\\
+        &=ae^{-sb}\int^\infty_0e^{-asu}F(u)du + ae^{-sb}\int^0_{-b/a}e^{-asu}F(u)du \\
+        &=ae^{-sb}\bar{f}(as)+ae^{-sb}\int^0_{-b/a}e^{-asu}F(u)du
+    \end{split}
+    \end{equation*}
+\end{work}
+
+% Exercise 8
+\begin{exercise}
+    Prove the following change of scale result:
+    \begin{equation*}
+        \lapt{F(at)}=\frac{1}{a}f\left( \frac{s}{a}\right)
+    \end{equation*}
+    Hence evaluate the Laplace transforms of the two functions:
+    \begin{enumerate}[label=(\alph*)]
+        \item $t\cos(6t)$
+        \item $t^2\cos(7t)$
+    \end{enumerate}
+\end{exercise}
+\begin{work}
+\leavevmode
+    \begin{proof}
+        The proof proceeds by making a substitution such that $u=at \rightarrow du = adt$
+        \begin{equation*}
+            \lapt{F(at)} = \int^\infty_0e^{-st}F(at)dt = \int^\infty_0e^{-s/a}F(u)\frac{1}{a}du = \frac{1}{a}f\left( \frac{s}{a} \right)
+        \end{equation*}
+    \end{proof}
+    \begin{enumerate}[label=(\alph*)]
+        \item 
+        \begin{equation*}
+            \begin{split}
+                \lapt{t\cos(6t)} &= -\od{}{s}\frac{1}{6}\frac{s/6}{(s/6)^2+1} = -\od{}{s}\frac{s}{s^2+36} \\
+                &=- \frac{s^2+36-s(2s)}{(s^2+36)^2} = - \frac{-s^2+36}{(s^2+36)^2} \\
+                &= \frac{s^2-36}{(s^2+36)^2}
+            \end{split}
+        \end{equation*}
+        \item 
+        \begin{equation*}
+            \begin{split}
+                \lapt{t^2\cos(7t)} &= -\od{}{s} \frac{s^2-49}{(s^2+49)^2}\\ &= -\frac{2s(s^2+49)^2-4s(s^2+49)(s^2-49)}{(s^2+49)^4} \\&=\frac{2s(s^2-147)}{(s^2+49)^3}
+            \end{split}
+        \end{equation*}
+    \end{enumerate}
+\end{work}
+
+
+
+
+
+\chapter{Further Properties of the Laplace Transform}
+\section{Derivative Property}
+\begin{theorem}
+    Suppose a differentiable function $F(t)$ has a Laplace transform $f(s)$. Then the Laplace transform of its derivative $F'(t)$ is 
+    \begin{equation*}
+        \lapt{F'(t)} = \int^\infty_0F'(t)e^{-st}dt = -F(0) + sf(s)  \label{theo:2.1}
+    \end{equation*}
+\end{theorem}
+\begin{proof}
+    We can easily prove this by integrating by parts once 
+    \begin{equation*}
+        \begin{split}
+            \lapt{F'(t)} &= \int^\infty_0 F'(t) e^{-st} dt \\
+            &= F(t)e^{-st}\Big|^\infty_0 +s\int^\infty_0F(t)e^{-st}dt \\
+            &= -F(0) + sf(s)
+        \end{split}
+    \end{equation*}
+\end{proof}
+We can state and prove the more general case of this property by using induction.
+\begin{theorem}
+    Suppose $F(t) \in C^n$, then the Laplace transform of its $n^{th}$ derivative is 
+    \begin{equation}
+        \lapt{F^{(n)}(t)}  = s^nf(s) -s^{n-1}F(0)-s^{n-2}F'(0) -\ldots-F^{(n-1)}(0) \label{eq:2.1}
+    \end{equation}
+\end{theorem}
+\begin{proof}
+          Let us start with the definition given in \eqref{eq:2.1} and perform some algebra
+          \begin{equation*}
+              \begin{split}
+                  \lapt{F^{(n)}(t)} &= s^nf(s) -s^{n-1}F(0)-s^{n-2}F'(0) -\ldots-F^{(n-1)}(0) \\
+                  & =s\left( s^{n-1}f(s) -s^{n-2}F(0)-s^{n-3}F'(0) -\ldots-F^{(n-2)}(0) \right) -F^{(n-1)}(0) \\
+                  &=s\lapt{F^{(n-1)}(t)} -F^{(n-1)}(0)
+              \end{split}
+          \end{equation*}
+          which we can verify easily by differentiating and, assuming that $F(t) \in C^{n+1}$, we can move the differentiation operator into the integral and perform an integration by parts to achieve our desired result 
+          \begin{equation*}
+              \begin{split}
+                  \od{}{t}\lapt{F^{(n)}(t)} & = \lapt{F^{n+1)}(t)} \\
+                  &= \int^\infty_0 F^{(n+1)}(t)e^{-st}dt \\
+                  &= F^{(n)}(t)e^{-st} \Big|^\infty_0 + s\int^\infty_0F^{(n)}(t)e^{-st}dt\\
+                  &=s\lapt{F^{(n)}(t)} -F^{(n)}(0)
+              \end{split}
+          \end{equation*}
+          Now we just need to verify the base case for $n=2$ which is easily proven by integrating by parts twice.
+\end{proof}
+This can be used to prove a result we proved previously. We know from before that the Laplace transform of $\sin(\omega t)=\frac{\omega^2}{s^2+\omega^2}$ and we know that $\od{}{t}(\sin (\omega t)) = \omega \cos (\omega t)$ and so thus 
+\begin{equation*}
+    \lapt{\omega \cos (\omega t)} = s \frac{\omega}{s^2+\omega^2} - 0 \rightarrow \lapt{\cos (\omega t)} = \frac{s}{s^2+\omega^2}
+\end{equation*}
+
+
+We can use this theorem to find the value of the function 
+\begin{equation*}
+    g(t) = \int^t_0 F(u)du
+\end{equation*}
+assuming that $F(t)$ is integrable and $g(t)$ is is of exponential order. We can see easily that $g(0)=0$ and $g'(t) = F(t)$ by the Fundamental Theorem of Calculus. 
+\begin{equation*}
+    \begin{split}
+        \lapt{g'(t)} &= s\bar{g}(s) - g(0) = f(s) = \lapt{F(t)} \\
+        \Rightarrow  \bar{g}(s) &= \frac{f(s)}{s} \\
+        \Rightarrow \lapt{\int^t_0F(u)du} &=\frac{f(s)}{s}
+    \end{split}
+\end{equation*}
+
+\begin{theorem}
+    If $\lapt{F(t)} = f(s)$, then $\displaystyle{\lapt{\frac{F(t)}{t}} = \int^\infty_s f(u)du}$ assuming that 
+    \begin{equation*}
+        \lapt{\frac{F(t)}{t} } \rightarrow \text{ as } s\rightarrow \infty  \label{theo:2.3}
+    \end{equation*}
+\end{theorem}
+\begin{proof}
+    Let $G(t)$ be the function $\frac{F(t)}{t}$ so that $F(t)= tG(t)$. Recalling Theorem \ref{theo:1.5}, we have that 
+    \begin{equation*}
+        \lapt{F(t)} = f(s) = -\od{}{s}\lapt{\frac{F(t)}{t}}
+    \end{equation*}
+    Integrating both sides from $s$ to $\infty$, we get 
+    \begin{equation*}
+        \int^\infty_s f(u)du = - \lapt{\frac{F(t)}{t}} \Bigg|^\infty_0 = 0 +\lapt{\frac{F(t)}{t}} 
+    \end{equation*}
+    under the assumption that 
+    \begin{equation*}
+        \lapt{\frac{F(t)}{t}} \rightarrow0 \text{ as } s\rightarrow \infty
+    \end{equation*}
+    
+\end{proof}
+Let us note that these two results above are the analogs of the derivative property in \eqref{eq:2.1} and Theorem \ref{theo:1.5}. That is to say, an integration in the $s$ domain is a division in the $t$ domain and vice versa.
+\\\\Now let $F(t) = \sin t$. Applying the result from Theorem \ref{theo:2.3}, we get that 
+\begin{equation*}
+    \begin{split}
+        \lapt{\frac{\sin t}{t}} &= \int^\infty _ s \frac{du}{1+u^2} \\
+        &= \tan ^{-1} (u) \Big|^\infty_s \\
+        &= \frac{\pi}{2} - \tan^{-1}(s) \\
+        &= \tan ^{-1} \left( \frac{1}{s}\right)
+    \end{split}
+\end{equation*}
+This is done by applying the identity 
+\begin{equation*}
+    \tan ^{-1} \left( \frac{1}{s}\right) + \tan^{-1}(s) = \frac{\pi}{2}
+\end{equation*}
+which we informally prove down below 
+\begin{equation*}
+    \begin{split}
+        f(x) & =\tan^{-1}x + \tan^{-1}\frac{1}{x}\\
+        \Rightarrow \tan (f(x)) &= \tan \left( \tan^{-1}x + \tan^{-1}\frac{1}{x} \right)\\
+        &= \frac{\tan (\tan^{-1}x) + \tan(\tan^{-1} \frac{1}{x})}{1-(\tan(\tan^{-1}x))(\tan(\tan^{-1} \frac{1}{x}))} \\
+        &= \frac{x + \frac{1}{x}}{1-1}
+    \end{split}
+\end{equation*}
+Since $\tan (f(x))$ is undefined for all $x$, then $f(x)$ must be constant. We know that tangent is always undefined when its argument is $\pm \frac{\pi}{2}$ and if $x>0$, then we know the output must be positive so the constant is $\frac{\pi}{2}$. \\\\ 
+Now let us study the Sine Integral function which is defined as
+\begin{equation*}
+    \operatorname{Si}(t) = \int^t_0 \frac{\sin u}{u}du
+\end{equation*}
+We use the previous result $\lapt{\frac{\sin t}{t}} = \tan^{-1}\frac{1}{s}$ to show that the Laplace transform of the Sine Integral function is 
+\begin{equation*}
+    \lapt{\operatorname{Si}(t)} = \lapt{\int^t_0 \frac{\sin u}{u}du} = \frac{1}{s} \lapt{\frac{\sin t}{t}} = \frac{1}{s}\tan^{-1}\frac{1}{s}
+\end{equation*}
+\section{The Heaviside Step Function}
+The Heaviside Unit Step function is defined as 
+\begin{equation*}
+    H(t) = \begin{cases}
+        0 &x< 0 \\
+        1 &x\geq 0
+    \end{cases}
+\end{equation*}
+The Laplace transform of the shifted unit step function is as follows 
+\begin{equation*}
+    \lapt{H(t-t_0)} = \int^\infty_{t_0} e^{-st}dt = -\frac{e^{-st}}{s} \Bigg|^\infty_0 = \frac{e^{-st_0}}{s}
+\end{equation*}
+Now let us prove the Second Shift Theorem.
+\begin{theorem} [Second Shift Theorem]
+    If $F(t)$ is a function of exponential order in $t$ and the Laplace transform of $\lapt{F(t)} = f(s)$ then 
+    \begin{equation*}
+        \lapt{H(t-t_0)F(t-t_0)} = e^{-st_0}f(s) \label{theo:sst}
+    \end{equation*}
+\end{theorem}
+\begin{proof}
+    \begin{equation*}
+        \begin{split}
+            \lapt{H(t-t_0)F(t-t_0)} &= \int^\infty_0H(t-t_0)F(t-t_0)e^{-st}dt \\
+            &= \int^\infty_{t_0} F(t-t_0)e^{-st} dt \\
+            & = \int^\infty_0 F(u) e^{-s(u+t_0)}du \\ 
+            &= e^{-st_0}\int^\infty_0F(u) e^{-su} du \\
+            &= e^{-st_0}f(s)
+        \end{split}
+    \end{equation*}
+    where we have made the substitution $u=t-t_0$ such that $du = dt$. Note, it is important that when you are applying the Second Shift theorem that the function $F(t)$ must have the SAME argument as $H(t)$. By this, I mean that if $H(t-t_0)$, the argument of $F(\tau)$ MUST be $\tau =t-t_0$.
+\end{proof}
+
+\section{Inverse Laplace Transforms}
+\begin{definition}
+    If $F(t)$ has the Laplace transform $f(s)$, then the inverse Laplace transform is uniquely defined (with the exception of functions whose Laplace transforms are 0) by 
+    \begin{equation*}
+        \inlt{f(s)} = F(t)
+    \end{equation*}
+\end{definition}
+\begin{theorem}
+    The inverse Laplace transform is linear.
+\end{theorem}
+\begin{proof}
+    We have already established the linearity of Laplace transform 
+    \begin{equation*}
+        \lapt{aF_1(t)+bF_2(t)} = af_1(s) + bf_2(s)
+    \end{equation*}
+    Applying the inverse gives 
+    \begin{equation*}
+        aF_1(t)+bF_2(t) = \inlt{af_1(s) + bf_2(s)} = a\inlt{f_1(s)} + b\inlt{f_2(s)}
+    \end{equation*}
+    and therefore the inverse Laplace transform is linear.
+\end{proof}
+In this present chapter, there is no systematic way to find the Inverse Laplace transform. The way to do this requires complex analysis and will not be touched on until Chapter 8. Inverting is therefore reliant on recognizing the forms of known Laplace transforms. 
+\section{Limiting Theorems}
+In the study of differential equations, the behaviors of systems for large values of $t$ or $s$ is an important of part of the study of asymptotics. We shall now prove some limiting theorems.
+\begin{theorem} [Initial Value]
+    If the indicated limits exist, then 
+    \begin{equation*}
+        \lim_{t\rightarrow 0} F(t) = \lim_{s\rightarrow \infty} sf(s)
+    \end{equation*}
+    where the left hand side is $F(0)$ or $\lim_{t\rightarrow 0^+}F(t)$ if $\lim_{t\rightarrow 0}F(t)$ isn't unique.
+\end{theorem}
+\begin{proof}
+    We start by using Theorem \ref{theo:2.1}. Assuming $F'(t)$ is of exponential order and is piecewise continuous, we then see 
+    \begin{equation*}
+    \begin{split}
+        \left| \int^\infty_0e^{-st}F'(t)dt \right| &\leq \int^\infty_0 |e^{-st}F'(t)|dt \\
+        & \leq \int^\infty_0e^{-st}e^{Mt} dt \\
+        &=-\frac{1}{M-s}
+    \end{split}
+    \end{equation*}
+    where we can bring the absolute value bars inside the integral through the triangle inequality. We therefore have that 
+    \begin{equation*}
+        \lapt{F'(t)} = sf(s) -F(0)\leq -\frac{1}{M-s}
+    \end{equation*}
+    and therefore as $s\rightarrow \infty$, $\lapt{F'(t)} \rightarrow 0$ and we can rearrange to get 
+    \begin{equation*}
+        \lim_{s\rightarrow \infty }sf(s) = F(0) =\lim_{t\rightarrow 0}F(t)
+    \end{equation*}
+\end{proof}
+
+\begin{theorem}[Final Value]
+    If the limits indicated exist, then 
+    \begin{equation*}
+        \lim_{t\rightarrow \infty} F(t) = \lim_{s\rightarrow 0}sf(s)
+    \end{equation*}
+\end{theorem}
+\begin{proof}
+    We once again start with result from Theorem \ref{theo:2.1} but we write out its integral form
+    \begin{equation}
+        \lapt{F'(t) } = \int^\infty_0e^{-st}F'(t)dt = sf(s) - F(0) \label{eq:2.2}
+    \end{equation}
+    Now we take the limit as $s\rightarrow 0$
+    \begin{equation*}
+        \begin{split}
+            \lim_{s\rightarrow 0} \int^\infty_0e^{-st}F'(t)dt &= \lim_{s\rightarrow0} \lim_{T\rightarrow \infty} \int^T_0e^{-st}F'(t)dt\\
+            &= \lim_{s\rightarrow0} \lim_{T\rightarrow \infty} [e^{-sT}F(T) = F(0)] \\
+            &= \lim_{T\rightarrow \infty} F(T) - F(0)
+        \end{split}
+    \end{equation*}
+    We have swapped the limits under the assumption that taking the $s$ limit first yields an equivalent value to taking the $T$ limit first and taking both limits at the same time which is a result from real analysis. Equating this with \eqref{eq:2.2}, we get 
+    \begin{equation*}
+        \lim_{t\rightarrow \infty} F(t) - F(0) = \lim_{s\rightarrow 0} sf(s) - F(0)
+    \end{equation*}
+    and the theorem is proved.
+\end{proof}
+
+An interesting application of the linearity of the Laplace transform is if $F(t)$ is an analytic function (as in we can represent it using a power series), we can effectively approximate the Laplace transform of $F(t)$ by multiplying each of the coefficients with the Laplace transform of $\lapt{t^n}$ which we already know the form of.
+
+
+
+\section{The Dirac-$\delta$ Function}
+I will now copy my notes on the delta function from my readings of Peter Olver's \textit{Introduction to Partial Differential Equations} because firstly, I think his book is so good and secondly, he introduces two different interpretations of the delta function that are nice to think about. \\\\
+There are two interpretations of the delta function: one as the limit of a series of functions and one as a linear functional. This is because the delta function isn't a function in the traditional but ``akshually a distribution'' which I've heard about 5 million times from every Youtube video that mentions a delta function.\\ $\newline$
+In the limit interpretation, we choose a sequence of smooth functions $g_n(x)$ and require the limit $\lim_{n\rightarrow \infty} g_n(x)=0 \hspace{4pt} \forall x\neq \xi$ where $\xi$ is the location we want the impulse to be located. The other requirement is that $\int^b_ag_n(x)dx = 1 \hspace{4pt} \forall n \in \mathbb{N}$. As such, $\delta_\xi(x) = \lim_{n\rightarrow \infty} g_n(x)$. One such example is $g_n(x) = \frac{n}{\pi (1+n^2x^2)}$. \\ $\newline$
+The other interpretation is the delta function as a linear functional. The most important property of the delta function is the sifting property.
+\begin{equation*}
+    \int^b_a\delta_\xi (x)u(x)dx = \int^b_a\delta_\xi(x)u(\xi)dx = u(\xi)\int^b_a\delta_\xi(x)dx = u(\xi) \text{ for } a < \xi < b
+\end{equation*} % Sifting Property
+We can define the delta function in this framework as a linear function $L_\xi :C^0[a,b] \mapsto \R$ that maps a continue function $u(x)$ to its value at $x=\xi$.
+ In a finite dimensional vector space, the operator $L:\R^n\mapsto \R$ is done by taking the dot product between the two. In an infinite dimensional function space, this is done by the inner product. In other words,
+ \begin{equation*}
+     L_g[u] = \langle g,u\rangle = \int_a^bg(x)u(x)dx
+ \end{equation*}
+The problem with this with regards to the delta function is that there does not exist a conventional function that satisfies the sifting property. Generalized functions are linear functionals acting on a function space but are intuitively a function through the $L^2$ inner product.\\\\
+Following the limit interpretation, let us take the series of Top Hat functions defined as 
+\begin{equation*}
+    T_p(t) = \begin{cases}
+        0 &t\leq -\frac{1}{T} \\
+        \tfrac{1}{2}T &-\frac{1}{T} < t < \frac{1}{T} \\
+        0 &t \geq\frac{1}{T}
+    \end{cases}
+\end{equation*}
+Assuming the integrals of the Top Hat function with a function $u(x)$ converges to $u(0)$, let us now delve into the Laplace transform of the delta function. Let us do this by taking the Laplace transform of the Top Hat function and then taking the limit as $T\rightarrow \infty$.
+\begin{equation*}
+    \begin{split}
+        \lapt{T_p(t)} &= \int^\infty _0 T_p(t)e^{-st}dt \\
+        &= \int^{\tfrac{1}{T}}_0\frac{1}{2}Te^{-st}dt \\
+        &= -\frac{T}{2s}e^{-st} \Bigg|_0^{\tfrac{1}{T}} \\
+        &= \frac{T}{2s} - \frac{T}{2s}e^{-\tfrac{s}{T}}
+    \end{split}
+\end{equation*}
+For large values of $T$, we have that 
+\begin{equation*}
+    e^{-\tfrac{s}{T}} \approx 1-\frac{s}{T} + O\left( \frac{1}{T^2}\right)
+\end{equation*}
+We then see that the Laplace transform of the Top Hat function as $T\rightarrow \infty$ is 
+\begin{equation*}
+    \frac{T}{2s} - \frac{T}{2s}e^{-\tfrac{s}{T}} \approx \frac{T}{2s} - \frac{T}{2s} +\frac{1}{2} + O\left( \frac{1}{T} \right) = \frac{1}{2} + O\left( \frac{1}{2} \right)
+\end{equation*}
+which goes to $\tfrac{1}{2}$ as $T\rightarrow \infty$. Usually in the study of Laplace transforms, we just define the Laplace transform of the delta function to be 1. We therefore use a different series of limiting functions to describe a delta function centered at $t=t_0$ using 
+\begin{equation*}
+    K(t) = \begin{cases}
+        0 &t\leq t_0 -\frac{1}{2T}\\
+        \frac{1}{2}T &t_0 -\frac{1}{2T}< t<t_0 +\frac{1}{2T} \\
+        0 &t\geq t_0 +\frac{1}{2T}
+    \end{cases}
+\end{equation*}
+We can now once again use the sifting property to extract the value of a function at a specific time $t=t_0$. We can therefore find the Laplace transform of a function $\delta(t-a)f(t)$ to be 
+\begin{equation*}
+    \lapt{\delta(t-a)f(t)} = e^{-as}f(a)
+\end{equation*}
+One interesting thing to note is the integral 
+\begin{equation*}
+    \int^t_{-\infty} \delta (u-u_0)du
+\end{equation*}
+If $u_0 >t$, the integral evaluates to be 0. Otherwise, it is equal to 1. This is exactly the definition of the step function centered at $u_0$. This is by no means a rigorous proof of the fact that the delta function is the derivative of the step function, that is reserved for studies in the field of generalized functions. Rather, it is to gain intuition as to the relationships between these functions. We shall now state a property of $n^{th}$ derivatives of the delta function without proof since it is reserved for specialist texts.
+\begin{equation*}
+    \int^\infty_{-\infty} H(t) \delta^{(n)}(t) dt = (-1)^nh^{(n)}(0)
+\end{equation*}
+and 
+\begin{equation*}
+    \int^\infty _{-\infty} e^{-st} \delta^{(n)}(t)dt = s^n
+\end{equation*}
+
+\section{Periodic Functions}
+\begin{definition}
+    If $F(t)$ is a function that obeys the rule 
+    \begin{equation*}
+        F(t) = F(t+\tau)
+    \end{equation*}
+    for some $\tau >0$ and $\tau \in \R$, then $F(t)$ is called a periodic function with period $\tau$.
+\end{definition}
+\begin{theorem}
+    Let $F(t)$ have a period $T>0$ such that $F(t) = F(t+T)$. Then 
+    \begin{equation*}
+        \lapt{F(t)}= \frac{\int^T_0 e^{-st}F(t)dt}{1-e^{-sT}}
+    \end{equation*}
+\end{theorem}
+\begin{proof}
+    We shall proceed by using the integral definition of the Laplace transform and recognize the periodicity of the integrand 
+    \begin{equation*}
+    \begin{split}
+        \lapt{F(t)} &= \int^\infty_0 e^{-st}F(t)dt \\
+        &= \int^T_0 e^{-st}F(t)dt + \int^{2T}_Te^{-st}F(t)dt +\ldots\int^{nT}_{(n-1)T}e^{-st}F(t)dt + \ldots
+    \end{split}
+    \end{equation*}
+    We now make the substitution $u=t-(n-1)T$ such that $du =dt$ such that the general integral becomes
+    \begin{equation*}
+        \int^{nT}_{(n-1)T} e^{-st}F(t)dt = e^{-s(n-1)T}\int^T_0e^{-su}F(u)du \twen n\in \mathbb{N}
+    \end{equation*}
+    Factoring the integral out of each term gives a geometric series with ratio $e^{-sT}$
+    \begin{equation*}
+        \int^\infty_0e^{-st}F(t)dt = (1+e^{-sT}+e^{-2sT}+\ldots) \int^T_0e^{-st}F(t)dt = \frac{1}{1-e^{-sT}}\int^T_0 e^{-st}F(t)dt
+    \end{equation*}
+\end{proof}
+\section{Exercises}
+
+% Exercise 1
+\begin{exercise}
+    If $F(t) = \cos(at)$, use the derivative formula to re-establish the Laplace transform of $\sin(at)$.
+\end{exercise}
+\begin{work}
+    \begin{equation*}
+        \begin{split}
+            F(t) = \cos (at) \rightarrow F'(t) = -a\sin(at) \\
+            \lapt{F'(t)} = \frac{s^2}{s^2+a^2} - 1 =\frac{s^2-s^2-a^2}{s^2+a^2} = -\frac{a^2}{s^2+a^2} \\
+            \lapt{\sin(at)} = -\frac{1}{a}\lapt{F'(t)} = \frac{a}{s^2+a^2}
+        \end{split}
+    \end{equation*}
+\end{work}
+
+% Exercise 2
+\begin{exercise}
+    Use Theorem \ref{theo:2.1} with 
+    \begin{equation*}
+        F(t) = \int^t_0 \frac{\sin u }{u}du
+    \end{equation*}
+    to establish the result
+    \begin{equation*}
+        \lapt{\frac{\sin (at)}{t}} = \tan^{-1}\left( \frac{a}{s} \right)
+    \end{equation*}
+\end{exercise}
+\begin{work}
+    Let $F(t)=\displaystyle{\int^t_0\frac{\sin u}{u}du}$
+    \begin{equation*}
+    \begin{split}
+        F'(t) &= \frac{\sin at}{t}\\
+        \lapt{F'(t)}&= s\lapt{\int^t_0\frac{\sin au}{u}du} - F(0) \\
+        &=s\left(\tan^{-1}\left( \frac{s}{a} \right)\right)\frac{1}{s} - 0\\
+        &= \tan^{-1}\left(\frac{s}{a} \right)
+        \end{split}
+    \end{equation*}
+    where the Laplace transform of 
+    \begin{equation*}
+    \begin{split}
+        \lapt{\frac{\sin au}{u}} &= \int^\infty_s \pull\frac{a}{a^2+v^2}dv \\
+        &=\frac{\pi}{2}- a\frac{1}{a}\tan^{-1}\left( \frac{s}{a} \right) \\
+        &= \tan^{-1}\left( \frac{a}{s} \right) \\
+        \text{so now}\\
+        \lapt{\int^t_0\frac{\sin u}{u}du} &= \frac{1}{s}\tan^{-1}\left( \frac{a}{s} \right)
+    \end{split}
+    \end{equation*}
+\end{work}
+
+% Exercise 3
+\begin{exercise}
+    Prove that 
+    \begin{equation*}
+        \lapt{\int^t_0 \pull \int^v_0F(u)dudv} = \frac{f(s)}{s^2}
+    \end{equation*}
+\end{exercise}
+\begin{work}
+\leavevmode
+\begin{proof}
+    Let us define the function 
+    \begin{equation*}
+        G(v) = \int^v_0 F(u)du
+    \end{equation*}
+    We can then take the Laplace transform of $G(v)$ to obtain 
+    \begin{equation*}
+        \lapt{G(v)} = \lapt{\int^v_0 F(u)du} = \frac{f(s)}{s}
+    \end{equation*}
+    Now the Laplace transform of the integral of $G(v)$ is 
+    \begin{equation*}
+        \lapt{\int^t_0 G(v)dv} = \frac{g(s)}{s} = \frac{f(s)}{s^2}
+    \end{equation*}
+\end{proof}
+\end{work}
+
+% Exercise 4 
+\begin{exercise}
+    Find 
+    \begin{equation*}
+        \lapt{\int^t_0 \frac{\cos(au) - \cos (bu)}{u}du}
+    \end{equation*}
+\end{exercise}
+\begin{work}
+    \begin{equation*}
+        \begin{split}
+            \lapt{\int^t_0 \frac{\cos(au) - \cos (bu)}{u}du} &= \frac{1}{s} \lapt{\frac{\cos(au) - \cos (bu)}{u}} \\
+            &=\frac{1}{s} \int^\infty_s\left( \frac{u}{u^2+a^2} - \frac{u}{u^2+b^2} \right) du \\
+            \text{We now make the substitution}&\text{ $v=u^2+a^2$ (or $b^2$) so now $dv = 2udu$ } \\
+            &= \frac{1}{2s}\left( \int^\infty_{s^2+a^2}\frac{1}{v}dv - \int^\infty_{s^2+b^2}\frac{1}{v}dv\right)\\
+            &=\frac{1}{2s}\int^{s^2+b^2}_{s^2+a^2}\frac{1}{v}dv \\
+            &=\frac{1}{2s} \ln\left( \frac{s+b^2}{s+a^2} \right)
+        \end{split}
+    \end{equation*}
+\end{work}
+
+% Exercise 5
+\begin{exercise}
+    Determine 
+    \begin{equation*}
+        \lapt{\frac{2\sin t \sinh t}{t}}
+    \end{equation*}
+\end{exercise}
+\begin{work}
+    \begin{equation*}
+        \begin{split}
+            \lapt{\frac{2\sin t \sinh t}{t}} &= \int^\infty_s \lapt{2\sin t \sinh t}du\\
+            &=\int^\infty_s \lapt{e^t\sin t-e^{-t}\sin t}du \\
+            &= \int^\infty_s\left(\frac{1}{(s-1)^2+1} - \frac{1}{(s+1)^2+1} \right)du \\
+            &= \frac{\pi}{2}-\tan^{-1}(s-1) - \frac{\pi}{2}+\tan^{-1}(s+1) \\
+            &=\tan^{-1}\left( \frac{1}{s-1} \right) - \tan^{-1}\left( \frac{1}{s+1} \right)\\
+            &= \tan^{-1} \left( \frac{\frac{1}{s-1}-\frac{1}{s+1}}{1+\frac{1}{s^2-1}} \right) \\
+            &= \tan^{-1}\left( \frac{\frac{2}{s^2-1}}{\frac{s^2}{s^2-1}} \right) \\
+            &= \tan^{-1}\frac{2}{s^2}
+        \end{split}
+    \end{equation*}
+\end{work}
+
+% Exercise 6
+\begin{exercise}
+    Prove that if $f(s)$ indicates the Laplace transform of a piecewise continuous function $F(t)$, then 
+    \begin{equation*}
+        \lim_{s\rightarrow \infty} f(s)=0
+    \end{equation*}
+\end{exercise}
+\begin{work}
+    \begin{equation*}
+        \lim_{s\rightarrow \infty} f(s)= \lim_{s\rightarrow \infty} \int^\infty_0e^{-st}F(t)dt = \int^\infty_0\lim_{s\rightarrow \infty} e^{-st}F(t)dt =\int^\infty_00dt =0
+    \end{equation*}
+    Assuming the necessary convergence conditions, we can bring the limit into the integral (I think Lebesgue Dominated Convergence Theorem is used here but I'm unsure).
+\end{work}
+
+% Exercise 7
+\begin{exercise}
+    Determine the following inverse Laplace transforms by using partial fractions:
+    \begin{enumerate}[label = (\alph*)]
+        \item $\displaystyle{\frac{2(2s+7)}{(s+4)(s+2)}}$ for $s>-2$
+        \item $\displaystyle{\frac{s+9}{s^2-9}}$
+        \item $\displaystyle{\frac{s^2+2k^2}{s(s^2+4k^2)}}$
+        \item $\displaystyle{\frac{1}{s(s+3)^2}}$
+        \item $\displaystyle{\frac{1}{(s-2)^2(s+3)^3}}$
+    \end{enumerate}
+\end{exercise}
+\begin{work}
+    \begin{enumerate}[label = (\alph*)]
+        \item \begin{equation*}
+            \begin{split}
+                \frac{2(2s+7)}{(s+4)(s+2)} = \frac{1}{s+4} + \frac{3}{s+2} \\
+                \inlt{\frac{1}{s+4} + \frac{3}{s+2}} &=e^{-4t}+3e^{-2t}
+            \end{split}
+        \end{equation*}
+        \item \begin{equation*}
+            \begin{split}
+                \frac{s+9}{s^2-9} &= \frac{2}{s-3}-\frac{1}{s+3} \\
+                \inlt{\frac{2}{s-3}-\frac{1}{s+3}} &= 2e^{3t} - e^{-3t}
+            \end{split}
+        \end{equation*}
+        \item \begin{equation*}
+            \begin{split}
+                \frac{s^2+2k^2}{s(s^2+4k^2)} &= \frac{1}{2s}+\frac{2}{(s^2+4k^2)} \\
+                \inlt{\frac{1}{2s}+\frac{2}{(s^2+4k^2)}} &= \frac{1}{2}\cos (2kt) + \frac{1}{2}
+            \end{split}
+        \end{equation*}
+        \item \begin{equation*}
+            \begin{split}
+                \frac{1}{s(s+3)^2} &= \frac{1}{9s}-\frac{1}{9(s+3)} - \frac{1}{3(s+3)^2} \\
+                \inlt{\frac{1}{9s}-\frac{1}{9(s+3)} - \frac{1}{3(s+3)^2}} &= \frac{1}{9}-\frac{1}{9}e^{-3t}-\frac{1}{3}e^{-3t}t
+            \end{split}
+        \end{equation*}
+        \item \begin{equation*}
+            \begin{split}
+                \frac{1}{(s-2)^2(s+3)^3} &= \frac{3}{625(s+3)} + \frac{2}{125(s+3)^2} + \frac{1}{25(s+3)^3} -\frac{3}{625(s-2)}+\frac{1}{125(s-2)^2}\\
+                \inlt{\frac{1}{(s-2)^2(s+3)^3}} &= \frac{3}{625}e^{-3t}+\frac{2}{125}te^{-3t}+\frac{1}{50}t^2e^{-3t} - \frac{3}{625}e^{2t}+\frac{1}{125}te^{2t}
+            \end{split}
+        \end{equation*}
+    \end{enumerate}
+\end{work}
+
+% Exercise 8
+\begin{exercise}
+    Verify the initial value theorem for the two functions 
+    \begin{enumerate}[label = (\alph*)]
+        \item $2+\cos t$
+        \item $(4+t)^2$
+    \end{enumerate}
+\end{exercise}
+\begin{work}
+\leavevmode
+    \begin{enumerate}[label = (\alph*)]
+        \item $\displaystyle{\lim_{t\rightarrow 0}} F(t) = 3 = \lim_{s\rightarrow \infty} \frac{2}{s} + s\left(\frac{s}{s^2+1}\right)$ = 3
+        \item $\displaystyle{\lim_{t\rightarrow 0}} (4+t)^2=16= \lim_{s\rightarrow \infty}s\left(\frac{16}{s} + \frac{8}{s^2} + \frac{2}{s^3} \right) = 16$
+    \end{enumerate}
+\end{work}
+
+% Exercise 9
+\begin{exercise}
+    Verify the final value theorem for the two functions
+    \begin{enumerate}[label = (\alph*)]
+        \item $3+e^{-t}$
+        \item $t^3e^{-t}$
+    \end{enumerate}
+\end{exercise}
+\begin{work}
+\leavevmode
+    \begin{enumerate}[label = (\alph*)]
+        \item $\displaystyle{\lim_{t\rightarrow \infty} F(t) = 3 = \lim_{s\rightarrow 0} s\left( \frac{3}{s} + \frac{1}{s+1} \right) = 3}$
+        \item $\displaystyle{\lim_{t\rightarrow \infty} t^3e^{-t}} = 0 = \lim_{s\rightarrow 0}s\left( \frac{6}{(s+1)^4} \right) = 0$
+    \end{enumerate}
+\end{work}
+
+% Exercise 10
+\begin{exercise}
+    Given that 
+    \begin{equation*}
+        \lapt{\sin(\sqrt{t})} = \frac{k}{s^{3/2}}e^{-\frac{1}{4s}}
+    \end{equation*}
+    use $\sin x \approx x$ for small $x$ to determine the value of the constant $k$.
+\end{exercise}
+\begin{work}
+    Consulting a table of Laplace transforms, we see that 
+    \begin{equation*}
+    \begin{split}
+        \lapt{\frac{\sin 2\sqrt{at}}{\sqrt{\pi a} }} &= \frac{e^{-a/s}}{s\sqrt{s}} \\
+        \lapt{\frac{\sin 2 \sqrt{t/4}}{\sqrt{\pi/4}}}& = \frac{1}{\sqrt{\pi/4}}\lapt{\sin\sqrt{t}} =\frac{e^{-\frac{1}{4s}}}{s^{3/2}}\\
+        \Rightarrow k &=\frac{\sqrt{\pi}}{2}
+    \end{split}
+    \end{equation*}
+\end{work}
+
+% Exercise 11
+\begin{exercise}
+    By using a power series expansion, determine (in series form) the Laplace transforms of $\sin (t^2)$ and $\cos(t^2)$
+\end{exercise}
+\begin{work}
+    \begin{equation*}
+        \begin{split}
+            \sin x^2 &= \sum^\infty_{n=0} \frac{(-1)^nx^{4n+2}}{(2n+1)!} \\
+            \cos x^2 &= \sum^\infty_{n=0} \frac{(-1)^nx^{4n}}{(2n)!} \\
+            \lapt{\sin x^2} &= \sum^\infty_{n=0} \frac{(-1)^n (4n+2)!}{(2n+1)!s^{4n+3}}\\
+            \lapt{\cos x^2} &= \sum^\infty_{n=0} \frac{(-1)^n(4n)!}{(2n)!s^{4n+1}}
+        \end{split}
+    \end{equation*}
+\end{work}
+
+% Exercise 12
+\begin{exercise}
+    $P(s)$ and $Q(s)$ are polynomials, the degree of $P(s)$ is less than that of $Q(s)$ which is $n$. Use partial fractions to prove the result 
+    \begin{equation*}
+        \inlt{\frac{P(s)}{Q(s)}} = \sum^n_{k=1} \frac{P(a_k)}{Q'(a_k)}e^{a_kt} 
+    \end{equation*}
+    where $a_k$ are the $n$ distinct zeros of $Q(s)$.
+\end{exercise}
+\begin{work}
+    The function $\frac{P(s)}{Q(s)}$ can be expressed, when broken down completely by partial fractions, as 
+    \begin{equation*}
+        \frac{P(s)}{Q(s)} = \frac{A_1}{s-a_1} + \frac{A_2}{s-a_2}+\ldots+\frac{A_k}{s-a_k}+\ldots+\frac{A_n}{s-a_n}
+    \end{equation*}
+    Taking the limit as $s\rightarrow a_k$ after multiplying by $(s-a_k)\,\,\forall k \in\{1,2,\ldots,n\}$, we see that everything but the coefficient for the root $a_k$ goes to zero.
+    \begin{equation*}
+        \lim_{s\rightarrow a_k}\left( (s-a_k)\frac{P(s)}{Q(s)} \right)=\frac{A_1(s-a_k)}{s-a_1} + \ldots+A_k+\ldots+\frac{A_n(s-a_k)}{s-a_n}
+    \end{equation*}
+    We then get by applying L'H\^opital's Rule
+    \begin{equation*}
+        \begin{split}
+            A_k &=\lim_{s\rightarrow a_k} \frac{P(s)}{Q(s)}(s-a_k) \\
+            &= P(a_k) \lim_{s\rightarrow a_k} \frac{s-a_k}{Q(s)} \\ 
+            &=P(a_k)\lim_{s\rightarrow a_k} \frac{1}{Q'(s)} \\
+            &= \frac{P(a_k)}{Q'(a_k)}
+        \end{split}
+    \end{equation*}
+    We can therefore write $\frac{P(s)}{Q(s)}$ as 
+    \begin{equation*}
+        \frac{P(s)}{Q(s)} = \sum^n_{k=1} \frac{P(a_k)}{Q'(a_k)(s-a_k)}
+    \end{equation*}
+    and since $A_k$ is just a constant, when we invert, we recognize the denominator is just the Laplace transform of 1 after applying the first shift theorem
+    \begin{equation*}
+        \inlt{\frac{P(s)}{Q(s)}} = \sum^n_{k=1} \frac{P(a_k)}{Q'(a_k)}e^{a_kt}
+    \end{equation*}
+\end{work}
+
+% Exercise 13
+\begin{exercise}
+    Find the following Laplace transforms
+    \begin{enumerate}[label =(\alph*)]
+        \item $H(t-a)$
+        \item $\displaystyle{f_1 = \begin{cases}
+            t+1 &0\leq t\leq 2\\ 3&t>2
+        \end{cases}}$
+        \item$\displaystyle{f_2 = \begin{cases}
+            t+1&0\leq t \leq 2 \\ 6 &t>2
+        \end{cases}}$
+    \end{enumerate}
+\end{exercise}
+\begin{work}
+\leavevmode
+    \begin{enumerate}[label =(\alph*)]
+        \item \begin{equation*}
+            \lapt{H(t-a)} = \int^\infty_0H(t-a)e^{-st}dt = \int^\infty_ae^{-st}dt =\frac{e^{-as}}{s}
+        \end{equation*}
+        \item \begin{equation*}
+            \begin{split}
+                f_1(t) &= (t+1)\left[H(t) -H(t-2)\right] +3H(t-2) \\
+                &=(t+1)H(t) -(t-2+3)H(t-2)+3H(t-2) \\
+                &= (t+1)H(t)-(t-2)H(t-2) \\
+                \lapt{f_1(t)}&=\frac{1}{s^2}+\frac{1}{s} -e^{-2s}\frac{1}{s^2}
+            \end{split}
+        \end{equation*}
+        \item I guess I thought the rest were too tedious to do so I did not do them
+    \end{enumerate}
+\end{work}
+
+% Exercise 14
+\begin{exercise}
+    Find the Laplace transform of the triangular wave function 
+    \begin{equation*}
+    \begin{split}
+        F(t) &= \begin{cases}
+            t & 0\leq t < c\\ 2c-t &c\leq t < 2c
+        \end{cases} \\
+        F(t+2c)&=F(t)
+    \end{split}
+    \end{equation*}
+\end{exercise}
+\begin{work}
+    \begin{equation*}
+        \begin{split}
+            \lapt{F(t)} &= \frac{1}{1-e^{-2cs}}\left[ \int^c_0e^{-st}dt + \int^{2c}_{c}(2c-t)e^{-st}dt\right]\\
+            &=\frac{1}{1-e^{-2cs}}\left[\frac{1}{s^2}-\frac{(cs+1)e^{-cs}}{s^2} + \frac{(cs-1)e^{-cs}}{s^2}+\frac{e^{-2cs}}{s^2}\right]\\
+            &=\frac{1}{1-e^{-2cs}}\left[1-2e^{-cs}+e^{-2cs}\right]\\
+            &=\frac{1}{1-e^{-2cs}}\left[1-e^{-cs}\right]^2\\
+            &= \frac{1}{s^2}\frac{1-e^{-sc}}{1+e^{-sc}} \\
+            &=\frac{1}{s^2}\tanh\left(\tfrac{1}{2}sc\right)
+        \end{split}
+    \end{equation*}
+\end{work}
+
+% Exercise 15
+\begin{exercise}
+    Find the Laplace transform of the generally placed top hat function 
+    \begin{equation*}
+        F(t) = \begin{cases}
+            \frac{1}{h} &a\leq t < a+h\\ 0 &\text{otherwise}
+        \end{cases}
+    \end{equation*}
+    Hence deduce the Laplace transform of the Dirac-$\delta$ function $\delta(t-a)$ where $a>0$ is a real constant.
+\end{exercise}
+\begin{work}
+    \begin{equation*}
+        \begin{split}
+            \lapt{F(t)} &= \int^{a+h}_{a}\frac{1}{h}e^{-st}dt \\
+            &=-\frac{1}{sh}e^{-st}\Bigg|^{a+h}_a \\
+            &= -\frac{1}{hs}e^{-(a+h)s}+
+            \frac{1}{hs}e^{-as} \\
+            &= \frac{1}{hs}e^{-as}(1-e^{-hs}) \\
+            \Rightarrow\lim_{h\rightarrow 0} \frac{(1-e^{-hs})e^{-as}}{hs} &=\frac{e^{-as}}{s}\lim_{h\rightarrow0}\frac{1-e^{-hs}}{h}\\
+            &=\frac{e^{-as}}{s} \frac{s}{1} \\
+            &=e^{-as}
+        \end{split}
+    \end{equation*}
+\end{work}
+
+\chapter{Convolution and Ordinary Differential Equations}
+\section{Convolution}
+Perhaps one of the most important mathematical operations is convolution. Convolution has many applications, particularly in electrical engineering where it's fundamental to digital signal processing. The convolution operator is defined as follows.
+\begin{definition} [Convolution]
+    The convolution of two given functions $f(t)$ and $g(t)$ is written as $f*g$ and is defined by 
+    \begin{equation*}
+        f*g = \int^t_0f(\tau) g(t-\tau)d\tau
+    \end{equation*}
+\end{definition}
+The only requirement is that the integral on the right exists.
+\begin{theorem}[Symmetry]
+The convolution operator is symmetric. That is to say, 
+    \begin{equation*}
+        f*g=g*f
+    \end{equation*}
+\end{theorem}
+\begin{proof}
+    The proof is simple under the substitution $u=t-\tau\rightarrow du = -d\tau$ 
+    \begin{equation*}
+        f*g=\int^t_0f(\tau)g(t-\tau)d\tau = -\int^0_tf(t-u)g(u)du = \int^t_0f(t-u)g(u)du = g*f
+    \end{equation*}
+\end{proof}
+
+\begin{theorem}[Convolution]
+    If $F(t)$ and $G(t)$ are of exponential order and $\lapt{F(t)} = \bar{f}(s)$ and $\lapt{G(t)} = \bar{g}(s)$ are their Laplace transforms, then $\inlt{\bar{f}\bar{g}}=f*g$. \label{theo:convolution}
+\end{theorem}
+\begin{proof}
+    We show via direct integration that 
+    \begin{equation*}
+        \bar{f}\bar{g}=\lapt{F(t)*G(t)}
+    \end{equation*}
+    Taking the Laplace transform of the convolution integral yields 
+    \begin{equation*}
+        \lapt{F*G} = \int^\infty_0e^{-st}\int^t_0F(\tau)G(t-\tau)d\tau dt
+    \end{equation*}
+    Let us note in the $t$-$\tau$ plane that the integration domain is from the $t$-axis to the $45^\circ$ line $t=\tau$. This allows us to change the bounds of integration such that the $t$ integral ranges from $\tau \rightarrow \infty$ and the $\tau$ integral ranges from $0\rightarrow \infty$. 
+    \begin{equation*}
+            \lapt{F*G} = \int^\infty_0F(\tau)\int^\infty_\tau G(t-\tau)e^{-st}dtd\tau
+    \end{equation*}
+    For the inner integral, let us make the substitution $u=t-\tau\rightarrow du=dt$
+    \begin{equation*}
+        \begin{split}
+            \int^\infty_\tau G(t-\tau)e^{-st}dt &= \int^\infty_0G(u)e^{-s(u+\tau)}du \\
+            &=e^{-s\tau}\int^\infty_0 G(u)e^{-su}du \\
+            &=e^{-s\tau}\bar{g}(s)
+        \end{split}
+    \end{equation*}
+    The double integral then simplifies down to 
+    \begin{equation*}
+        \begin{split}
+            \int^\infty_0F(\tau)\int^\infty_\tau G(t-\tau)e^{-st}dtd\tau &=\int^\infty_0F(\tau)\bar{g}(s)e^{-s\tau}d\tau \\
+            &=\bar{f}(s)\bar{g}(s)\\
+            \Rightarrow\inlt{\bar{f}(s)\bar{g}(s)} &=F(t)*G(t)
+        \end{split}
+    \end{equation*}
+\end{proof}
+
+Let us find the Laplace transform of $\frac{1}{\sqrt t}$ as it prove useful later. We start with the substitution $st=u^2 \rightarrow2udu=sdt$
+\begin{equation*}
+    \lapt{\frac{1}{\sqrt t}} =\int^\infty_0\frac{e^{-u^2}}{s}\frac{\sqrt s}{u}2udu = \frac{2}{\sqrt s}\int^\infty_0e^{-u^2}du = \sqrt{\frac{\pi}{s}}
+\end{equation*}
+Where we recognize that 
+\begin{equation*}
+    \int^\infty_0e^{-x^2}dx = \frac{\sqrt \pi}{2}
+\end{equation*}
+as the Gaussian integral. We can also see that 
+\begin{equation*}
+    \inlt{\frac{1}{\sqrt s}} = \frac{1}{\sqrt{\pi t}}
+\end{equation*}
+\begin{example}
+    We shall now find the inverse Laplace transform of
+    \begin{equation*}
+        \inlt{\frac{1}{\sqrt{s}(s-1)}}
+    \end{equation*}
+\end{example}
+Let us recognize that these are two known transforms and apply the convolution theorem (\ref{theo:convolution})
+\begin{equation*}
+    \begin{split}
+        \inlt{\frac{1}{\sqrt{s}(s-1)}} &= \frac{1}{\sqrt{\pi t}}*e^t\\
+        &=\int^t_0 \frac{1}{\sqrt{\pi t}}e^{t-\tau}d\tau \\
+        &=\frac{e^t}{\sqrt{\pi}}\int^t_0\frac{e^{-\tau}}{\sqrt{\tau}}d\tau 
+    \end{split}
+\end{equation*}
+Now we make the substitution $u^2=\tau \rightarrow2udu=d\tau$
+\begin{equation*}
+    \begin{split}
+        \frac{e^t}{\sqrt \pi} \int_{0}^{\sqrt{t}} \frac{e^{-u^2}}{u}2udu &= \frac{2e^t}{\sqrt \pi}\int_{0}^{\sqrt{t}} e^{-u^2}du\\
+        &=e^t\operatorname{erf}\left(\sqrt t\right)
+    \end{split}
+\end{equation*}
+where the error function $\operatorname{erf}\left( x \right)$ is defined as 
+\begin{equation*}
+    \operatorname{erf}(x) = \frac{2}{\sqrt \pi}\int^x_0e^{-t^2}dt
+\end{equation*}
+and the complementary error function is defined as $1-\operatorname{erf}(x)$. 
+\begin{example}
+    Another important result comes from finding the Laplace transform of 
+    \begin{equation*}
+        \lapt{t^{-\frac{3}{2}}e^{-\frac{k^2}{4t}}}
+    \end{equation*}
+\end{example}
+Let us start by making the substitution $u=\frac{k}{2\sqrt{t}} \rightarrow du =-\frac{k}{4}t^{-\frac{3}{2}}dt$ and then completing the square to get
+\begin{equation*}
+    \begin{split}
+        \lapt{t^{-\frac{3}{2}}e^{-\frac{k^2}{4t}}} &= \int^\infty_0e^{-k^2/4t -st} t^{-3/2}dt \\
+        &=\frac{4}{k}\int^\infty_0e^{-u^2-sk/4u^2}du\\
+        &=\frac{4}{k}\int^\infty_0 e^{-(u-\frac{k\sqrt{s}}{2u})^2-k\sqrt{s}} du
+    \end{split}
+\end{equation*}
+We then express $u-\frac{k\sqrt{s}}{2u}$ as $u-\frac{u}{a}$. We then make the substitution $v=\frac{a}{u} \rightarrow dv=-\frac{a}{u^2}du$ and also note the identity $(v-\frac{a}{v})^2=(\frac{a}{u}-u)^2$ and that the minus sign from the differential cancels the limit change so we get 
+\begin{equation*}
+    \frac{4}{k}\int^\infty_0 e^{-(u-\frac{a}{u})^2-k\sqrt{s}} du = \frac{4}{k}e^{-k\sqrt{s}}\int^\infty_0\frac{a}{u^2}e^{-(u-\frac{a}{u})^2}du
+\end{equation*}
+after replacing $v$ with $u$. We then add the left hand integral to both sides to reach 
+\begin{equation*}
+    \frac{8}{k}e^{-k\sqrt{s}}\int^\infty_0\frac{a}{u^2}e^{-(u-\frac{a}{u})^2}du = \frac{4}{k}e^{-k\sqrt{s}}\int^\infty_0\left(1+\frac{a}{u^2}\right)e^{-(u-\frac{a}{u})^2}du
+\end{equation*}
+We now make the substitution $\lambda =u-\frac{a}{u} \rightarrow d\lambda = \left(1+\frac{a}{u^2}\right)du$
+\begin{equation*}
+    \begin{split}
+        \frac{4}{k}e^{-k\sqrt{s}}\int^\infty_0\left(1+\frac{a}{u^2}\right)e^{-(u-\frac{a}{u})^2}du &=\frac{4}{k}e^{-k\sqrt{s}}\int^\infty_{-\infty} e^{-\lambda^2}d\lambda \\
+        &=\frac{4}{k}e^{-k\sqrt{s}}\sqrt{\pi} \\
+        \Rightarrow \lapt{t^{-\frac{3}{2}}e^{-\frac{k^2}{4t}}} &=\frac{4}{k}e^{-k\sqrt{s}}\int^\infty_0e^{-(u-\frac{u}{a})^2}du\\ &= \frac{2\sqrt{\pi}}{k}e^{-k\sqrt{s}}\\
+       \Rightarrow  \inlt{e^{-k\sqrt{s}}}& = \frac{k}{2\sqrt{\pi t^3}}e^{-\frac{k^2}{4t}}
+    \end{split}
+\end{equation*}
+\section{Ordinary Differential Equations}
+We shall consider the general second order differential equation 
+\begin{equation*}
+    a\odt{x}{t} +b\od{x}{t}+cx = f(x) \twen(t\geq0)
+\end{equation*}
+For the example of a mass on a spring, the second derivative term represents the acceleration, the first derivative term represents the damping, $x$ represents the displacement term, and $f(x)$ represents the forcing term. Since the coefficients are constant, the system is deemed "time invariant." This means a response to a specific stimulus will be the same regardless at what time $t$ it happens. An example of a time invariant system can be found by finding the general solution to the heat equation which can be read upon further \href{https://www.overleaf.com/read/yjwqnxvbxdsj#f891eb}{here} in Section 3.\\\\
+Taking the Laplace transform of both sides gives 
+\begin{equation*}
+    a(s^2\bar{x}(s)-sx(0)-x'(0))+b(s\bar{x}(s)-x(0))+c\bar{x}(s)=\bar{f}(s)
+\end{equation*}
+Solving for $\bar{x}(s)$ yields 
+\begin{equation*}
+    \bar{x}(s) = \frac{\bar{f}(s)+(as+b)x(0)+ax'(0)}{as^s+bs+c}
+\end{equation*}
+If we assume homogeneous initial conditions $(x(0) = x'(0)=0)$, we achieve 
+\begin{equation*}
+    \bar{x}(s) = \frac{1}{as^s+bs+c}\bar{f}(s)
+\end{equation*}
+which is of the form ``response = transfer function $\times$ input." The transfer function maps every an input to an output and so intuitively is similar to that of a Green's function. Let us look at an example of a differential equation being solved using Laplace transforms.
+\begin{example}
+    The equation governing the bending of beams is of the form 
+    \begin{equation*}
+        k\od{^4y}{x^4} = -W(x)
+    \end{equation*}
+    where $k$ is flexural rigidity constant (the product of the Young's modulus and the length), and $W(x)$ is the transverse force per unit length along the beam. 
+\end{example}
+Let us first find the general solution for a cantilever (where one side is supported and the other end is free). Since the beam is finite, let us write the Laplace transform of the $y(x)$, the function that describes the deflection of the beam, as 
+\begin{equation*}
+    \bar{y}(s) = \int^\infty_0y(x)[1-H(x-l)]e^{-xs}dx
+\end{equation*}
+Taking Laplace transforms of the fourth order differential equation yields 
+\begin{equation*}
+    \begin{split}
+        k(s^4\bar y(s) -s^3 y(0) -s^2y'(0) -sy''(0) - y'''(0)) = -\overline W(s)\\ \bar y(s) = \frac{-\overline W (s)}{ks^4}+\frac{y(0)}{s}+\frac{y'(0)}{s^2}+\frac{y''(0)}{s^3} + \frac{y'''(0)}{s^4}
+    \end{split}
+\end{equation*}
+Applying the convolution theorem \ref{theo:convolution} to find 
+\begin{equation*}
+    \inlt{\frac{\overline W (s)}{s^4}} = \frac{1}{6}\int^x_0(x-\xi)^3W(\xi)d\xi
+\end{equation*}
+We then have that the general solution to the cantilever problem to be 
+\begin{equation*}
+    y(x)[1-H(x-l)] = -\frac{1}{6k}\int^x_0(x-\xi)^3W(\xi)d\xi +y(0) + xy'(0)+\frac{1}{2}x^2y"(0)+\frac{1}{6}x^3y'''(0)
+\end{equation*}
+Let us now look at the case in which both ends are supported. This implies the boundary conditions that there is no displacement at either end ($y(x)=y(l)=0$) and that there is no net force there either ($y"(0)=y"(l)=0$). We can apply the boundary conditions at $x=0$ to arrive at 
+\begin{equation*}
+    y(x)[1-H(x-l)] = -\frac{1}{6k}\int^x_0(x-\xi)^3W(\xi)d\xi + xy'(0)+\frac{1}{6}x^3y'''(0)
+\end{equation*}
+It is non-trivial to substitute in the $x=l$ boundary conditions. One method is to differentiate with respect to $x$ twice but we do not know how the product of $y(x)$ and the step function behaves under differentiation. As such, let us substitute $u(x)=y''(x)$ so now 
+\begin{equation*}
+    k\odt{u}{x} = - W(x)
+\end{equation*}
+Applying the Laplace transform and doing the same as above, we arrive at 
+\begin{equation*}
+    \begin{split}
+        u(x)[1-H(x-l)] &= -\frac{1}{k}\int^x_0(x-\xi)W(\xi)d\xi + u(0)+xu'(0) \\
+        \Rightarrow  y''(x)[1-H(x-l)] &= -\frac{1}{k}\int^x_0(x-\xi)W(\xi)d\xi + y''(0)+xy'''(0)
+    \end{split}
+\end{equation*}
+Substituting in the boundary conditions at $x=l$ and rearranging, we get 
+\begin{equation*}
+    y'''(0)=-\frac{1}{kl}\int^l_0(l-\xi)W(\xi)d\xi
+\end{equation*}
+Finding the last initial condition is 
+\begin{equation*}
+    \begin{split}
+        0&=-\frac{1}{6k}\int^l_0(l-\xi)^3W(\xi)d\xi +ly'(0)+\frac{l^3}{6}\frac{1}{kl}\int^l_0(l-\xi)W(\xi)d\xi \\
+        \Rightarrow y'(0)&=\frac{1}{6kl}\int^l_0(l-\xi)^3W(\xi)d\xi - \frac{l}{6k}\int^l_0(l-\xi)W(\xi)d\xi
+    \end{split}
+\end{equation*}
+Therefore the general solution is 
+\begin{equation*}
+    \begin{split}
+        y(x)[1-H(x-l)] = &-\frac{1}{6k}\int^x_0(x-\xi)^3W(\xi)d\xi +\frac{x}{6kl}\int^l_0(l-\xi)^3W(\xi)d\xi \\ &- \frac{xl}{6k}\int^l_0(l-\xi)W(\xi)d\xi +\frac{x^3}{6kl}\int^l_0(l-\xi)W(\xi)d\xi
+    \end{split}
+\end{equation*}
+From this, we can now find the solution to any weight distribution $W(x)$.
+\section{Integral Equations}
+Integral equations are equations where the unknown function appears under an integral sign. One example is 
+\begin{equation*}
+    \int^b_aK(x,y)\phi(y)dy=f(x)
+\end{equation*}
+where $K(x,y)$ is known as the kernel and is known along with $f(x)$. One can view this as an integral operator acting on an unknown $\phi(y)$ leading to $f(x)$. Another integral equation is 
+\begin{equation*}
+    A(x)\phi(x)-\lambda\int^b_aK(x,y)\phi(y)dy = f(x) 
+\end{equation*}
+which is known as a Fredholm integral of the third kind. If $A(x)=1$, then that is known as a Fredholm equation of the second kind. In Fredholm integrals, $a$ and $b$ are constant but when $a$ or $b$ are dependent on the independent variable $x$, then that is known as a Volterra integral equation. An integral equation that is easy to solve with Laplace transforms is the case when $b=x$. Let us look at an example.
+\begin{example}
+    Solve the integral equation 
+    \begin{equation*}
+        \phi(x)-\lambda \int^x_0e^{x-y}\phi(y)dy
+    \end{equation*}
+    where $f(x)$ is a general function of $x$.
+\end{example}
+Let us note that the integral is a convolution 
+\begin{equation*}
+    \phi(x)-\lambda e^x*\phi(x)=f(x)
+\end{equation*}
+Now, taking the Laplace transform yields 
+\begin{equation*}
+    \begin{split}
+        \bar \phi - \lambda\frac{\bar \phi}{s-1} &= \bar f \\
+        \Rightarrow \bar \phi\left( \frac{s-1-\lambda}{s-1}\right) &=\bar f \\
+        \Rightarrow\bar \phi = \frac{s-1}{s-(1+\lambda)}\bar f &=\bar f + \frac{\lambda \bar f}{s-(1+\lambda)} \\
+        \Rightarrow \phi = f+\lambda f*e^{(1+\lambda)x}&=f+\lambda\int^x_0f(y)e^{(1+\lambda)(x-y)}dy
+    \end{split}
+\end{equation*}
+
+\section{Exercises}
+
+% Exercise 1
+\begin{exercise}
+    Given suitably well behaved functions $f,g,$ and $h$, establish the following properties of the convolution $f*g$:
+    \begin{enumerate}[label=(\alph*)]
+        \item $f*g=g*f$
+        \item $f*(g*h)=(f*g)*h$
+        \item determine $f^{-1}$ such that $f*f^{-1}$, stating any extra properties $f$ must posses in order for the inverse $f^{-1}$ to exist
+    \end{enumerate}
+\end{exercise}
+\begin{work}
+\leavevmode
+    \begin{enumerate}[label=(\alph*)]
+        \item The proof was given above.
+        \item \begin{proof}\begin{equation*}
+            \begin{split}
+                g*h &= \varphi(t) = \int^t_0g(\tau)h(t-\tau)h\tau \\
+                f*(g*h)&= \int^t_0f(\alpha)\varphi(t-\alpha)d\alpha =\int^t_0\int^{t-\alpha}_0f(\alpha)g(\tau)h(t-\tau-\alpha)d\alpha d\tau \\
+            \end{split}
+        \end{equation*}
+        Now let us make the substitution $u=t-\tau-\alpha$ and $x=\alpha$ so now 
+        \begin{equation*}
+        \begin{split}
+            dudx = \frac{\partial (u,x)}{\partial(\tau,\alpha)}d\tau d\alpha = \det \left[\begin{matrix}
+                -1&-1\\0&1
+            \end{matrix} \right] d\tau d\alpha= -d\tau d\alpha
+            \end{split}
+        \end{equation*}
+        \begin{equation*}
+            \begin{split}
+                \int^t_0\int^{t-\alpha}_0f(\alpha)g(\tau)h(t-\tau-\alpha)d\alpha d\tau &=\int^t_0\int^{t-u}_0f(x)g(t-u-x)h(u)dxdu \\
+                &=\int^t_0 h(u)\left[ \int^{t-u}_0g((t-u)-x)f(x)dx\right]du\\
+                &=\int^t_0h(x) (f*g)(x)dx \\
+                &=h*(f*g)=(f*g)*h
+            \end{split}
+        \end{equation*}
+        \end{proof}
+        \item \begin{equation*}
+            \begin{split}
+                f*f^{-1}&=1\\
+                \bar f \bar f^{-1} &=\frac{1}{s}\\
+                \bar f^{-1} &=\frac{1}{s\bar f} \\ 
+                f^{-1} &= 1*\inlt{\frac{1}{\bar f(s)}} \\
+                &=\bigintsss_0^t\inlt{\frac{1}{\bar f(s)}} d\tau
+            \end{split}
+        \end{equation*}
+    \end{enumerate}
+\end{work}
+
+% Exercise 2
+\begin{exercise}
+    Use the convolution theorem to establish 
+    \begin{equation*}
+        \inlt{\frac{\bar f(s)}{s}} = \int^t_0f(\tau)d\tau
+    \end{equation*}
+\end{exercise}
+\begin{work}
+    \begin{equation*}
+        \begin{split}
+            \inlt{\frac{\bar f(s)}{s}} &= \inlt{\bar f(s)} * \inlt{\frac{1}{s}}\\
+            &=f(t)*1\\
+            &=\int^t_0f(\tau)d\tau
+        \end{split}
+    \end{equation*}
+\end{work}
+
+% Exercise 3
+\begin{exercise}
+    Find the following convolutions
+    \begin{enumerate}[label=(\alph*)]
+        \item $t*\cos t$
+        \item $t*t$
+        \item $\sin t *\sin t$
+        \item $e^t*t$
+        \item $e^t*\cos t$
+    \end{enumerate}
+\end{exercise}
+\begin{work}
+    \leavevmode
+    \begin{enumerate}[label=(\alph*)]
+        \item $\displaystyle{t*\cos t} = \int^t_0\tau \cos (t-\tau)d\tau = 1-\cos t$
+        \item $\displaystyle{t*t = \int^t_0\tau (t-\tau)d\tau = \frac{1}{2}t\tau^2-\frac{1}{3}\tau^3\Bigg|^t_0 =\frac{1}{2}t^3-\frac{1}{3}t^3=\frac{1}{6}t^3}$
+        \item $\displaystyle{\sin t *\sin t=\int^t_0\sin \tau \sin (t-\tau)d\tau = \tfrac{1}{2}(\sin t-t\cos t)}$
+        \item $\displaystyle{e^t*t=\int^t_0\tau e^{t-\tau}d\tau =e^t\int^t_0\tau e^{-\tau}d\tau =e^t-t-1}$
+        \item $\displaystyle{e^t*\cos t} = \int^t_0e^{t-\tau}\cos \tau d\tau =\tfrac{1}{2}\left(\sin t -\cos t+e^t \right)$
+    \end{enumerate}
+\end{work}
+
+% Exercise 4
+\begin{exercise}
+\leavevmode
+    \begin{enumerate}[label=(\alph*)]
+        \item Show that 
+        \begin{equation*}
+            \lim_{x\rightarrow 0} \frac{\operatorname{erf}(x)}{x} = \frac{2}{\sqrt \pi}
+        \end{equation*}
+        \item Show that 
+        \begin{equation*}
+            \lapt{t^{-1/2}\operatorname{erf}\sqrt t} = \frac{2}{\sqrt{\pi s}} \tan^{-1}\left( \frac{1}{\sqrt s}\right)
+        \end{equation*}
+    \end{enumerate}
+\end{exercise}
+\begin{work}
+    \leavevmode
+    \begin{enumerate}[label=(\alph*)]
+        \item 
+        \begin{equation*}
+            \begin{split}
+                \lim_{x\rightarrow 0} \frac{\operatorname{erf}(x)}{x} &= \lim_{x\rightarrow 0} \frac{\frac{2}{\sqrt \pi}e^{-x^2}}{1} = \frac{2}{\sqrt \pi} \\
+                \Rightarrow \lim_{s\rightarrow \infty}s\lapt{\frac{\operatorname{erf}(x)}{x}} &= \frac{2}{\sqrt{\pi}} \text{ by the initial value theorem}
+            \end{split}
+        \end{equation*}
+        \item Let us perform a power series expansion of the error function 
+        \begin{equation*}
+            \begin{split}
+                \int^{\sqrt{t}}_0e^{-x^2}dx &= \sum^\infty_{n=0} (-1)^{n}\frac{t^{n+1/2}}{(2n+1)\cdot n!} \\
+                t^{-1/2}\operatorname{erf}(x)&=\frac{2}{\sqrt \pi} \sum^\infty_{n=0}(-1)^n\frac{t^n}{(2n+1)\cdot n!} \\
+                \lapt{t^{-1/2}\operatorname{erf}(x)} &= \frac{2}{\sqrt \pi} \sum^\infty_{n=0} \frac{(-1)^n}{(2n+1)s^{n+1}} \\
+                &=\frac{2}{\sqrt{\pi s}}\tan^{-1}\left( \frac{1}{\sqrt s}\right)
+            \end{split}
+        \end{equation*}
+    \end{enumerate}
+\end{work}
+
+% Exercise 5
+\begin{exercise}
+    Solve the following differential equations by using Laplace transforms:
+    \begin{enumerate}[label=(\alph*)]
+        \item \begin{equation*}
+            \od{x}{t} + 3x = e^{2t} \twen x(0)=1
+        \end{equation*}
+        \item \begin{equation*}
+            \od{x}{t} + 3x = \sin t \twen x(\pi)=1
+        \end{equation*}
+        \item \begin{equation*}
+            \odt{x}{t} +4\od{x}{t}+5x=8 \sin t \twen x(0)=x'(0)=0 
+        \end{equation*}
+        \item \begin{equation*}
+            \odt{x}{t} -3\od{x}{t} -2x =6 \twen x(0) = x'(0) = 1 
+        \end{equation*}
+        \item \begin{equation*}
+            \odt{y}{t} + y = 3 \sin (2t) \twen y(0)=3 \twen y'(0)=1
+        \end{equation*}
+    \end{enumerate}
+\end{exercise}
+\begin{work}
+    \leavevmode
+    \begin{enumerate}[label=(\alph*)]
+        \item \begin{equation*}
+            \begin{split}
+                \od{x}{t} + 3x &= e^{2t}  \\
+                \Rightarrow s\bar x(s) - x(0)+3\bar x(s)&=\frac{1}{s-2} \\
+                \Rightarrow \bar x(s) = \frac{1}{(s+3)(s-2)}+\frac{1}{s+3}&=\frac{4}{5}\frac{1}{s+3}+\frac{1}{5}\frac{1}{s-2}\\
+                \Rightarrow x(t)&=\frac{4}{5}e^{-3t}+\frac{1}{5}e^{2t}
+            \end{split}
+        \end{equation*}
+        \item \begin{equation*}
+            \begin{split}
+                \od{x}{t} + 3x &= \sin t \\ 
+                \Rightarrow s\bar x(s)-x(0)+3\bar x(s)&=\frac{1}{s^2+1} \\
+                \Rightarrow \bar x(s)&=\frac{1}{(s^2+1)(s+3)}+\frac{x(0)}{s+3} \\
+                &=-\frac{1}{10}\left( \left( \frac{s}{s^2+1}-\frac{3}{s^2+1}\right) - \frac{x(0)}{s+3} \right) \\
+                \Rightarrow x(t)&=-\frac{1}{10}(\cos t-3\sin t-x(0)e^{-3t}) \\
+                \Rightarrow x(\pi) =1&=-\frac{1}{10}(-1-x(0)e^{-3\pi}) \\
+                \Rightarrow x(0)&=9e^{3\pi}\\
+                \Rightarrow x(t) &=\frac{3}{10}\sin t-\frac{1}{10}\cos t+ \frac{9}{10}e^{3(\pi -t)}
+            \end{split}
+        \end{equation*}
+        \item \begin{equation*}
+            \begin{split}
+                \odt{x}{t} +4\od{x}{t}+5x&=8 \sin t  \\
+                \Rightarrow s^2\bar x(s)+4s\bar x(s)+5\bar x(s)&=\frac{8}{s^2+1} \\
+                \Rightarrow\bar x(s)&= \frac{8}{(s^2+1)((s+2)^2+1)} \\
+                &=\frac{s+2}{(s+2)^2+1} + \frac{1}{(s+2)^2+1} - \frac{s}{s^2+1}+\frac{1}{s^2+1} \\
+                \Rightarrow x(t) &= e^{-2t}(\cos t-\sin t) - \cos t+\sin t
+            \end{split}
+        \end{equation*}
+        \item \begin{equation*}
+            \begin{split}
+                \odt{x}{t} -3\od{x}{t} -2x &=6\\
+                \Rightarrow s^2\bar x(s)-s-1-3s\bar x+3-2\bar x&=\frac{6}{s}\\
+                \Rightarrow \bar x(s)&= \frac{4s-11}{s^2-3s-2}-\frac{3}{s}
+            \end{split}
+        \end{equation*}
+        Let us now complete the square 
+        \begin{equation*}
+            \begin{split}
+                s^2-3s-2=s^2-3s-2+\frac{17}{4}-\frac{17}{4} =\left( s-\frac{3}{2}\right)^2-\frac{17}{4} \\
+                4s-11=4\left( s-\frac{11}{4} \right) = 4\left(s-\frac{6}{4}-\frac{5}{4}\right)
+            \end{split}
+        \end{equation*}
+        \begin{equation*}
+            \begin{split}
+                \bar x(s) &= \frac{4\left(s-\frac{3}{2}\right)}{\left(s-\frac{3}{2}\right)^2-\frac{17}{4}} - 5\frac{\frac{\sqrt{17}}{2}}{\frac{\sqrt{17}}{2}\left(\left(s-\frac{3}{2}\right)^2-\frac{17}{4}\right)} - \frac{3}{s}\\
+                x(t)&=4e^{3t/2}\cosh\left(\frac{\sqrt{17}}{2}t\right)-\frac{10}{\sqrt{17}}\sinh e^{3t/2}\left( \frac{\sqrt{17}}{2}t \right) -3
+            \end{split}
+        \end{equation*}
+        \item \begin{equation*}
+            \begin{split}
+                \odt{y}{t} + y &= 3 \sin (2t) \\
+                \Rightarrow \bar y(s)(s^2+1)-3s-1&=\frac{6}{s^2+4}\\
+                \Rightarrow \bar y(s) &=-\frac{2}{s^2+4}+\frac{2}{s^2+1}+\frac{3s}{s^2+1}+\frac{3}{s^2+1}\\
+                \Rightarrow y(t) &=-\sin 2t+2\sin t+3\cos t+3\sin t\\
+                &=3\cos t+5\sin t-\sin 2t
+            \end{split}
+        \end{equation*}
+    \end{enumerate}
+\end{work}
+
+% Exercise 6 
+\begin{exercise}
+    Solve the following pairs of simultaneous differential equations by using Laplace transforms:
+    \begin{enumerate}[label=(\alph*)]
+        \item \begin{equation*}
+            \begin{split}
+                \od{x}{t} -2x -\od{y}{t} -y&=6e^{3t} \\
+                2\od{x}{t} - 3x+\od{y}{t}-3y &=6e^{3t} \twen x(0)=3\twen y(0)=0
+            \end{split}
+        \end{equation*}
+        \item \begin{equation*}
+            \begin{split}
+                4\od{x}{t}+6x+y &=2\sin (2t) \\
+                \odt{x}{t} + x-\od{y}{t}&=3e^{-2t} \twen x(0)=2 \twen x'(0)=-2
+            \end{split}
+        \end{equation*}
+        \item \begin{equation*}
+            \begin{split}
+                \odt{x}{t}-x+5\od{y}{t} &=t\\
+                \odt{y}{t}-4y-2\od{x}{t}&=-2 \twen x(0)=x'(0)=y'(0)=0 \twen y(0)=1 \twen
+            \end{split}
+        \end{equation*}
+    \end{enumerate}
+\end{exercise}
+\begin{work}
+    \leavevmode
+    \begin{enumerate}[label=(\alph*)]
+        \item \begin{equation*}
+            \begin{split}
+                \od{x}{t} -2x -\od{y}{t} -y&=6e^{3t} \\
+                2\od{x}{t} - 3x+\od{y}{t}-3y &=6e^{3t} \\
+            \end{split}
+        \end{equation*}
+        \begin{equation*}
+            \begin{split}
+                &\begin{cases}
+                    \displaystyle(s-2)\bar x(s)-(s+1)\bar y(s)=\displaystyle{\frac{6}{s-3}}+3\\
+                    (2s-3)\bar x(s)+(s-3)\bar y(s)=\displaystyle{\frac{6}{s-3}}+6
+                \end{cases}\\
+                \Rightarrow\bar x(s) = &\frac{4}{(s-3)(s-1)} +\frac{3s-1}{(s-1)^2} = \frac{2}{s-3}+\frac{1}{s-1}+\frac{2}{(s-1)^2}\\
+                &\Rightarrow x(t)=2e^{3t}+e^t+2te^t
+            \end{split}
+        \end{equation*}
+        Eliminating $\od{y}{t}$ and solving for $y$ in the original system gives 
+        \begin{equation*}
+            \begin{split}
+                y(t)&=-3e^{3t}-\frac{5}{4}x(t)+\frac{3}{4}\od{x}{t} \\
+                &=-e^{3t}+e^t-te^t
+            \end{split}
+        \end{equation*}
+        \item Adding the two equations together gets\begin{equation*}
+            \begin{split}
+                5\odt{x}{t}+6\od{x}{t}+x&=4\sin (2t)+3e^{-2t} \\
+                \Rightarrow \bar x(s) &=\frac{29}{20(s+1)} + \frac{1}{3(s+2)} + \frac{2225}{1212(5s+1)}-4\frac{19s-25}{(5s+1)(s+1)} \\
+                \Rightarrow x(t)&=\frac{1}{3}e^{-2t}+\frac{29}{20}e^{-t}+\frac{445}{1212}e^{-t/5}-\frac{76}{5-5}\cos (2t)+\frac{48}{505}\sin(2t)
+            \end{split}
+        \end{equation*}
+        Subbing this back into the first ODE gives \begin{equation*}
+            y(t)=\frac{2}{3}e^{2t}-\frac{29}{10}e^{-t}-\frac{1157}{606}e^{-t/5}+\frac{72}{505}\cos(2t)+\frac{118}{505}\sin(2t)
+        \end{equation*}
+        \item I guess I skipped doing this one after being traumatized by the last problem.
+    \end{enumerate}
+\end{work}
+
+% Exercise 7
+\begin{exercise}
+    Demonstrate the phenomenon of resonance by solving the equation
+    \begin{equation*}
+        \odt{x}{t} + k^2x=A\sin(t) \twen x(0)=x_0 \twen x'(0)=v_0
+    \end{equation*}
+    and showing that the solution is unbounded as $t\rightarrow \infty$ for particular values of $k$.
+\end{exercise}
+\begin{work}
+    \begin{equation*}
+        \begin{split}
+            \bar x(s^2+k^2)-sx_0-v_0=\frac{A}{s^2+1}\\
+            \bar x(s)=\frac{A}{(s^2+1)(s^2+k^2)} + \frac{sx_0}{s^2+k^2}+\frac{v_0}{s^2+k^2}
+        \end{split}
+    \end{equation*}
+    If $k\neq 1$, we can split the first term via partial fractions and invert to get 
+    \begin{equation*}
+        x(t) = \frac{A}{k^2-1}\left(\sin t-\frac{\sin kt}{k}\right) + \frac{v_0}{k}\sin(kt) -x_0\cos(kt)
+    \end{equation*}
+    If $k=1$, we then get a $(1+s^2)^2$ in the denominator and we therefore convolute $\sin t$ with itself to get 
+    \begin{equation*}
+        x(t)= \frac{A}{2}(\sin t-t\cos t)+v_0\sin t+x(0)\cos t
+    \end{equation*}
+    Where we can see that there is a secular term $t\cos t$ that goes to infinity as $t\rightarrow \infty$.
+\end{work}
+
+% Exercise 8
+\begin{exercise}
+    Assuming that the air resistance is proportional to speed, the motion of a particle in air is governed by the equation 
+    \begin{equation*}
+        \frac{w}{g} \odt{x}{t} + b\od{x}{t} = w
+    \end{equation*}
+    If the initial conditions at $t=0$ are $x(0)=0$ and $v=v_0$, show that the solution is 
+    \begin{equation*}
+        x=\frac{gt}{a} +\frac{(av_0-g)(1-e^{-at})}{a^2}
+    \end{equation*}
+    where $a=\frac{bg}{w}$. Deduce the terminal speed of the particle.
+\end{exercise}
+\begin{work}
+    \begin{equation*}
+        \begin{split}
+            \frac{w}{g}(s^2\bar x-v_0)+b(s\bar x)&=\frac{w}{s}\\
+            \bar x\left( \frac{w}{g}s^2+bs\right) &=\frac{w}{s}+\frac{v_0w}{g}\\
+            &=\frac{wg+v_0ws}{sg}\\
+            \Rightarrow \bar x&=\frac{wg+v_0ws}{ws^3+gbs^2}\\
+            &=\frac{g+v_0s}{s^3+\frac{bg}{w}s^2}\\
+            &=\frac{g+v_0s}{s^2(s+a)} \\
+            &=\frac{-\frac{1}{a^2}(av_0-g)}{s+a}+\frac{-\frac{1}{a^2}(av_0-g)s+\frac{g}{a}}{s^2} \\
+            \Rightarrow x(t) &= -\frac{1}{a^2}(av_0-g)e^{-at}-\frac{1}{a^2}(av_0-g)+\frac{g}{a}t \\
+            \Rightarrow \od{x}{t} &= \frac{g}{a}+\frac{(av_0-g)}{a}e^{-at}\\
+            \Rightarrow \odt{x}{t} &=(g-av_0)e^{-at}
+        \end{split}
+    \end{equation*}
+    To find the terminal velocity, set the acceleration to be zero (since at terminal velocity, the velocity isn't changing) and solve for $t$ and plug it back into the expression for the velocity.
+\end{work}
+
+% Exercise 9
+\begin{exercise}
+    Determine the algebraic system of equations obeyed by the transformed electrical variables $\bar j_1, \bar j_2, \bar j_3$ and $\bar q_3$ given the electrical circuit equations 
+    \begin{equation*}
+        \begin{split}
+            j_1&=j_2+j_3\\
+            R_1j_1+L_2\od{j_2}{t} &= E\sin (\omega t)\\
+            R_1j_1+R_3j_3+\frac{1}{C}q_3 &= E\sin (\omega t)\\
+            j_3&=\od{q_3}{t}
+        \end{split}
+    \end{equation*}
+\end{exercise}
+\begin{work}
+    \begin{equation*}
+        \begin{split}
+            \bar j_1-\bar j_2-\bar j_3 &= 0\\
+            R_1\bar j_1+L_2(s\bar j_2-j_2(0)) &=E\frac{\omega^2}{s^2+\omega^2}\\
+            R_1\bar j_1+R_3\bar j_3+\frac{1}{C}\bar q_3 &= E\frac{\omega^2}{s^2+\omega^2}\\
+            \bar j_3-s\bar q_3&=-q_3(0)
+        \end{split}
+        \newline\Rightarrow \begin{bmatrix}
+            1&-1&-1&0\\ R_1&sL_2&0&0\\ R_1&0&R_3&\frac{1}{C}\\0&0&1&-s 
+        \end{bmatrix}
+        \begin{bmatrix}
+            \bar j_1\\\bar j_2 \\\bar j_3 \\\bar q_3
+        \end{bmatrix} 
+        =\begin{bmatrix}
+            0\\E\frac{\omega^2}{s^2+\omega^2}+j_2(0) \\E\frac{\omega^2}{s^2+\omega^2}\\-q_3(0)
+        \end{bmatrix}
+    \end{equation*}T
+\end{work}
+
+% Exercise 10
+\begin{exercise}
+    Solve the loaded beam problem expressed by the equation 
+    \begin{equation*}
+        k\od{y^4}{x^4} = \frac{w_0}{c}[c-x+(x-c)H(x-c)] \twen 0<x<2c \twen y(0)=y'(0)=y''(2c)=y'''(2c)=0
+    \end{equation*}
+    Find the bending moment $ky''$ at the point $x=\frac{1}{2}c$.
+\end{exercise}
+\begin{work}
+    \begin{equation*}
+        \begin{split}
+            s^4\bar y(s) &= \frac{w_0}{ck}\left(\frac{c}{s} - \frac{1}{s^2}(1-e^{-cs})\right)+sy''(0)+y'''(0) \\
+            \Rightarrow \bar y(s) &=\frac{w_0}{ck}\left( \frac{c}{s^5}-\frac{1}{s^6}(1-e^{-cs)}\right)+\frac{y''(0)}{s^3}+\frac{y'''(0)}{s^4}\\
+            \Rightarrow y(x)&=\frac{w_0}{ck}\left( \frac{c}{24}x^4-\frac{1}{120}x^5+\frac{(x-c)^5}{120}H(x-c)\right) + \frac{1}{2}y''(0)x^2+\frac{1}{6}y'''(0)x^3\\
+            \Rightarrow y''(x)&=\frac{w_0}{ck}\left( \frac{c}{2}x^2-\frac{1}{6}x^3+\frac{(x-c)^3}{6}H(x-c)\right)+y''(0)+y'''(0)x\\
+            \Rightarrow y'''(x)&=\frac{w_0}{ck}\left( cx -\frac{1}{2}x^2+\frac{(x-c)^2}{2}H(x-c)\right)+y'''(0)\\
+            \Rightarrow y'''(2c)=0&=\frac{w_0}{ck}\left(2c^2-2c^2+\frac{1}{2}c^2\right) +y'''(0)\\
+            \Rightarrow y'''(0) &=-\frac{w_0c}{2k} \\
+            \Rightarrow y''(2c)=0&=\frac{w_0}{ck}\left(\frac{c}{2}4c^2-\frac{1}{3}4c^3+\frac{1}{6}c^3 \right) +y''(0) - \frac{w_0c^2}{k}\\
+            &= \frac{w_0}{k}\left( 2c^2-\frac{4}{3}c^2+\frac{1}{6}c^2 \right)+y''(0) -\frac{w_0c^2}{k}\\
+            &=\frac{w_0}{k}\frac{5}{6}c^2+y''(0)-\frac{w_0c^2}{k} \\
+            \Rightarrow y''(0) &=\frac{w_0c^2}{6k}\\
+            \Rightarrow y(x) &=\frac{w_0}{ck}\left( \frac{c}{24}x^4-\frac{1}{120}x^5+\frac{(x-c)^5}{120}H(x-c)\right) + \frac{w_0c^2}{12k}x^2-\frac{w_0c}{12k}x^3
+        \end{split}
+    \end{equation*}
+\end{work}
+
+% Exercise 11
+\begin{exercise}
+    Solve the integral equation 
+    \begin{equation*}
+        \phi(t) = t^2 + \int^t_0\phi (y)\sin (t-y)dy
+    \end{equation*}
+\end{exercise}
+\begin{work}
+    \begin{equation*}
+        \begin{split}
+            \phi(t) &= t^2+\phi*\sin t \\
+            \Rightarrow \bar \phi(s) &=\frac{2}{s^3}+\frac{\bar \phi}{s^2+1} \\
+            \Rightarrow \bar \phi(s)\left(1-\frac{1}{s^2+1} \right)&= \bar \phi(s)\left( \frac{s^2}{s^2+1}\right)=\frac{2}{s^3}\\
+            \Rightarrow \bar \phi(s) &= \frac{2s^2+2}{s^5}= \frac{2}{s^5}+\frac{2}{s^3}\\
+            \Rightarrow \bar \phi(t)&= \frac{1}{12}t^4+t^2
+        \end{split}
+    \end{equation*}
+\end{work}
+
+
+\chapter{Fourier Series}
+\section{Definition of the Fourier Series}
+\begin{theorem} [Bessel's Inequality]
+    If 
+    \begin{equation*}
+        \{\bold{e_1,e_2,\ldots,e_n,\dots}\} 
+    \end{equation*}
+    is an orthonormal basis for the vector space $V$, then for every $\bold{a} \in V$ the series 
+    \begin{equation*}
+        \sum^\infty_{r=1}|\langle \bold{a,e_n} \rangle|^2
+    \end{equation*}
+    converges and the following inequality is true
+    \begin{equation*}
+        \sum^\infty_{r=1}|\langle \bold{a,e_n}\rangle|^2 \leq ||\bold{a}||^2
+    \end{equation*}
+\end{theorem}
+
+\begin{lemma}[Riemann-Lebesgue Lemma]
+    Let $\{\bold{e_1,e_2,}\ldots\}$ be an orthonormal basis of infinite dimension for the inner product space $V$. Then for any $\bold{a}\in V$, 
+    \begin{equation*}
+        \lim_{n\rightarrow \infty}\langle\bold{a,e_n}\rangle = 0
+    \end{equation*}
+\end{lemma}
+Intuitively, these results can be thought of as for an infinite dimensional space (I believe more specifically a Hilbert Space), the "energy" in each coefficient for every projection onto a basis vector must go to zero for a finite vector. Basically, a finite normed vector "runs out" of stuff to project onto. Let us also note the definitions of pointwise and uniform convergence.
+\begin{definition}[Pointwise Convergence]
+    Let \begin{equation*}
+        \{f_0,f_1,\ldots,f_m,\ldots\}
+    \end{equation*}
+    be a sequence of functinos defined on the closed interval $[a,b]$. We say that the sequence $\{f_0,f_1,\ldots,f_m,\ldots\}$ converges pointwise to $f$ on $[a,b]$ if for each $x\in [a,b]$ and $\epsilon>0$, there exists a natural number $N(\epsilon,x)$ such that \begin{equation*}
+        |f_m(x)-f(x)|<\epsilon \,\,\, \forall m \geq N(\epsilon,x)
+    \end{equation*}
+\end{definition}
+
+\begin{definition}[Uniform Convergence]
+    Let \begin{equation*}
+        \{f_0,f_1,\ldots,f_m,\ldots\}
+    \end{equation*}
+    be a sequence of functions defined on the closed interval $[a,b]$. We say that the sequence $\{f_0,f_1,\ldots,f_m,\ldots\}$ converges uniformly to $f$ on $[a,b]$ if for each $\epsilon>0$ there exists a natural number $N(\epsilon)$ such that 
+    \begin{equation*}
+        |f_m(x)-f(x)|<\epsilon\,\,\,\forall m \geq N(\epsilon) \text{ and }\forall x\in [a,b]
+    \end{equation*}
+\end{definition}
+The Fourier series converges pointwise and not uniformly to the function. At discontinuities, it converges to the average of the limit of both sides. 
+\begin{theorem}[Dirichlet's Theorem]
+    If $f$ is a member of the space of piecewise continuous functions which are $2\pi$ periodic on the closed interval $[-\pi,\pi]$ and which has both left and right derivatives at each $x\in [-\pi,\pi]$, then for each $x\in [-\pi,\pi]$, the Fourier series of $f$ converges to the value 
+    \begin{equation*}
+        \frac{f(x^-)+f(x^+)}{2}
+    \end{equation*}
+    and at the end points $x=\pm \pi$, the series converges to 
+    \begin{equation*}
+        \frac{f(\pi^-)+f((-\pi)^+)}{2}
+    \end{equation*}
+\end{theorem}
+\begin{definition}
+    If an interval $[s,t_0]$ can be partitioned into a finite number of subintervals $[s,t_1],[t_1,t_2],[t_2,t_3],\ldots,[t_n,t_0]$ with $s,t_1,t_2,\ldots,t_n,t_0$ an increasing sequence of intervals numbers and such that a given function $f(t)$ is continuous in each of these subintervals but not necessarily at the end points, then $f(t)$ is piecewise continuous in the interval $[s,t_0]$. 
+\end{definition}
+\begin{theorem}
+    The sequence of functions 
+    \begin{equation*}
+        \left\{ \frac{1}{\sqrt{2}},\sin x,\cos x, \sin 2x, \cos 2x,\ldots\right\}
+    \end{equation*}
+    form an infinite orthonormal sequence in the space of al piecewise continuous functions on the interval $[-\pi,\pi]$ where the inner product $\langle f,g\rangle$ is defined by 
+    \begin{equation*}
+        \langle f,g \rangle = \frac{1}{\pi}\int^\pi_{-\pi} f\bar gdx
+    \end{equation*}
+    where the overbar denotes the complex conjugate.
+\end{theorem}
+The proof of this will be omitted since it is fairly straightforward but tedious. Since this sequence of functions forms an infinite orthonormal basis for the space of piecewise  continuous $2\pi$-periodic functions, we can express a piecewise continuous $2\pi$-periodic functions as a linear combination of the basis vectors or 
+\begin{equation*}
+    f(x)\sim \frac{a_0}{\sqrt{2}} + \sum^\infty_{n=1} (a_n\cos(nx)+b_n\sin(nx)) \twen -\pi<x<\pi
+\end{equation*}
+Each coefficient represents how much of each basis vector contributes to the overall function and so we can figure this out by projecting our function onto each basis vector. We do this by taking the inner product such that 
+\begin{equation*}
+    \begin{split}
+        a_0 = \langle f,1\rangle &= \frac{1}{\pi} \int^\pi_{-\pi}f(x)dx \\
+        a_n = \langle f,\cos nx\rangle&=\frac{1}{\pi}\int^\pi_{-\pi}f(x)\cos (nx)dx \\
+        b_n=\langle f, \sin nx\rangle &=\frac{1}{\pi}\int^\pi_{-\pi}f(x)\sin (nx)dx
+    \end{split}
+\end{equation*}
+Realistically speaking, we mainly deal with the Fourier expansion as 
+\begin{equation*}
+    f(x)\sim \frac{a_0}{2} + \sum^\infty_{n=1} (a_n\cos(nx)+b_n\sin(nx))
+\end{equation*}
+since the square root in the denominator is annoying to deal with. This technically means that the basis is no longer orthonormal but it is much more convenient to work with. We can also find the Fourier series of other functions by manipulating the series of one that we know. For example, the Fourier series of $y=x$ is 
+\begin{equation*}
+    y \sim2\sum^\infty_{n=1}\frac{(-1)^{n+1}}{n}\sin(nx)
+\end{equation*}
+and so therefore the Fourier series of a generalized straight line $y=mx+c$ is 
+\begin{equation*}
+    y\sim c+2m\sum^\infty_{n=1}\frac{(-1)^{n+1}}{n}\sin(nx)
+\end{equation*}
+One notes that since a straight line is an odd function (unless completely horizontal), the Fourier series only consists of odd sin functions. 
+\begin{definition} [Even Function]
+    A function $f(x)$ is termed even with respect to the value $a$ is 
+    \begin{equation*}
+        f(a+x)=f(a-x) \,\,\, \forall x\in\R
+    \end{equation*}
+\end{definition}
+\begin{definition} [Odd Function]
+    A function $f(x)$ is termed odd with respect to the value $a$ if \begin{equation*}
+        f(a+x)=-f(a-x) \,\,\, \forall x\in \R
+    \end{equation*}
+\end{definition}
+We can then recall Euler's formula and therefore express sin and cos as 
+\begin{equation*}
+    \begin{split}
+        \cos(nx)&=\frac{1}{2}(e^{inx}+e^{-inx})\\
+        \sin (nx)&=\frac{1}{2}(e^{inx}-e^{-inx})
+    \end{split}
+\end{equation*}
+and so therefore we can express the Fourier series in its complex form as 
+\begin{equation*}
+    f(x)\sim\sum^\infty_{n=-\infty}c_ne^{inx}
+\end{equation*}
+where \begin{equation*}
+    c_n = \frac{1}{2}(a_n-ib_n)\twen c_{-n}=\frac{1}{2}(a_n+ib_n)\twen c_0=\frac{1}{2}a_0\twen n\in \mathbb{N}
+\end{equation*}
+We can also write the coefficients in inner product form as 
+\begin{equation*}
+    c_n = \frac{1}{2\pi}\int^\pi_{-\pi}f(x)e^{-inx}dx \twen c_{-n}=\frac{1}{2\pi}\int^\pi_{-\pi}f(x)e^{inx}dx
+\end{equation*}
+Let us also consider the half-range series which are defined on the the interval $[0,\pi ]$. Our previous basis would not work on this interval but the individual bases
+\begin{equation*}
+    \begin{split}
+        \{\sin x,\sin 2x,\sin 3x,\ldots \} \\
+        \left\{\frac{1}{\sqrt{2}}, \cos x,\cos 2x, \ldots \right \}
+    \end{split}
+\end{equation*}
+do work. As such, we can effectively have an odd and even extension of a function by taking the half range Fourier series. We therefore have the coefficients to be 
+\begin{equation*}
+    a_n = \frac{2}{\pi}\int^\pi_0f(x)\cos (nx)dx 
+\end{equation*}
+and 
+\begin{equation*}
+    b_n = \frac{2}{\pi}\int^\pi_0 f(x)\sin(nx)dx
+\end{equation*}
+We can also generalize the Fourier series to any interval $[-L,L]$ using the transformation $x\rightarrow \frac{n\pi}{L}x$ where the coefficients can be found using the inner product
+\begin{equation*}
+    \langle f,g\rangle=\frac{1}{L}\int^L_{-L}f\bar g dx
+\end{equation*}
+\section{Properties of the Fourier Series}
+Differentiation poses a larger problem than integration of the Fourier series. The reasoning for this is differentiation pulls out an $n$ as a coefficient which for larger values of $n$, cause the terms to be larger in magnitude than the originals. Integration pulls out a $\frac{1}{n}$ coefficient and therefore the magnitude is smaller.
+
+
+
+
+
+
+
+
+
+\end{document}

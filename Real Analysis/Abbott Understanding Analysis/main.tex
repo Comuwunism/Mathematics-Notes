@@ -1,0 +1,161 @@
+\documentclass[12pt,letterpaper]{report}
+\usepackage{graphicx} % Required for inserting images
+\usepackage[english]{babel}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage[margin=1in]{geometry}
+
+\title{Understanding Analysis}
+\author{Kyle Wang}
+\date{July 2026}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{exercise}{Exercise}[section]
+\theoremstyle{remark}
+\newtheorem*{work}{Work}
+
+\newcommand{\R}{\mathbf{R}}
+\newcommand{\Q}{\mathbf{Q}}
+
+
+\begin{document}
+
+\maketitle
+\newpage
+\begin{abstract}
+This document serves to digitize my paper notes along with my work and proofs for each of the exercises for working through Stephen Abbott's \textit{Understanding Analysis}. I should complete every exercise and if one of the exercise numbers are skipped, it was likely a proof for a theorem mentioned in the text that is left as an exercise to the reader. The first section of each chapter are motivating examples from Abbott and may be left empty. Some of the earlier exercises may also be left empty due to potential absences in my paper notes.
+\end{abstract}
+\newpage
+
+\chapter{The Real Numbers}
+
+\section{Introduction}
+\section{Preliminaries}
+% Function Definition
+\begin{definition}
+Given two sets $A$ and $B$, a \textit{function} from $A$ to $B$ is a rule or mapping that takes each element $x \in A$ and associates with it a single element of $B$. In this case, we write $f:A \rightarrow B$. Given an element $x \in A$, the expression $f(x)$ is used to represent the element of $B$ associated with $x$ by $f$. The set $A$ is called the \textit{domain} of $f$. The \textit{range} of $f$ is not necessarily equal to $B$, but refers to the subset of $B$ given by ${y \in B:y=f(x) \text{ for some } x \in A}$.
+\end{definition}
+
+% Therorem about Equal Numbers
+\begin{flushleft}
+\begin{theorem}
+Two real numbers a and b are equal if and only if for every real number $\epsilon > 0$ it follows that $|a-b|<\epsilon$.
+\end{theorem}
+\end{flushleft}
+\begin{proof}
+    ($\Rightarrow$) If $a=b$, then $|a-b| = 0 < \epsilon$ for every real number $\epsilon > 0$.\\
+    ($\Leftarrow$) We shall prove the converse statement by contradiction. Assume first that $a \neq b$. Then there exists an $\epsilon_0$ such that
+\begin{equation*}
+    \epsilon_0 = |a-b|
+\end{equation*}
+Since we have established before that $|a-b| < \epsilon$ for any $\epsilon$, this implies that $|a-b| < \epsilon_0$ and now we have a contradiction. Therefore our claim that $a \neq b$ is wrong and $a=b$.
+\end{proof}
+
+% Exercise 1.2.1
+\begin{exercise}
+(a) Prove that $\sqrt{3}$ is irrational. Does a similar argument work to show $\sqrt{6}$ is irrational?
+(b) Where does the proof of Theorem 1.1.1 (that there does not exist a rational number equal to $\sqrt{2}$) break down if we try to use it to prove $\sqrt{4}$ is irrational?
+\end{exercise}
+\begin{work}
+    (a) Assume, by contradiction, that there exists a rational number that is equal to $\sqrt{3}$. Then we get
+    \begin{equation*}
+        \sqrt{3} = \frac{p}{q} \text{ where $p$ and $q$ have no common factors}
+    \end{equation*}
+    This implies that 
+    \begin{equation*}
+        3 =  \frac{p^2}{q^2} \rightarrow 3q^2 = p^2
+    \end{equation*}
+    but this implies that $p^2$, and by extension $p$, is a multiple of 3 and can be written of the form $p=3r$. This implies
+    \begin{equation*}
+        3q^2 = 9r^2 \rightarrow q^2 = 3r^2
+    \end{equation*}
+    which implies that $q^2 and q$ are multiples of 3 as well. Since both $p$ and $q$ are divisible by 3, this violates our initial assumption that $p$ and $q$ share no common factors. Hence, $\sqrt{3}$ is irrational.\qed \\
+    \medskip
+    (b) 4 is a perfect square so when you reach $p^2 = 4q^2$, $p$ can equal 2.
+\end{work}
+
+% Exercise 1.2.2
+\begin{exercise}
+    Show that there is no rational number $r$ satisfying $2^r = 3$.
+\end{exercise}
+\begin{work}
+    Let us assume that there exists a number $r = \frac{p}{q}$ where $p$ and $q$ share no common factors that satisfy the above relation. We then get 
+    \begin{equation*}
+        2^{\frac{p}{q}} = 3 \rightarrow 2^p = 3^q
+    \end{equation*}
+    Since the left hand side is always even and the right hand side is always odd, there exists no integers $p$ and $q$ satisfy the above relation.
+    \qed
+\end{work}
+
+% Exercise 1.2.3
+\begin{exercise}
+Decide which of the following represent true statements about
+the nature of sets. For any that are false, provide a specific example where the statement in question does not hold.\\
+(a) If $A_1 \subseteq A_2 \subseteq A_3 \subseteq A_4 
+ \cdots$ are all the sets containing an infinite number of elements, then the intersection $\bigcap^\infty_{n=1} A_n$ is infinite as well \\
+ (b) If $A_1 \subseteq A_2 \subseteq A_3 \subseteq A_4 
+ \cdots$ are all finite, nonempty sets of real numbers, then the intersection $\bigcap^\infty_{n=1} A_n$ is finite and nonempty.\\
+ (c) $A \cap (B \cup C)  = ( A \cap B ) \cup C $ \\
+ (d) $A \cap (B \cap C) = (A \cap B) \cap C$ \\
+ (e) $A \cap (B \cup C) = (A \cap B) \cup (A \cap C)$
+\end{exercise}
+\begin{work}
+    (a) False. Consider the sets $A_1 = \{1,2,\ldots\}, A_2 = \{2,3,\ldots\}$. The infinite intersection of these sets is $\emptyset$.\\
+    (b) True. Since they all must be nested within in each other, we must reach an index $k$ such that $A_k = \{x\}$ and subsets with index $n \geq k$ will just "copy" this element meaning $\bigcap^{\infty}_{n=1}A_n = \{x\}$ \\
+    (c) False. If $A = \emptyset$, then the left hand side becomes $\emptyset$ but the right hand side becomes $C$\\
+    (d) True. \\
+    (e) True
+    
+\end{work}
+
+
+
+
+
+
+
+\section{The Axiom of Completeness}
+Let us first assume $\R$ is field which means that addition and multiplication of the elements of $\R$ are commutative, associative, and the distributive property holds. We can also have notions of magnitude and therefore $\R$ is an ordered field. In order to express that $\R$ does not contain any gaps like $\Q$, we must use the \textit{Axiom of Completeness}.
+
+% AoC
+\begin{definition} [Axiom of Completeness]
+Every nonempty set of real numbers that is bounded above has a least upper bound.
+\end{definition}
+
+% Bounded Above and Below
+\begin{definition}
+    A set $A \subseteq \R$ is \textit{bounded above} if there exists a number $b \in \R$ such that $a \leq b$ for all $a \in A$. The number $b$ is called an \textit{upper bound} for $A$.\\ Similarly, the set $A$ is \textit{bounded below} if there exists a \textit{lower bound} $l \in \R$ satisfying $l \leq a$ for every $a \in A$. 
+\end{definition}
+
+% Supremum Definition
+\begin{definition}
+    A real number $s$ is the \textit{least upper bound} or \textit{supremum} for a set $A \subseteq \R$ if it meets the following two criteria: 
+    \begin{enumerate}
+        \item[(i)] $s$ is an upper bound for $A$
+        \item[(ii)] if $b$ is any upper bound for A, then $s \leq b$.
+    \end{enumerate}
+\end{definition}
+
+\begin{flushleft}
+    The \textit{greatest lower bound} or \textit{infimum} for $A$ is defined similarly.
+\end{flushleft}
+
+% Maximum Definition
+\begin{definition}
+    A real number $a_0$ is a \textit{maximum} of the set $A$ if $a_0$ is an element of $A$ and $a_0 \geq a \hspace{4pt} \forall a \in A$. Similarly, a number $a_1$ is a minimum of $A$ if $a_1 \in A$ and $a_1 \leq a \hspace{4pt} \forall a \in A$.
+\end{definition}
+
+% Supremum Lemma
+\begin{lemma}
+    Assume $s \in \R$ is an upper bound for a set $A \subseteq \R$. Then, $s$ = sup $A$ if and only if, for every choice of $\epsilon > 0$, $\exists \hspace{4pt} a \in A$ satisfying $s-\epsilon < a$.
+\end{lemma}
+
+\begin{proof}
+    $(\Rightarrow)$ First, we assume that $s=$ sup $A$ and consider $s-\epsilon$, where $\epsilon > 0$. Therefore $s-\epsilon < s$ and is therefore not an upper bound. Therefore $\exists \hspace{4pt} a \in A \text{ such that }s-\epsilon < a$. \\
+    $(\Leftarrow)$ Assume s is an upper bound with the property that for every $\epsilon > 0$, $s-\epsilon$ is no longer an upper bound of A. If $b < s$, b is no longer an upper bound and you can set $\epsilon = s-b$. 
+\end{proof}
+
+
+\end{document}
