@@ -949,16 +949,16 @@ This is a demonstration of Duhamel's Principle which effectively states that whe
 \begin{equation}
     u(t,x) = h(t,x) * G(t,x;0,0)
 \end{equation}
-\textbf{The Black-Scholes (Bullshit) Equation}\\
+\textbf{The Black-Scholes Equation}\\
 The most influential equation in quantitative finance is the Black-Scholes Equation
 \begin{equation}
     \pd{u}{t} +\frac{\sigma^2}{2}x^2\pdt{u}{x}+rx\pd{u}{x} -ru= 0
 \end{equation}
-I genuinely have no idea what any of these terms mean nor do I care because I think quant and finance are soulless endeavors. As such, I will just be copying Olver's explanation. The dependent variable $u(t,x)$ represents the monetary value of a single financial option, meaning a contract to either buy or sell and asset at a specified exercise price $p$ at a certain future time $t_\star$. The value $u(t,x)$ of the option will depend on the current time $t\leq t_\star$ and the current price $x\geq0$ of the underlying asset. As with many financial models, one assumes the absence of arbitrage, meaning that there is no way to make a riskless profit. The constant $\sigma>0$ represents the asset's volatility, while $r$ denotes the (assumed to be constant) interest rate for bank deposits, where investors could place their money with a guaranteed rate of return instead of buying the option. If we rearrange the Bullshit equation such that all the $x$ derivatives are one side we see that the Bullshit equation is a backwards diffusion process since the second spatial derivative is negative. 
+I genuinely have no idea what any of these terms. As such, I will just be copying Olver's explanation. The dependent variable $u(t,x)$ represents the monetary value of a single financial option, meaning a contract to either buy or sell and asset at a specified exercise price $p$ at a certain future time $t_\star$. The value $u(t,x)$ of the option will depend on the current time $t\leq t_\star$ and the current price $x\geq0$ of the underlying asset. As with many financial models, one assumes the absence of arbitrage, meaning that there is no way to make a riskless profit. The constant $\sigma>0$ represents the asset's volatility, while $r$ denotes the (assumed to be constant) interest rate for bank deposits, where investors could place their money with a guaranteed rate of return instead of buying the option. If we rearrange the Black-Scholes equation such that all the $x$ derivatives are one side we see that the Black-Scholes equation is a backwards diffusion process since the second spatial derivative is negative. 
 \begin{equation}
     \pd{u}{t} = -\frac{\sigma^2}{2}x^2\pdt{u}{x}-rx\pd{u}{x} +ru 
 \end{equation}
-In contrast to the standard heat equation, the Bullshit equation is only well posed when run in reverse time. This gives rise to a \textit{final value problem} as opposed to an initial value problem. We want to determine the option value at the current time and asset value given the final condition
+In contrast to the standard heat equation, the Black-Scholes equation is only well posed when run in reverse time. This gives rise to a \textit{final value problem} as opposed to an initial value problem. We want to determine the option value at the current time and asset value given the final condition
 \begin{equation}
     u(t_\star,x) =f(x)
 \end{equation}
@@ -978,7 +978,7 @@ The first step is to convert it into a forward diffusion process using the chang
 \begin{equation}
     \tau = \frac{1}{2} \sigma^2(t_\star -t) \hspace{20pt} v(\tau,x) = u\left(t_\star - \frac{2\tau}{\sigma^2},x \right)
 \end{equation}
-This has the effect of turning the final condition into an initial condition. Using the chain rule, the Bullshit equation turns into 
+This has the effect of turning the final condition into an initial condition. Using the chain rule, the Black-Scholes equation turns into 
 \begin{equation}
     \pd{v}{\tau} =x^2\pdt{v}{x} +\kappa x\pd{v}{x}-\kappa v \text{ where } \kappa =\frac{2r}{\sigma^2}
 \end{equation}
@@ -1042,7 +1042,7 @@ erfc is the complementary error function which is defined to be
 \begin{equation*}
     \operatorname{erfc} x = 1-\operatorname{erf}x=1-\frac{2}{\sqrt{\pi}}\int^x_0 e^{-t^2}dt = \frac{2}{\sqrt{\pi}} \int^\infty_xe^{-t^2}dt
 \end{equation*}
-As such, the solution to the Bullshit equation for the European call option is 
+As such, the solution to the Black-Scholes equation for the European call option is 
 \begin{equation*}
 \begin{split}
     u(t,x) = \frac{1}{2}\left[ x\,\operatorname{erfc}\left(-\frac{\left(r + \tfrac{1}{2}\sigma^{2}\right)(t_\star - t) + \ln\frac{x}{p}}{\sqrt{2\,\sigma(t_\star - t)}}\right)  
