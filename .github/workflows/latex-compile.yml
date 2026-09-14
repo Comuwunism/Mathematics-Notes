@@ -3,9 +3,9 @@ name: Compile LaTeX
 on:
   push:
     branches:
-      - main  # Change to 'master' if that is your default branch
+      - main
     paths:
-      - '**.tex'  # Only runs when a .tex file is modified
+      - '**.tex'
 
 jobs:
   build:
@@ -17,14 +17,22 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Compile all LaTeX documents
+      - name: Find all LaTeX files
+        id: find_tex
+        run: |
+          FILES=$(find . -name "*.tex" -type f -printf "%P\n")
+          echo "files<<EOF" >> $GITHUB_OUTPUT
+          echo "$FILES" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+      - name: Compile all discovered files
         uses: xu-cheng/latex-action@v3
         with:
-          root_file: "*.tex"
-          glob_root_file: true
+          root_file: ${{ steps.find_tex.outputs.files }}
+          work_in_root_file_dir: true
           
-      - name: Commit generated PDF
+      - name: Commit generated PDFs
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
-          commit_message: "Auto-update PDF from LaTeX"
-          file_pattern: '*.pdf'
+          commit_message: "Auto-compile all LaTeX documents"
+          file_pattern: '**/*.pdf'
