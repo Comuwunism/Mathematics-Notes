@@ -178,7 +178,7 @@ Equation \eqref{eq:cl} is known as the differential rate law which be written ac
 Proposition 1.1 is also known as the integrated form of the conservation law.\\
 
 \textbf{Shocks}\\
-When the function becomes multi-valued, we have to impose a vertical line in order to recover a single valued function. In order to obey conservation of mass, the amount of area we cut off from the overhang must be added back to the area "left" of where we intend to place our shock line. 
+When the function becomes multi-valued, we have to impose a vertical line in order to recover a single valued function. In order to obey conservation of mass, the amount of area we cut off from the overhang must be added back to the area ``left" of where we intend to place our shock line. 
 \begin{proposition}
     Let $u(t,x)$ be solution to the nonlinear transport equation with a discontinuity at $x=\sigma(t)$ where $\sigma(t)$ is the Heaviside unit step function. Assuming the limits for $u^-(t)$ and $u^+(t)$ are unequal, to obey conservation of mass, the speed of the shock is 
     \begin{equation*}
@@ -251,7 +251,7 @@ $c$ is once again the celerity or wave speed. Equation \eqref{eq:wave} can be wr
 \begin{equation*}
     \square u = 0 \text{ where } \square=(\partial^2_t - c^2\partial^2_x) = (\partial_t+c\partial_x)(\partial_t-c\partial_x)
 \end{equation*}
-We can note that when we "factor" the d'Alembert operator, we get two one dimensional transport equations.
+We can note that when we ``factor" the d'Alembert operator, we get two one dimensional transport equations.
 
 % d'Alembert Solution First Part Theorem
 \begin{theorem}
@@ -355,7 +355,7 @@ We can now write the general solution to the classical wave equation as the sum 
 
 \section{Green's Functions}
 \textbf{The Dirac Delta Function}\\
-There are two interpretations of the delta function: one as the limit of a series of functions and one as a linear functional. This is because the delta function isn't a function in the traditional but ``akshually a distribution'' which I've heard about 5 million times from every Youtube video that mentions a delta function.\\ $\newline$
+There are two interpretations of the delta function: one as the limit of a series of functions and one as a linear functional. This is because the delta function isn't a function in the traditional but ``akshually a distribution" which I've heard about 5 million times from every Youtube video that mentions a delta function.\\ $\newline$
 In the limit interpretation, we choose a sequence of smooth functions $g_n(x)$ and require the limit $\lim_{n\rightarrow \infty} g_n(x)=0 \hspace{4pt} \forall x\neq \xi$ where $\xi$ is the location we want the impulse to be located. The other requirement is that $\int^b_ag_n(x)dx = 1 \hspace{4pt} \forall n \in \mathbb{N}$. As such, $\delta_\xi(x) = \lim_{n\rightarrow \infty} g_n(x)$. One such example is $g_n(x) = \frac{n}{\pi (1+n^2x^2)}$. \\ $\newline$
 The other interpretation is the delta function as a linear functional. The most important property of the delta function is the sifting property.
 \begin{equation}
@@ -730,7 +730,7 @@ Now notice how the potential outside of the unit disk would have been the same a
     \end{equation*}
 \end{proof} 
 \textbf{The Method of Images} \\
-The Method of Images is one way to find the solution to a boundary value problem. We already know the logarithmic potential (the free-space Green's Function) so we want to find the correct harmonic part $z(x,y)$ that matches the boundary values required by the problem. We do this by placing an "image" charge or mass in such a way outside of the domain $\Omega$ such that the required boundary conditions are met. 
+The Method of Images is one way to find the solution to a boundary value problem. We already know the logarithmic potential (the free-space Green's Function) so we want to find the correct harmonic part $z(x,y)$ that matches the boundary values required by the problem. We do this by placing an ``image" charge or mass in such a way outside of the domain $\Omega$ such that the required boundary conditions are met. 
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.5\textwidth]{MethodOfImages.png}
@@ -847,7 +847,7 @@ with an initial temperature distribution
 \begin{equation*}
     u(0,x) = f(x)
 \end{equation*}
-For the solution to uniquely exist, we require it to be square integrable for all $t>0$. This acts as the "boundary conditions" as square integrability requires $|u(t,x)|$ to be vanishingly small at $x=\pm \infty$. To solve the initial value problem, let us take the Fourier Transform of \eqref{eq:3.3} and the initial conditions to get 
+For the solution to uniquely exist, we require it to be square integrable for all $t>0$. This acts as the ``boundary conditions" as square integrability requires $|u(t,x)|$ to be vanishingly small at $x=\pm \infty$. To solve the initial value problem, let us take the Fourier Transform of \eqref{eq:3.3} and the initial conditions to get 
 \begin{equation}
     \pd{\hat{u}}{t} =-k^2\hat{u} \text{ and } \hat{u}(0,k) =\hat{f}(k) = \frac{1}{\sqrt{2\pi}}\int^\infty_{-\infty} f(x)e^{-ikx}dx \label{eq:3.4}
 \end{equation}
@@ -1109,7 +1109,7 @@ where $a,b,c$ are constants and $a,b \neq0$. As a result, the rescaled solution 
 \begin{equation}
     U(t,x) = \beta^cu(\beta^{-a}t,\beta^{-b}x) \label{eq:3.41}
 \end{equation}
-$u(t,x)$ is a similarity solution if the left hand side of \eqref{eq:3.41} is $U(t,x) = u(t,x)$. For the following example, let us assume $a\neq 0$. Since the left hand side is completely independent of $\beta$ and "anchored" by the specific $t$ and $x$, our scaling symmetry should work for all $\beta > 0$. Let us choose a convenient $\beta = t^{1/a}$ such that it eliminates one of our variables. We now have 
+$u(t,x)$ is a similarity solution if the left hand side of \eqref{eq:3.41} is $U(t,x) = u(t,x)$. For the following example, let us assume $a\neq 0$. Since the left hand side is completely independent of $\beta$ and ``anchored" by the specific $t$ and $x$, our scaling symmetry should work for all $\beta > 0$. Let us choose a convenient $\beta = t^{1/a}$ such that it eliminates one of our variables. We now have 
 \begin{equation}
     u(t,x) =t^{c/a}v(\xi) \hspace{20pt} \xi = xt^{-b/a} \hspace{20pt} v(\xi) = u(1,\xi) \label{eq:3.42}
 \end{equation}
