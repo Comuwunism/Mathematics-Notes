@@ -36,10 +36,14 @@
 
 \newcommand{\lapt}[1]{\mathscr{L}\left\{ #1\right\}}
 \newcommand{\inlt}[1]{\mathscr{L}^{-1} \left\{ #1 \right\}}
+\newcommand{\ft}[1]{\mathscr{F}\left\{ #1\right\}}
+\newcommand{\ift}[1]{\mathscr{F}^{-1} \left\{ #1 \right\}}
 \newcommand{\R}{\mathbb{R}}
 \newcommand{\twen}{\hspace{20pt}}
 \newcommand{\od}[2]{\frac{d #1}{d#2}}
 \newcommand{\odt}[2]{\frac{d^2 #1}{d#2^2}}
+\newcommand{\pd}[2]{\frac{\partial #1}{\partial#2}}
+\newcommand{\pdt}[2]{\frac{\partial^2 #1}{\partial#2^2}}
 \newcommand{\pull}{\! \! \!}
 
 \begin{document}
@@ -542,11 +546,11 @@ Now let us prove the Second Shift Theorem.
 \end{proof}
 In this present chapter, there is no systematic way to find the Inverse Laplace transform. The way to do this requires complex analysis and will not be touched on until Chapter 8. Inverting is therefore reliant on recognizing the forms of known Laplace transforms. 
 \section{Limiting Theorems}
-In the study of differential equations, the behaviors of systems for large values of $t$ or $s$ is an important of part of the study of asymptotics. We shall now prove some limiting theorems.
+In the study of differential equations, the behaviors of systems for large values of $t$ or $s$ is an important part of the study of asymptotics. We shall now prove some limiting theorems.
 \begin{theorem} [Initial Value]
     If the indicated limits exist, then 
     \begin{equation*}
-        \lim_{t\rightarrow 0} F(t) = \lim_{s\rightarrow \infty} sf(s)
+        \lim_{t\rightarrow 0} F(t) = \lim_{s\rightarrow \infty} sf(s)\label{theo:ivt}
     \end{equation*}
     where the left hand side is $F(0)$ or $\lim_{t\rightarrow 0^+}F(t)$ if $\lim_{t\rightarrow 0}F(t)$ isn't unique.
 \end{theorem}
@@ -1713,8 +1717,8 @@ Now, taking the Laplace transform yields
     \end{equation*}
 \end{theorem}
 
-\begin{lemma}[Riemann-Lebesgue Lemma]
-    Let $\{\bold{e_1,e_2,}\ldots\}$ be an orthonormal basis of infinite dimension for the inner product space $V$. Then for any $\bold{a}\in V$, 
+\begin{lemma}[Riemann-Lebesgue]
+    Let $\{\bold{e_1,e_2,}\ldots\}$ be an orthonormal basis of infinite dimension for the inner product space $V$. Then for any $\bold{a}\in V$, \label{lemma:rl}
     \begin{equation*}
         \lim_{n\rightarrow \infty}\langle\bold{a,e_n}\rangle = 0
     \end{equation*}
@@ -1838,6 +1842,293 @@ We can also generalize the Fourier series to any interval $[-L,L]$ using the tra
 \end{equation*}
 \section{Properties of the Fourier Series}
 Differentiation poses a larger problem than integration of the Fourier series. The reasoning for this is differentiation pulls out an $n$ as a coefficient which for larger values of $n$, cause the terms to be larger in magnitude than the originals. Integration pulls out a $\frac{1}{n}$ coefficient and therefore the magnitude is smaller.
+\begin{theorem}
+    If $f$ is continuous on $[-\pi,\pi]$ and piecewise differentiable in $(-\pi,\pi)$ which means that the derivative $f'$ is piecewise continuous on $[-\pi,\pi]$, and if $f(x)$ has the Fourier series 
+    \begin{equation*}
+        f(x)\sim \frac{a_0}{2}+\sum^\infty_{n=1}[a_n\cos(nx)+b_n\sin(nx)]
+    \end{equation*}
+    then the Fourier series of the derivative of $f(x)$ is given by 
+    \begin{equation*}
+        f'(x)\sim \sum^\infty_{n=1}[-na_n\sin(x)+nb_n\cos(nx)]
+    \end{equation*}
+\end{theorem}
+Note that for differentiating the Fourier series, we need the requirement that the series converges uniformly. Otherwise, differentiating will yield nonsense. The same requirement is not needed for integration. For integration, we have the following theorem.
+\begin{theorem}
+    If $f$ is piecewise continuous on the interval $[-\pi,\pi]$ and has the Fourier series 
+    \begin{equation*}
+        f(x)\sim \frac{a_0}{2}+\sum^\infty_{n=1}[a_n\cos(nx)+b_n\sin(nx)]
+    \end{equation*}
+    then for each $x\in [-\pi,\pi]$,
+    \begin{equation*}
+        \int^x_{-\pi}f(t)dt = \frac{a_0(x+\pi)}{2}+\sum^\infty_{n=1}\left[ \frac{a_n}{n}\sin (nx)-\frac{b_n}{n}(\cos(nx)-\cos(n\pi))\right]
+    \end{equation*}
+\end{theorem}
+We can prove the more general result. Let $F(t)$ be represented as 
+\begin{equation*}
+    F(t)\sim \frac{A_0}{2}+\sum^\infty_{n=1}(A_n\cos (nt)+B_n \sin(nt))
+\end{equation*}
+along with the usual periodicity requirements. Let us define another function $G(x)$ such that 
+\begin{equation*}
+    \int^t_{-\pi} G(x)dx = \frac{1}{2}a_0t+F(t)
+\end{equation*}
+Each of the Fourier coefficients are defined under the usual inner product as $A_n = \langle F(t),\cos(nt)\rangle$ and $B_n=\langle F(t),\sin(nt)\rangle$. Using the Fundamental Theorem of Calculus, we have that $F'(t)=G(t)-\frac{1}{2}a_0$. If we integrate by parts once for $A_n$ and $B_n$, we have 
+\begin{equation*}
+    \begin{split}
+        A_n = \frac{1}{\pi}\int^\pi_{-\pi}F(t)\cos (nt)dt =-\frac{1}{n\pi}\int^\pi_{-\pi}F'(t)\sin(nt)dt \\
+        B_n=\frac{1}{\pi}\int^\pi_{-\pi}F(t)\sin (nt)dt=-\frac{1}{n\pi}\int^\pi_{-\pi}F'(t)\cos)nt)dt
+    \end{split}
+\end{equation*}
+If we write the Fourier coefficients of $G(t)$ as $a_n $ and $b_n$, we see that 
+\begin{equation*}
+    A_n=-\frac{b_n}{n} \twen B_n=\frac{a_n}{n}
+\end{equation*}
+We now write the Fourier series of $F(t)$ as 
+\begin{equation*}
+    F(t)=\frac{A_0}{2}+\sum^\infty_{n=1}\left(-\frac{b_n}{n}\cos(nt)+\frac{a_n}{n}\sin(nt) \right)
+\end{equation*}
+Let us now consider the values of $F(t)$ at the end points $t=\pm \pi$. For $t=\pi$, we have 
+\begin{equation*}
+    F(\pi)=-\frac{a_0\pi}{2} +\int^\pi_{-\pi}G(x)dx
+\end{equation*}
+and for the other endpoint we have 
+\begin{equation*}
+    F(-\pi)=\frac{a_0\pi}{2}
+\end{equation*}
+and by the periodicity requirement, $F(\pi)=F(-\pi)=\frac{a_0\pi}{2}$. Assuming there is no jump discontinuity (and therefore piecewise differentiable), we have that 
+\begin{equation*}
+    \begin{split}
+        \frac{a_0\pi}{2} &= \frac{A_0}{2}-\sum^\infty_{n=1}\frac{b_n}{n}\cos(n\pi) = \frac{A_0}{2}-\sum^\infty_{n=1}(-1)^n\frac{b_n}{n} \\
+        \Rightarrow\frac{A_0}{2}&=\frac{a_0\pi}{2}+\sum^\infty_{n=1}(-1)^n\frac{b_n}{n}
+    \end{split}
+\end{equation*}
+And we can now substitute this into our Fourier series for $F(t)$
+\begin{equation*}
+    F(t)\sim\frac{1}{2}a_0\pi +\sum^\infty_{n=1}\frac{1}{n}[b_n((-1)^n-\cos(nt))+a_n\sin(nt)]
+\end{equation*}
+Using our previous expression for the integral of $G(x)$, we get 
+\begin{equation*}
+    \int^t_{-\pi}G(x)dx = \frac{1}{2}a_0t+F(t) = \frac{1}{2}a_0(\pi+t)+\sum^\infty_{n=1}\frac{1}{n}[b_n(-1)^n-b_n\cos(nt)+a_n\sin(nt)]
+\end{equation*}
+The function $G(\xi)$ can be defined in a similar way and by subtracting $G(t)-G(\xi)$ and applying properties of definite integrals, we get 
+\begin{equation*}
+    \int^t_\xi G(x)dx = \frac{1}{2}a_0(t-\xi)+\sum^\infty_{n=1}\frac{1}{n}[b_n(\cos(n\xi)-\cos(nt))+a_n(\sin(nt)-\sin(n\xi))]
+\end{equation*}
+
+\begin{theorem}
+    If $f(t)$ and $g(t)$ are continuous in $(-\pi,\pi)$ and square integrable, that is \label{theo:4.12}
+    \begin{equation*}
+        \int^\pi_{-\pi}|f(t)|^2dt \text{ and } \int^\pi_{-\pi}|g(t)|^2dt <\infty 
+    \end{equation*}
+    and $a_n,b_n$ the Fourier coefficients of $f(t)$ and $\alpha_n,\beta_n$ the Fourier coefficients of $g(t)$, then 
+    \begin{equation*}
+        \int^\pi_{-\pi}f(t)g(t)dt = \frac{1}{2}\pi a_0\alpha_0 + \pi\sum^\infty_{n=1}(\alpha_na_n+\beta_nb_n)
+    \end{equation*}
+\end{theorem}
+\begin{proof}
+    We can write the product of these two functions as 
+    \begin{equation*}
+        f(t)g(t)\sim \frac{1}{2}a_0g(t)+\sum^\infty_{n=1}(a_ng(t)\cos(nt)+b_ng(t)\sin(nt))
+    \end{equation*}
+    We then integrate both sides from $\pi$ to $-\pi$ and since it is uniformly convergent (by some magic since it obeys the Cauchy Schwarz inequality and is therefore finite), we can swap the sum and integral operators to get 
+    \begin{equation*}
+        \int^\pi_{-\pi}f(t)g(t)dt= \frac{1}{2}a_0\int^\pi_{-\pi}g(t)dt +\sum^\infty_{n=1}\left[ a_n\int^\pi_{-\pi}g(t)\cos(nt)dt + b_n\int^\pi_{-\pi}g(t)\sin(nt)dt\right]
+    \end{equation*}
+    Recognizing that the integrals lead to an inner product between $g(t)$ and our Fourier basis, we have that 
+    \begin{equation*}
+        \int^\pi_{-\pi}f(t)g(t)dt = \frac{1}{2}\pi a_0\alpha_0+\pi\sum^\infty_{n=1}(a_n\alpha_n+\beta_nb_n)
+    \end{equation*}
+\end{proof}
+
+\begin{theorem}[Parseval's Theorem]
+    If $f(t)$ is continuous in the range of $(-\pi,\pi)$, is square integrable, and has Fourier coefficients $a_n,b_n$ then 
+    \begin{equation*}
+        \int^\pi_{-\pi}|f(t)|^2dt = 2\pi a_0^2+\pi\sum^\infty_{n=1}(a^2_n+b_n^2)
+    \end{equation*}
+\end{theorem}
+\begin{proof}
+    Use Theorem $\ref{theo:4.12}$ by setting $g(t)=f(t)$.
+\end{proof}
+
+\section{Generalized Fourier Series}
+Instead of using just trig functions as a basis, we can generalize the principle further by using a set of functions $\phi_n(t)$ such that they span the function space and are orthogonal to each other. We can therefore express $f(t)$ as 
+\begin{equation*}
+    f(t)= \sum^\infty_{n=1}k_n \phi_n(t)
+\end{equation*}
+We find the coefficients $k_n$ via the inner product 
+\begin{equation*}
+    \int^{t_1}_{t_0}f(t)\phi_n(t)dt = \sum^\infty_{m=1}k_m\int^{t_1}_{t_0}\phi_m(t)\phi_n(t)
+\end{equation*}
+where \begin{equation*}
+    \int^{t_1}_{t_0}\phi_m(t)\phi_n(t) = \delta_{m,n}\gamma_n
+\end{equation*}
+where $\delta_{m,n}$ is the Kronecker delta defined as 
+\begin{equation*}
+    \delta_{m,n} = \begin{cases}
+        0 &m\neq n\\ 1 &m=n
+    \end{cases}
+\end{equation*}
+Since the functions may not necessarily be orthonormal, we have 
+\begin{equation*}
+    \gamma_n = \int^{t_1}_{t_0}|\phi_n(t)|^2dt
+\end{equation*}
+Therefore $\gamma_n$ acts as the normalization factor and 
+\begin{equation*}
+    k_n = \frac{1}{\gamma_n}\int^{t_1}_{t_0}f(t)\phi_n(t)dt
+\end{equation*}
+We can also state Parseval's theorem for generalized Fourier series 
+\begin{equation*}
+    \int^{t_1}_{t_0}|f(t)|^2dt = \sum^\infty_{n=1}\gamma k_n^2
+\end{equation*}
+ The basis of this theory comes from Sturm-Liouville Theory which concerns the Sturm-Liouville eigenfunction problem 
+ \begin{equation*}
+     \od{}{x}\left[ p(x)\od{y}{x}\right]+q(x)y=-\lambda w(x)y
+ \end{equation*}
+ on the finite interval $[a,b]$ that is regular. Regular implies the following conditions: 
+ \begin{itemize}
+     \item the coefficient functions $p,q,w$ and $p'$ are all continuous on $[a,b]$
+     \item $p(x),w(x)>0 \,\,\,\forall x\in [a,b]$
+     \item The problem has the Robin boundary conditions 
+     \begin{equation*}
+         \begin{cases}
+             \alpha_1y(a)+\alpha_2y'(a) = 0, &\alpha_1,\alpha_2 \neq 0\\ \beta_1y(b)+\beta_2y'(b)=0, &\beta_1,\beta_2\neq 0
+         \end{cases}
+     \end{equation*}
+ \end{itemize}
+ The theory states the following results:
+ \begin{itemize}
+     \item There are an infinite number of eigenvalues that can be ordered such that $\lambda_1<\lambda_2<\ldots<\lambda_n<\ldots\rightarrow \infty$
+     \item Corresponding to each eigenvalue $\lambda_n$, there exists a unique eigenfunction $y_n(x)$ deemed the $n^{th}$ \textit{fundamental solution}
+     \item The normalized eigenfunctions $y_n(x)$ form an orthonormal basis under the $w$-weighted inner product in the Hilbert Space $L^2([a,b],w(x)dx)$, or in other words
+     \begin{equation*}
+         \langle y_n, y_m\rangle =\int^b_ay_n(x)y_m(x)w(x)dx = \delta_{n,m}
+     \end{equation*}
+ \end{itemize}
+ We can typically write the Sturm-Liouville problem in the form 
+ \begin{equation*}
+     L[y(x)]=-\lambda w(x) y(x)
+ \end{equation*}
+where $L$ is a second order differential operator and $w(x)$ is the weighting function. Some examples of Sturm-Liouville problems include:
+\begin{itemize}
+    \item The time-independent Schr\"odinger's Equation (which can be written in the form $H\Psi = E\Psi$ where $H$ is the Hamiltonian operator)
+    \begin{equation*}
+        \left(-\frac{\hbar^2}{2m} \od{}{x^2}+V(x)\right)\Psi = E\Psi
+    \end{equation*}
+    \item Bessel's Equation 
+    \begin{equation*}
+        x^2\odt{y}{x}+x\od{y}{x}+(x^2-\alpha^2)y=0
+    \end{equation*}
+    \item Legendre's Equation 
+    \begin{equation*}
+        (1-x^2)\odt{y}{x}-2x\od{y}{x}+n(n+1)y=0
+    \end{equation*}
+\end{itemize}
+
+\section{Exercises}
+
+
+\chapter{Partial Differential Equations}
+\section{Introduction}
+Partial differential equations (PDEs) that are second order and linear can be classified into three main groups. If we look at a general linear second order PDE, that is 
+\begin{equation*}
+    Au_{xx}+Bu_{xy}+Cu_{yy}+(\text{first order terms)} = 0
+\end{equation*}
+We can express the determinant as $D=B^2-4AC$ and therefore classify linear 2nd order PDEs into three categories: hyperbolic ($D>0$), elliptic ($D<0$), and parabolic ($D=0$). One example of a hyperbolic equation is the one dimensional wave equation 
+\begin{equation*}
+    \pdt{u}{x}=\frac{1}{c^2}\pdt{u}{t}
+\end{equation*}
+This equation appears almost everywhere and is widely studied. It can be used to describe the displacement of a string as well as the density changes of a sound wave propagating through a medium. By applying a key identity from vector calculus and a free space condition to Faraday's and Ampere's Law, James Clerk Maxwell was able to calculate the speed of light to be $c=\frac{1}{\sqrt{\mu_0\varepsilon_0}}$ and showed that electricity and magnetism were the same phenomena. \\\\
+An example of an elliptic PDE is Laplace's equation which is arguably the most important PDE in physics. 
+\begin{equation*}
+    \nabla ^2u=0
+\end{equation*}
+where $\nabla^2=\Delta=\sum^n_{i=1}\pdt{}{x_i}$ denotes the Laplacian operator in $\R^n$. Solutions to Laplace's equation are known as harmonics. Harmonic functions in a domain $D\in\R^n$ have maximums on the border of $D$, $\partial D$, as opposed to in $D$. Harmonic functions are extremely well-behaved. So much so that one can find the value of a point inside a closed path $\gamma$ by knowing the values of the function and its derivative along $\gamma$. For real valued functions, this is done via Green's Representation and Poisson Integral formula. For holomorphic functions (since they are also harmonic as they abide by the Cauchy-Riemann equations), we use Cauchy Integral Formula. \\\\
+The final example is one of a parabolic equation: the one dimensional heat equation. 
+\begin{equation*}
+    \pd{u}{t}=\kappa \pdt{u}{x}
+\end{equation*}
+This equation is actually the genesis of the Fourier series. Fourier was studying the solutions to the heat equation on a ring and due to the periodicity requirement, required for the solutions to be comprised of sin and cos functions. Since the initial conditions could be anything, Fourier reasoned any function could be represented as an infinite sum of trigonometric functions. Olver's introduction to Fourier Series in his book \href{https://link.springer.com/book/10.1007/978-3-319-02099-0}{\textit{Introduction to Partial Differential Equations}} is perhaps the best introduction to Fourier series I have read and is just so good as he goes through how Fourier was able to come to his conclusion. 
+\section{Separation of Variables}
+Perhaps one of the most well used techniques for solving PDEs is separation of variables. Let us take the one dimensional heat equation to demonstrate the idea. Let us assume there is some function $u(t,x)$ that satisfies the equation 
+\begin{equation*}
+    \pd{u}{t} = \kappa \pdt{u}{x}
+\end{equation*}
+and any associated boundary conditions. Then let us make the ansatz that the solution takes the form 
+\begin{equation*}
+    u(t,x)=T(t)X(x)
+\end{equation*}
+The heat equation then becomes 
+\begin{equation*}
+    T'X=\kappa TX''
+\end{equation*}
+We then divide both sides by $u=TX$ to get 
+\begin{equation*}
+    \frac{T'}{T} = \kappa \frac{X''}{X}
+\end{equation*}
+Since both sides of the equation are independent of each other, they must equal the same constant. In this case, let this constant be $-\alpha^2$ such that we now have the ODEs 
+\begin{equation*}
+    \begin{split}
+        T' &=-\alpha^2T \\
+        X''&=-\frac{\alpha^2}{\kappa}X
+    \end{split}
+\end{equation*}
+These are well known differential equations and give the general solutions 
+\begin{equation*}
+    T(t)=Ae^{-\alpha^2t} \twen X(x) =B\cos\left( \frac{\alpha x}{\sqrt \kappa}\right) +C\sin\left( \frac{\alpha x}{\sqrt \kappa}\right)
+\end{equation*}
+If the initial temperature distribution at $t=0$ is $u(0,x) = f(x)$, then we must have that 
+\begin{equation*}
+    f(x) =B\cos\left( \frac{\alpha x}{\sqrt \kappa}\right) +C\sin\left( \frac{\alpha x}{\sqrt \kappa}\right)
+\end{equation*}
+but this is generally not true. To resolve this issue, let us remember that any temperature distribution on the interval $[0,L]$ can be written as the infinite sum of sin and cos functions. Therefore 
+\begin{equation*}
+    f(x)\sim \sum^\infty_{n=1}B_n\cos\left( \frac{\alpha_n x}{\sqrt \kappa} \right) + C_n\sin\left( \frac{\alpha_n x}{\sqrt \kappa} \right)
+\end{equation*}
+If we assume homogeneous boundary conditions (i.e. $u(t,0) =u(t,L)=0$), $B_n$ must be zero for all $n$ and we require 
+\begin{equation*}
+    \frac{\alpha_n}{\sqrt \kappa} = \frac{n\pi}{L}
+\end{equation*}
+Therefore the general solution is 
+\begin{equation*}
+    u(t,x) = \sum^\infty_{n=1} C_ne^{-\frac{1}{L^2}n^2\pi^2\kappa}\sin \left( \frac{n\pi x}{L}\right)
+\end{equation*}
+where the Fourier coefficients are found via $C_n = \left\langle f(x),\sin\left( \frac{n\pi x}{L}\right) \right\rangle $. One sees that the higher frequency contributions, the frequencies associated with large $n$, are dampened quickly by the exponential decay term. As such, the heat equation is often used to denoise signals.
+
+\section{Laplace Transforms for PDEs} 
+The Laplace transform is convenient for PDEs in which the domain aligns nicely with the range of the Laplace transform's bounds. That is from $0\rightarrow \infty$. For most PDEs, this is the time domain. We can also apply the derivative property (\ref{theo:2.1}) to substitute in our initial conditions nicely. Additionally, assuming that a solution $u \in C^k$ and the integral is well defined, we can swap the differentiation and integration operators to get 
+\begin{equation*}
+    \lapt{\pd{^ku(x_1,x_2,\ldots,x_n)}{x_i^k}}_{x_j} = \int^\infty_0 \pd{^k}{x_i^k}ue^{-sx_j}dx_j = \pd{^k}{x_i^k}\int^\infty_0ue^{-sx_j}dx_j = \pd{^k}{x_i^k}\bar{u} \twen i,j \in\{1,\ldots,n\} \twen i\neq j
+\end{equation*}
+For the one dimensional heat equation, we can then generally get 
+\begin{equation*}
+    s\bar u - u(0) = \pdt{\bar u}{x}
+\end{equation*}
+We now have a linear second order ODE which can be solved relatively easily. The next step is to transform any boundary conditions into the $s$-domain and then solve for the variables then. Afterwards, we invert the function to retrieve the $u(t,x)$ we want. 
+\section{Asymptotic Expansions}
+Oftentimes we cannot find an exact solution. However, we can approximate things to a certain degree. Let us state Watson's Lemma.
+\begin{lemma}[Watson's Lemma]
+    Let $0<T\leq \infty$ be fixed. Assume $\varphi(t)=t^{\lambda}g(t) $ where $g(t)$ is infinitely differentiable around $t=0$, $g(0)\neq 0$, and $\lambda > -1$. Also suppose that either $g(t)$ is of exponential order or the integral of the norm of $\varphi(t)$ is finite. Then it is true for all positive $x$ that 
+    \begin{equation*}
+        \left| \int^T_0\varphi(t)e^{-xt}dt \right| < \infty
+    \end{equation*} 
+    and 
+    \begin{equation*}
+        \int^T_0\varphi(t) e^{-xt}dt = \sum^\infty_{n=1}\frac{g^{(n)}(0)\Gamma(\lambda+n+1)}{n! x^{\lambda+n+1}}
+    \end{equation*}
+\end{lemma}
+\begin{proof}
+    Ask a toddler on the street.
+\end{proof}
+
+A special case arises when $T=\infty$ as the left hand side then becomes a Laplace transform and we then have 
+\begin{equation*}
+    \bar \varphi (s) = \sum^\infty_{n=1}a_n\frac{\Gamma(n+\lambda+1)}{s^{\lambda+n+1}}
+\end{equation*}
+and the value of the expansion 
+\begin{equation*}
+    \varphi(t) = \sum^\infty_{n=1}a_nt^{\lambda+n}
+\end{equation*}
+can be approximated for small values of $t$ by the Initial Value Theorem (\ref{theo:ivt}) for finding the value of the transformed series as $s\rightarrow \infty$.
+\section{Exercises}
 
 
 
@@ -1845,6 +2136,179 @@ Differentiation poses a larger problem than integration of the Fourier series. T
 
 
 
+\chapter{Fourier Transforms}
+\section{Derivation of the Fourier Transform}
+\begin{definition}
+    Let $f$ be a function defined for all $x\in \R$ with values in $\mathbb{C}$. The Fourier transform is a mapping $f:\R\mapsto \mathbb{C}$ defined by 
+    \begin{equation*}
+        F(\omega) = \int^\infty_{-\infty} f(x)e^{-i\omega x}dx
+    \end{equation*}
+\end{definition}
+Let us relate the Fourier series with the Fourier transform. Let us consider a function $f(t)$. Let us now cconsider a function $g(t)$ that has a periodicity of $T$ and effectively takes the ``chunk" of $f(t)$ from the interval $\left[-\frac{T}{2},\frac{T}{2}\right]$ and repeats it for all $t$. We also make the transformation $x\rightarrow\frac{2\pi t}{T}$. Our function $g(t)$ can be written as 
+\begin{equation*}
+    g(t) =\begin{cases}
+        f(t) &|t|<\tfrac{1}{2}T \\
+        f(t-nT) & \tfrac{1}{2}(2n-1)T < |t| < \tfrac{1}{2}(2n+1)T
+    \end{cases}
+\end{equation*}
+We can then write it as a complex Fourier series 
+\begin{equation*}
+    g(t) = \sum^\infty_{n=-\infty} G_ne^{in\omega_0t} \twen G_n = \frac{1}{T} \int^{T/2}_{-T/2}g(t)e^{-in\omega_0 t}dt
+\end{equation*}
+where $\omega_0 = \frac{2\pi}{T}$ which comes from $x=\frac{2\pi t}{T}=\omega_0t$. We require the transformation to have $2\pi$ and not just $\pi$ since the complex exponential is only periodic over $2\pi$. We now substitute the Fourier coefficient formula into the Fourier series to get 
+\begin{equation*}
+    g(t) = \sum^\infty_{n=-\infty} \left[ \frac{1}{T}\int^{T/2}_{-T/2}g(t)e^{-in\omega_0t}dt\right]e^{in\omega_0 t}
+\end{equation*}
+Let us now note that the frequency spacing $\Delta \omega = (n+1)\omega_0-n\omega_0=\omega_0$ and rename $n\omega_0=\omega_n$ We can therefore rewrite $\frac{1}{T} =\frac{\Delta \omega}{2\pi}$ and $G_n$ as 
+\begin{equation*}
+    G_n = \int^{T/2}_{-T/2}g(t)e^{-i\omega_nt}dt
+\end{equation*}
+Let us now substitute this back into our Fourier series and take the limit as $T\rightarrow \infty$ 
+\begin{equation*}
+    g(t) =\lim_{T\rightarrow \infty} \sum^{\infty}_{n=-\infty}G_ne^{i\omega_nt}\frac{\Delta \omega}{2\pi}
+\end{equation*}
+The frequency spacing becomes an infinitesimal and the sum becomes an integral so we have 
+\begin{equation*}
+    g(t) = \frac{1}{2\pi}\int^\infty_{-\infty} \left[ \int^\infty_{-\infty}g(t)e^{-i\omega t}dt\right] e^{i\omega t}d\omega
+\end{equation*}
+We can now see that the inner integral is the Fourier transform of $g(t)$ and 
+\begin{equation*}
+    \ift{G(\omega)} = \frac{1}{2\pi}\int^\infty_{-\infty}G(\omega)e^{i\omega t}dt
+\end{equation*}
+is the inverse. In essence, we were effectively taking the Fourier series representation and then letting the period become infinitely wide to ``encompass" the entire function $f(t)$ that we wanted the transform of. \\\\
+Using this, we can give a brief proof of the inverse Laplace transform. Let us consider a complex valued function $F(\omega)$ of the form 
+\begin{equation*}
+    F(\omega) = A(\omega)e^{i\phi(\omega)}
+\end{equation*}
+where $A(\omega)$ and $\phi(\omega)$ are real value functions of $\omega \in \R$. $A(\omega)$ acts as the amplitude and $\phi(\omega)$ acts as the phase angle. Using the inverse Fourier transform, we see that 
+\begin{equation*}
+    f(x)=\frac{1}{2\pi}\int^\infty_{-\infty}A(\omega)e^{i\omega x+i\phi(\omega)}d\omega
+\end{equation*}
+However, this is often not very useful since the oscillatory nature leads to a lot of integrals not converging. As such, let instead do the Fourier transform of the function $e^{-kx}f(x)$ where the exponential decay term allows more functions to converge. We then change the lower bound of integration to 0 and assuming $f(x)$ is of exponential order, we have 
+\begin{equation*}
+    F_k(\omega) = \int^\infty_0e^{-(k+i\omega)x}f(x)dx
+\end{equation*}
+Finding the inverse of $F_k$ using our definition for the inverse Fourier transform gives us 
+\begin{equation*}
+    \frac{1}{2\pi}\int^\infty_{-\infty}e^{i\omega x}F_k(\omega)d \omega = \begin{cases}
+        0 &x<0 \\e^{-kx}f(x)&x\geq 0
+    \end{cases}
+\end{equation*}
+Multiplying both sides to cancel out the damping factor on the right hand side (and bringing it under the integral side on the left), we have 
+\begin{equation*}
+    \frac{1}{2\pi}\int^\infty_{-\infty}e^{(k+i\omega )x}F_k(\omega)d \omega = \begin{cases}
+        0 &x<0 \\f(x)&x\geq 0
+    \end{cases}
+\end{equation*}
+We now make the substitution $s=k+i\omega\rightarrow ds = id\omega$ so now the limits of integration will be $s=k\pm i\infty$ when $\omega=\pm \infty$ where we now have 
+\begin{equation*}
+    f(x)=\frac{1}{2\pi i}\int^{k+i\infty}_{k-i\infty}e^{sx}F(s)ds
+\end{equation*}
+
+
+
+\section{Properties of the Fourier Transform}
+As with the Fourier series we can represent the decomposition as a complex exponential or in terms of sin and cos, we can do the same with the Fourier transform. Let us define the Fourier sin and cos transforms to be 
+\begin{equation*}
+\begin{split}
+    F_s(\omega)&=\int^\infty_0f(t)\sin(\omega t)dt \\
+    F_c(\omega)&=\int^\infty_0f(t)\cos(\omega t)dt
+\end{split}
+\end{equation*}
+We change the bottom limit to 0 for a reason (although other texts may keep the bottom as $-\infty$. We can then write the Fourier transform of $F(\omega)$ as 
+\begin{equation*}
+    F(\omega)\int^\infty_0[f(t)+f(-t)]\cos (\omega t)dt - i\int^\infty_0[f(t)-f(-t)]\sin (\omega t)dt
+\end{equation*}
+We can now see why changing the bottom bound to 0 is nice as if the function is odd, $F(\omega)$ is purely imaginary. If $f(t)$ is even, then $F(\omega)$ is completely real. The inverse of these transforms are 
+\begin{equation*}
+\begin{split}
+    f(t)&=\frac{2}{\pi}\int^\infty_0F_s(\omega)\sin(\omega t)dt \\
+    f(t)&=\frac{2}{\pi}\int^\infty_0F_c(\omega)\cos(\omega t)dt
+\end{split}
+\end{equation*}
+The Fourier transform also has a derivative property like the Laplace transform which is once again proven by integration by parts and induction which we shall omit here. 
+\begin{equation*}
+    \ft{\od{^nf}{t^n}} = (i\omega)^nF(\omega)
+\end{equation*}
+
+\begin{theorem}[Lebesgue Dominated Convergence Theorem]
+    Let $f_h$ such that $h\in \R$ be a family of piecewise continuous functions. If  \label{theo:ldct}
+    \begin{enumerate}
+        \item There exists a function $g$ such that $|f_h(x)|\leq g(x) \,\,\, \forall x\in\R $ and all $h\in\R$
+        \item $\displaystyle{\int^\infty_{-\infty}g(x)dx<\infty}$
+        \item $\displaystyle{\lim_{h\rightarrow 0}f_h((x)=f(x) \,\,\, \forall x\in R}$
+    \end{enumerate}
+    then \begin{equation*}
+        \lim_{h\rightarrow 0}\int^\infty_{-\infty}f_h(x)dx =\int^\infty_{-\infty}f(x)dx
+    \end{equation*}
+\end{theorem}
+Let us now consider the vector space $G\{\R\}$ which is the family of functions where every $f\in G\{\R\}$ is such that $f:\R\mapsto \mathbb{C}$, is piecewise continuous, and absolutely integrable. These are the family of functions that have a Fourier transform. 
+\begin{theorem}
+    For each $f\in G\{\R\}$,
+    \begin{enumerate}
+        \item $F(\omega)$ is defined for all $\omega \in \R$
+        \item $F$ is a continuous function on $\R$
+        \item $\displaystyle{\lim_{\omega \rightarrow \pm \infty}F(\omega)=0}$
+    \end{enumerate}
+\end{theorem}
+\begin{proof}
+    To prove this, we need to use the Lebesgue Dominated Convergence Theorem. We know the magnitude of the oscillatory kernel $|e^{i\omega x}|=1$ and since $f(x)$ is absolutely integrable by definition, we have
+    \begin{equation*}
+        \int^\infty_{-\infty}|f(x)e^{-i\omega x}|dx = \int^\infty_{-\infty}|f(x)|dx < \infty
+    \end{equation*}
+    which proves that $F(\omega)$ is well defined for all $\omega$. We now prove that $F(\omega)$ is continuous by considering 
+    \begin{equation*}
+        \begin{split}
+            F(\omega+h)-F(\omega)&=\int^\infty_{-\infty} [f(x)e^{-i\omega (x+h)}-f(x)e^{-i\omega x}]dx\\
+            &=\int^\infty_{-\infty} f(x)e^{-i\omega x}[e^{-i\omega h}-1]dx
+        \end{split}
+    \end{equation*}
+    By letting $f_h(x)=f(x)e^{-i\omega x}[e^{-i\omega h}-1]$, we can easily see that $\lim_{h\rightarrow 0}f_h(x) =0 \,\,\, \forall x\in \R$. By noting that the norm of $|e^{-i\omega h}|=1$ and applying the triangle inequality, we have 
+    \begin{equation*}
+        |f_h(x)|=|f(x)||e^{-i\omega x}||e^{-i\omega h}-1|\leq|f(x)|(|e^{-i\omega h}|+|-1|) \leq 2|f(x)|
+    \end{equation*}
+    We can therefore let our function $g(x)=2|f(x)|$ and since $f(x)$ is absolutely integrable, so is $g(x)$. We have therefore fulfilled all conditions of the Lebesgue Dominated Convergence Theorem. We can now say that 
+    \begin{equation*}
+        \lim_{h\rightarrow 0}\int^\infty_{-\infty}f_h(x)dx = \int^\infty_{-\infty}|f(x)e^{-i\omega x}[0]|dx = 0
+    \end{equation*}
+    and hence 
+    \begin{equation*}
+        \lim_{h\rightarrow 0}[F(\omega +h)-F(\omega)] =0
+    \end{equation*}
+    which is the condition for continuity. To prove the final statement, consider the Fourier transform of $f(x)$ broken down into its real and imaginary components 
+    \begin{equation*}
+        F(\omega) = \int^\infty_{-\infty}f(x)\cos(\omega x)dx - i\int^\infty_{-\infty}f(x)\sin(\omega x)dx
+    \end{equation*}
+    By recognizing each of these parts are an inner product between $f(x)$ and some basis vector $\cos(\omega x)$ or $\sin(\omega x)$, we can apply the Riemann-Lebesgue Lemma (\ref{lemma:rl}) and show that 
+    \begin{equation*}
+        \lim_{\omega\rightarrow \pm \infty}F(\omega) =\lim_{\omega\rightarrow \pm \infty}\int^\infty_{-\infty}f(x)\cos(\omega x)dx - \lim_{\omega\rightarrow \pm \infty}i\int^\infty_{-\infty}f(x)\sin(\omega x)dx = 0
+    \end{equation*}
+    
+\end{proof}
+\begin{theorem}
+    Let $f(x)\in G\{\R\}$ and $a,b \in \R$ with $a\neq 0$ where we denote the Fourier transform of $f$ as $\ft{f}=\hat f$. Let $g(x)=f(ax+b)$, then 
+    \begin{equation*}
+        \ft{g(x)} = \frac{1}{|a|}e^{i\omega b/a}\hat{f}\left( \frac{\omega}{a}\right)
+    \end{equation*}
+\end{theorem}
+\begin{proof}
+    We start by simply using the definition of the Fourier transform 
+    \begin{equation*}
+        \ft{g(x)} = \int^\infty_{-\infty}f(ax+b)e^{-i\omega x}dx
+    \end{equation*}
+    Let us now make the substitution $t=ax+b\rightarrow dt=adx$ where if $a>0$
+    \begin{equation*}
+        \ft{g(x)} = \frac{1}{a}\int^\infty_{-\infty}f(t)e^{-i\omega(t-b)/a}dt = \frac{1}{a}e^{i\omega b/a}\int^\infty_{-\infty}f(t)e^{-i\omega t/a}dt =\frac{1}{a}e^{i\omega b/a}\hat f\left(\frac{\omega}{a}\right)
+    \end{equation*}
+    and if $a<0$
+    \begin{equation*}
+        \ft{g(x)} = -\frac{1}{a}e^{i\omega b/a}\hat f\left(\frac{\omega}{a}\right)
+    \end{equation*}
+    (the negative comes from reswapping the bounds of integration after the substitution) and so thus we have 
+    \begin{equation*}
+        \ft{g(x)} = \frac{1}{|a|}e^{i\omega b/a}\hat{f}\left( \frac{\omega}{a}\right)
+    \end{equation*}
+\end{proof}
 
 
 \end{document}
