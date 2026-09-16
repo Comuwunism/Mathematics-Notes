@@ -19,7 +19,6 @@
 \xpatchcmd{\@thm}{\thm@headpunct{.}}{\thm@headpunct{}}{}{}
 \makeatother
 
-%
 \title{Phil Dyke-Introduction to Laplace Transforms and Fourier Series Notes}
 \author{Kyle Wang}
 \date{August 2026}
@@ -51,11 +50,11 @@
 
 \maketitle
 \newpage
-\tableofcontents
-\newpage
 \begin{abstract}
     This is the digitization of the notes and exercises to Phil Dyke's book on Laplace Transforms and Fourier series from Springer Undergraduate Mathematics Series. This is the first math book that I've read cover to cover and I quite like it. It was part of the reason why I switched into applied math and provides a lot of useful insights that help with higher level math. Part of the later exercises may not be included due to work done on a chalkboard (and I was too lazy to copy them over) or in another notebook which was lost due to water damage unfortunately.
 \end{abstract}
+\newpage
+\tableofcontents
 \newpage
 \chapter{Introduction}
 \section{Elementary Properties}
@@ -1189,7 +1188,7 @@ We shall consider the general second order differential equation
 \begin{equation*}
     a\odt{x}{t} +b\od{x}{t}+cx = f(x) \twen(t\geq0)
 \end{equation*}
-For the example of a mass on a spring, the second derivative term represents the acceleration, the first derivative term represents the damping, $x$ represents the displacement term, and $f(x)$ represents the forcing term. Since the coefficients are constant, the system is deemed "time invariant." This means a response to a specific stimulus will be the same regardless at what time $t$ it happens. An example of a time invariant system can be found by finding the general solution to the heat equation which can be read upon further \href{https://www.overleaf.com/read/yjwqnxvbxdsj#f891eb}{here} in Section 3.\\\\
+For the example of a mass on a spring, the second derivative term represents the acceleration, the first derivative term represents the damping, $x$ represents the displacement term, and $f(x)$ represents the forcing term. Since the coefficients are constant, the system is deemed ``time invariant." This means a response to a specific stimulus will be the same regardless at what time $t$ it happens. An example of a time invariant system can be found by finding the general solution to the heat equation which can be read upon further \href{https://www.overleaf.com/read/yjwqnxvbxdsj#f891eb}{here} in Section 3.\\\\
 Taking the Laplace transform of both sides gives 
 \begin{equation*}
     a(s^2\bar{x}(s)-sx(0)-x'(0))+b(s\bar{x}(s)-x(0))+c\bar{x}(s)=\bar{f}(s)
@@ -1226,9 +1225,9 @@ Applying the convolution theorem \ref{theo:convolution} to find
 \end{equation*}
 We then have that the general solution to the cantilever problem to be 
 \begin{equation*}
-    y(x)[1-H(x-l)] = -\frac{1}{6k}\int^x_0(x-\xi)^3W(\xi)d\xi +y(0) + xy'(0)+\frac{1}{2}x^2y"(0)+\frac{1}{6}x^3y'''(0)
+    y(x)[1-H(x-l)] = -\frac{1}{6k}\int^x_0(x-\xi)^3W(\xi)d\xi +y(0) + xy'(0)+\frac{1}{2}x^2y''(0)+\frac{1}{6}x^3y'''(0)
 \end{equation*}
-Let us now look at the case in which both ends are supported. This implies the boundary conditions that there is no displacement at either end ($y(x)=y(l)=0$) and that there is no net force there either ($y"(0)=y"(l)=0$). We can apply the boundary conditions at $x=0$ to arrive at 
+Let us now look at the case in which both ends are supported. This implies the boundary conditions that there is no displacement at either end ($y(x)=y(l)=0$) and that there is no net force there either ($y''(0)=y''(l)=0$). We can apply the boundary conditions at $x=0$ to arrive at 
 \begin{equation*}
     y(x)[1-H(x-l)] = -\frac{1}{6k}\int^x_0(x-\xi)^3W(\xi)d\xi + xy'(0)+\frac{1}{6}x^3y'''(0)
 \end{equation*}
@@ -1724,7 +1723,7 @@ Now, taking the Laplace transform yields
         \lim_{n\rightarrow \infty}\langle\bold{a,e_n}\rangle = 0
     \end{equation*}
 \end{lemma}
-Intuitively, these results can be thought of as for an infinite dimensional space (I believe more specifically a Hilbert Space), the "energy" in each coefficient for every projection onto a basis vector must go to zero for a finite vector. Basically, a finite normed vector "runs out" of stuff to project onto. Let us also note the definitions of pointwise and uniform convergence.
+Intuitively, these results can be thought of as for an infinite dimensional space (I believe more specifically a Hilbert Space), the ``energy" in each coefficient for every projection onto a basis vector must go to zero for a finite vector. Basically, a finite normed vector ``runs out" of stuff to project onto. Let us also note the definitions of pointwise and uniform convergence.
 \begin{definition}[Pointwise Convergence]
     Let \begin{equation*}
         \{f_0,f_1,\ldots,f_m,\ldots\}
@@ -2287,7 +2286,7 @@ Let us now consider the vector space $G\{\R\}$ which is the family of functions 
     
 \end{proof}
 \begin{theorem}
-    Let $f(x)\in G\{\R\}$ and $a,b \in \R$ with $a\neq 0$ where we denote the Fourier transform of $f$ as $\ft{f}=\hat f$. Let $g(x)=f(ax+b)$, then 
+    Let $f(x)\in G\{\R\}$ and $a,b \in \R$ with $a\neq 0$ where we denote the Fourier transform of $f$ as $\ft{f}=\hat f$. Let $g(x)=f(ax+b)$, then \label{theo:6.4}
     \begin{equation*}
         \ft{g(x)} = \frac{1}{|a|}e^{i\omega b/a}\hat{f}\left( \frac{\omega}{a}\right)
     \end{equation*}
@@ -2310,6 +2309,379 @@ Let us now consider the vector space $G\{\R\}$ which is the family of functions 
         \ft{g(x)} = \frac{1}{|a|}e^{i\omega b/a}\hat{f}\left( \frac{\omega}{a}\right)
     \end{equation*}
 \end{proof}
+
+\section{Fourier Transforms for PDEs}
+Fourier transforms are often impractical for many PDE applications due to the limited amount of functions you can actually take the Fourier transform of. It also requires the bounds to be infinite in order to accommodate the bounds of integration in the transform. However, one can use the finite Fourier transform
+\begin{equation*}
+    \int^b_af(t)e^{-i\omega t}dt
+\end{equation*}
+to work with bounds you want to work on and then make the function doubly periodic. This does raise some convergence issues but I will not go into more detail about them. The Fourier transform, even when it is relevant to a problem, is still oftentimes impractical. However, there are still a few cases such as an infinitely long bar or solving a Laplace's equation in a plane where we can take a multi dimensional Fourier transforms. We shall now prove some convolution identities. We should also note that the general convolution operator is defined as 
+\begin{equation*}
+    f(t)*g(t)=\int^\infty_{-\infty}f(\tau)g(t-\tau)d\tau
+\end{equation*}
+and the reason for the different with the one for Laplace transforms is that the Laplace use case is for causal signals that have a unit function baked in that leads to the bounds changing to $0\rightarrow t$.
+\begin{equation*}
+    \begin{split}
+        f*g &=\int^\infty_{-\infty}f(\tau)g(t-\tau)d\tau \\
+        \ft{f*g}&= \int^\infty_{-\infty} e^{-i\omega t}\int^\infty_{-\infty}f(\tau)g(t-\tau)d\tau dt\\
+        &=\int^\infty_{-\infty}f(\tau)\int^\infty_{-\infty} g(t-\tau_) e^{-ixt}dt d\tau
+    \end{split}
+\end{equation*}
+Now we make the substitution $u=t-\tau \rightarrow du=dt$
+\begin{equation*}
+    \begin{split}
+        \ft{f*g}&= \int^\infty_{-\infty}f(\tau)\int^\infty_{-\infty} g(u)e^{-i\omega(u+\tau)}dud\tau\\
+        &=\int^\infty_{-\infty}f(\tau)e^{-i\omega \tau}d\tau \int^\infty_{-\infty}g(u)e^{-i\omega u}du\\
+        &=\hat{f}(\omega)\hat{g}(\omega )
+    \end{split}
+\end{equation*}
+We shall also prove that multiplication in the time domain is equivalent to a convolution in the frequency domain.
+\begin{equation*}
+    \begin{split}
+        \ft{f(t)g(t)}&=\int^\infty_{-\infty}f(t)g(t)e^{-ikt}dt \\
+        &=\int^\infty_{-\infty}\left[ \frac{1}{2\pi}\int^\infty_{-\infty}\hat{f}(\kappa)e^{i\kappa t}d\kappa \right] g(t)e^{-ikt}dt\\
+        &=\frac{1}{2\pi}\int^\infty_{-\infty}\hat{f}(\kappa) \left[\int^\infty_{-\infty}g(t)e^{-i(k-\kappa)t}dt \right] d\kappa \\
+        &= \frac{1}{2\pi}\int^\infty_{-\infty}\hat{f}(\kappa) \hat{g}(k-\kappa)d\kappa \\
+        &=\frac{1}{2\pi}\hat{f}(k)*\hat{g}(k)
+    \end{split}
+\end{equation*}
+
+\section{Windowing}
+In practice, it is often impossible to take a full Fourier transform due to the limits of integration. However, we note that the Fourier coefficients of the complex Fourier series look suspiciously like a finite Fourier transform. As such, we can obtain the $2\pi$-Fourier transform by finding $2\pi c_n$ and inverting using the complex Fourier series where 
+\begin{equation*}
+    c_n =\frac{1}{2\pi}\int^\pi_{-\pi}f(t)e^{-in t}dt
+\end{equation*}
+In practice, we want to restrict the domain to some window of our choosing. As such, let us find the Fourier transform of the Dirac-$\delta$ function
+\begin{equation*}
+    \ft{\delta (t-t_0)} = \int^\infty_{-\infty}\delta (t-t_0)e^{-i\omega t}dt = e^{-i\omega t_0}
+\end{equation*}
+If we want to find the function that leads to a $\delta$ function in the frequency domain, let us assum that $F(\omega)=\delta (\omega-\omega_0)$ and then appy the inversion formula 
+\begin{equation*}
+    \begin{split}
+        f(t) &= \frac{1}{2\pi}\int^\infty_{-\infty}\delta (\omega-\omega_0)e^{i\omega t}d\omega =\frac{1}{2\pi}e^{i\omega_0 t} \\
+        \Rightarrow \ft{e^{i\omega_0 t}} &= 2\pi \delta(\omega-\omega_0)
+    \end{split}
+\end{equation*}
+Assuming the complex Fourier series of $f(t)$ can be written as 
+\begin{equation*}
+    f(t) = \sum^\infty_{n=-\infty} F_ne^{in\omega_0 t}
+\end{equation*}
+we can find the Fourier transform of $f(t)$ by finding the Fourier transform of each of the individual terms of the Fourier series representation (since the Fourier transform is a linear operator)
+\begin{equation*}
+    \begin{split}
+        \ft{f(t)} &=\ft{\sum^\infty_{n=-\infty} F_ne^{in\omega_0 t}} \\
+        &=\sum^\infty_{n=-\infty} F_n \ft{e^{in\omega_0 t}} \\
+        &=2\pi\sum^\infty_{n=-\infty} F_n\delta(\omega-\omega_0)
+    \end{split}
+\end{equation*}
+In the specific case that our function $f(t)$ is the Shah function (since it looks like the Cyrillic letter sha), an infinite train of $\delta$ functions,
+\begin{equation*}
+    f(t) = \sum^\infty_{n=-\infty}\delta(t-nT)
+\end{equation*}
+we can find the individual Fourier coefficients to be 
+\begin{equation*}
+    \begin{split}
+        F_n&=\frac{1}{T}\int^{T/2}_{-T/2}\delta(t)e^{-in\omega_0t}dt \\
+        &=\frac{1}{T}
+    \end{split}
+\end{equation*}
+where $\omega_0 = \frac{2\pi}{T}$. Using our previous result, we can see that the Fourier transform of the Shah function is also a Shah function 
+\begin{equation*}
+    \ft{f(t)}=\omega_0\sum^\infty_{n=-\infty}\delta(\omega -n\omega_0)
+\end{equation*}
+The other way to window a function is to use the windowing function $W(x)$ which is given by 
+\begin{equation*}
+    W(x) = \begin{cases}
+        0 &|x|>\frac{1}{2}\\ \frac{1}{2} &|x|=\frac{1}{2} \\ 1 &|x|<\frac{1}{2}
+    \end{cases}
+\end{equation*}
+We can then use the bijective shift 
+\begin{equation*}
+    t=\frac{x-\frac{1}{2}(b+a)}{b-a}
+\end{equation*}
+to make the window fit to whatever sized interval we need. The Fourier transform then becomes 
+\begin{equation*}
+    F_W(\omega)=\int^\infty_{-\infty}W\left( \frac{x-\frac{1}{2}(b+a)}{b-a} \right)f(x)e^{-i\omega x} dx = \int^b_af(x)e^{-i\omega x}dx
+\end{equation*}
+and to invert, we use 
+\begin{equation*}
+    \frac{1}{2\pi}\int^\infty_{-\infty}F_W(\omega)e^{i\omega x}d\omega
+\end{equation*}
+There is really no benefit to this, it just depends if you'd rather work with the Fourier series directly or with $F_W(\omega)$.\\\\
+We can also define something known as the \textit{total energy} which is defined as 
+\begin{equation*}
+    E = \int^\infty_{-\infty}|f(t)|^2dt
+\end{equation*}
+and the quantity $|F(\omega)|^2$ is referred to as the \textit{energy spectral density} and plotting it versus $\omega$ is known as the \textit{energy spectrum}. We can relate the energy densities between the function and its transform via Parseval's theorem for transforms (it is also called Rayleigh's theorem or Plancherel's identity).
+\begin{theorem}[Parseval's Theorem]
+    If $f(t)$ has a Fourier transform $F(\omega)$ and is square integrable, then 
+    \begin{equation*}
+        \int^\infty_{-\infty}|f(t)|^2 dt = \frac{1}{2\pi}\int^\infty_{-\infty}|F(\omega)|^2d\omega
+    \end{equation*}
+\end{theorem}
+\begin{proof}
+    \begin{equation*}
+        \begin{split}
+            \int^\infty_{-\infty}f(t)\overline{f(t)}dt &= \int^\infty_{-\infty}f(t)\frac{1}{2\pi}\int^\infty_{-\infty}F(\omega)e^{i\omega t}dt \\
+            &=\frac{1}{2\pi}\int^\infty_{-\infty}F(\omega)\int^\infty_{-\infty}f(t)e^{i\omega t}dt \\
+            &=\frac{1}{2\pi}\int^\infty_{-\infty}F(\omega)\overline{F(\omega)}d\omega\\
+            &=\frac{1}{2\pi}\int^\infty_{-\infty}|F(\omega)^2|d\omega
+        \end{split}
+    \end{equation*}
+\end{proof}
+
+
+\section{Exercises}
+
+
+
+
+
+
+
+\chapter{Wavelets and Signal Processing}
+\section{Wavelets}
+Another generalization of the principles of Fourier analysis, that is, decomposing a function onto a set of orthonormal basis functions, is via wavelet analysis. It was originally introduced by Alfr\'ed Haar in 1910 by defining the Father wavelet
+\begin{equation*}
+    \phi(t)=\chi_{[0,1)}(t)=\begin{cases}
+        1 &0\leq t < 1\\ 0 &\text{otherwise}
+    \end{cases}
+\end{equation*}
+The mother wavelet is defined as \begin{equation*}
+    \psi (t)=\phi(2t)-\phi(2t-1) = \begin{cases}
+        1 &0\leq t < \frac{1}{2}\\ -1 &\frac{1}{2}\leq t<1\\0 & \text{otherwise}
+    \end{cases}
+\end{equation*}
+The Daughter wavelets (I genuinely don't know who is the god awful person who named ts but ts genuine so cornball) and succeeding generations (again, cornball) of wavelets all look like the mother wavelet in the fact they ``oscillate" (and hence the name wave-let) and not the father which looks more like a Top Hat function. There are also son wavelets which look more like the father wavelet but we will not go into too much detail about them. In general, we define the $k^{th}$ wavelet in the $j^{th}$ generation of daughter wavelets through 
+\begin{equation*}
+    \psi_{j,k}(t)=2^{j/2}\psi(2^jt-k)
+\end{equation*}
+where $0\leq k\leq 2^j-1$ and has a value of 1 in the interval $[k2^{-j},(k+\frac{1}{2})2^{-j}]$ and -1 in the interval $[(k+\frac{1}{2})2^{-j},(k+1)2^{-j}]$. One can verify that these are orthogonal to each other and hence linearly independent of each other.
+\\\\The essence of wavelet analysis comes from representation theory (which I have zero notions about other than representing shii with linear algebra). As such, we can effectively split the interval $[0,1]$ into $2^n \,\,\,\forall n\in \mathbb{N}$ amount of intervals. For just a demonstration, let us split it into just four intervals. We can represent the value of a function on the interval $[0,1]$ using a 4-vector $\begin{bmatrix}a,b,c,d\end{bmatrix}^T$. We can therefore replace the basis vectors $\{ \bold{e}_1,\bold{e}_2,\bold{e}_3,\bold{e}_4\}$ with a different set of basis vectors $\{\phi(t),\psi(t),\psi_{1,0}(t),\psi_{1,1}(t)\}$ which can be represented as 
+\begin{equation*}
+    \left\{ \begin{bmatrix}1\\1\\1\\1\end{bmatrix},\begin{bmatrix}1\\1\\-1\\-1\end{bmatrix},\begin{bmatrix}1\\-1\\0\\0\end{bmatrix},\begin{bmatrix}0\\0\\1\\-1\end{bmatrix} \right\}
+\end{equation*}
+which are linearly independent. Since we have a collection of 4 linearly independent vectors, we know they span all of $\R^4$ and therefore form a basis. Hence, we can project our function onto any number of wavelets that we want.
+\begin{equation*}
+    f(t) = \sum^\infty_{j=-\infty}\sum^\infty_{k=-\infty}c_{jk}\psi_{j,k}
+\end{equation*}
+where the coefficient is found through the inner product between $f(t)$ and the $jk^{th}$ wavelet 
+\begin{equation*}
+    c_{jk} =\langle f,\psi_{j,k}\rangle =\int^\infty_{-\infty}f(t)\psi_{j,k}(t)dt
+\end{equation*}
+
+\section{Signal Processing}
+We can define the auto-covariance, which measures how well a signal matches with itself at different points in time, as 
+\begin{equation*}
+    R_f(\tau)=\int^\infty_{-\infty}f(t)f(t-\tau)dt
+\end{equation*}
+We also define the auto-correlation as the normalized version of the auto-covariance. That is, 
+\begin{equation*}
+    \rho_f(\tau) =\frac{R_f(\tau)}{|R_f(\tau)|}
+\end{equation*}
+We can also trivially show using the substitution $u=t+\tau \rightarrow du=dt$ to show that the auto-covariance is a symmetric operation 
+\begin{equation*}
+    \begin{split}
+        R_f(-\tau) &= \int^\infty_{-\infty}f(t)f(t+\tau)dt \\
+        &=\int^\infty_{-\infty}f(u-\tau)f(u)du \\
+        &=R_f(\tau)
+    \end{split}
+\end{equation*}
+which logically makes sense. We also define the \textit{power spectral density} as the Fourier transform of the auto-covariance 
+\begin{equation*}
+    S_f(\omega) =\int^\infty_{-\infty}R_f(\tau)e^{-i\omega \tau}d\tau
+\end{equation*}
+Suppose now that we have a $2\pi$-periodic function such that $f_p(t)=\sum^\infty_{n=-\infty}f(t+2\pi n)$. We can therefore express it as a Fourier series where each coefficient is given by 
+\begin{equation*}
+    \begin{split}
+        c_k &= \frac{1}{2\pi}\int^{2\pi}_{0}f_p(t)e^{-ikt}dt \\
+        &=\frac{1}{2\pi}\int^{2\pi}_0\sum^\infty_{n=-\infty}f(t+2\pi n)e^{-ikt}dt \\
+        &= \frac{1}{2\pi}\sum^\infty_{n=-\infty} \int^{2\pi}_0f(t+2\pi n)e^{-ikt}dt
+    \end{split}
+\end{equation*}
+assuming we impose the necessary conditions that allows us to swap the sum and integral. We now make the substitution $\xi=t+2\pi n \rightarrow d\xi = dt$.
+\begin{equation*}
+    \begin{split}
+        c_k &= \frac{1}{2\pi}\sum^\infty_{n=-\infty} \int^{2\pi (n+1)}_{2\pi n} f(\xi)e^{-ik(\xi-2\pi n)}d\xi \\
+        &=\frac{1}{2\pi}\int^\infty_{-\infty}f(\xi)e^{-ik\xi}d\xi \\
+        &=\frac{1}{2\pi}\hat{f}(k)
+    \end{split}
+\end{equation*}
+If we generalize this to a function with any period, we arrive at Poisson's sum formula 
+\begin{equation*}
+    \sum^\infty_{n=-\infty} f(t+2\pi an)=\frac{1}{2\pi a}\sum^\infty_{k=-\infty} \hat{f}\left( \frac{k}{a} \right)e^{ikt/a}
+\end{equation*}
+where we have replaced the $n$ with $x$ and then transformed with respect to $x$ and applied Theorem \ref{theo:6.4} to arrive at the right hand side. Now let us show an important property known as Fourier duality. The Fourier transform of the function $\hat{f}(\omega)$ is 
+\begin{equation*}
+    \begin{split}
+        \ft{\ft{f(x)}} &= \int^\infty_{-\infty}\hat{f}(\omega)e^{-i\omega x}d\omega \\
+        \ift{\hat{f}(\omega)}&=\frac{1}{2\pi}\int^\infty_{-\infty}\hat{f}(\omega) e^{i\omega x}d\omega \\
+        \Rightarrow \ft{\ft{f(x)}}&=2\pi f(-x)
+    \end{split}
+\end{equation*}
+If we replace $f(x)$ with its transform $\hat{f}(\omega)$ in Poisson's Summation Formula and apply Fourier duality identity, we get 
+\begin{equation*}
+    \sum^\infty_{n=-\infty}\hat f(t+2\pi an) = \frac{1}{2\pi a}\sum^\infty_{k=-\infty}2\pi  f\left( \frac{k}{a}\right)e^{ikt/a}
+\end{equation*}
+If we let $a=1$ and replace $t$ with $\omega$ and $n$ with $-k$ (adding the minus sign doesn't matter since we are summing from $-\infty\rightarrow +\infty$), we get 
+\begin{equation*}
+    \sum^\infty_{k=-\infty}\hat f(\omega+2\pi k) = \sum^\infty_{k=-\infty}  f\left( k\right)e^{-ik\omega}
+\end{equation*}
+If instead we make the substitution $t=\frac{\omega}{c}$ and $a=\frac{1}{c}$, we get 
+\begin{equation}
+    \begin{split}
+        \sum^\infty_{k=-\infty} \hat f\left( \frac{\omega+2\pi k}{c}\right) = c\sum^\infty_{k=-\infty} f(ck)e^{-ik\omega} \label{eq:7.1}
+    \end{split}
+\end{equation}
+If instead of all of that we just plug in $a=\frac{1}{2\pi}$ 
+\begin{equation*}
+    \sum^\infty_{n=-\infty} f(t+n) = \sum^\infty_{k=-\infty}\hat f(2\pi k)e^{2\pi ikt}
+\end{equation*}
+Now let us consider the Fourier transform of a function such that 
+\begin{equation*}
+    \hat f(2\pi k) = \delta_{0,k} \twen k\in\mathbb{Z}
+\end{equation*}
+We can therefore see this leads to something known as the Partition of Unity 
+\begin{equation*}
+    \sum^\infty_{n=-\infty}f(t+n) = 1
+\end{equation*}
+One such example is the Haar function which we have defined previously. We shall refer to it as $B_1(t) = \chi_{[0,1)}(t)$. The Fourier transform of the Haar function is 
+\begin{equation*}
+    \hat B_1(\omega) = \frac{1-e^{-i\omega}}{i\omega}
+\end{equation*}
+We can see that for all integers that aren't 0, the Fourier transform of $B_1$ yields 0 but $\hat B_1(0) =1$. Therefore we ccan say 
+\begin{equation*}
+    \sum^\infty_{n=-\infty}B_1(t+n)=1
+\end{equation*}
+This is also known as the first order $B$-spline function. To find the $n^{th}$ order $B$-spline function, we use the formula 
+\begin{equation*}
+    B_n(t) =B_{n-1}(t)*B_1(t)
+\end{equation*}
+and by using the convolution theorem for Fourier transforms and induction, the Fourier transform of the $n^{th}$ order $B$-spline function is 
+\begin{equation*}
+    \hat B_n(\omega) = \left(\frac{1-e^{-i\omega}}{i\omega}\right)^n
+\end{equation*}
+Suppose we have a signal that we wish to sample with some range of frequencies (called the \textit{bandwidth}) $2\Omega$. If $h\equiv \frac{\pi}{\Omega}$, then this is the largest value $h$ can obtain while still being able to recover the important features of a signal during reconstruction. This is due to the Shannon-Nyquist theorem and the highest frequency is called the Nyquist frequency. Let us take the Fourier transform of a signal $f(t)$ to be 
+\begin{equation*}
+    \hat f(\omega) = \int^\infty_{-\infty}f(t)e^{-i\omega t}dt
+\end{equation*}
+We can approximate it using Simpson's rule. Let us call this approximation $\hat F(\omega)$
+\begin{equation*}
+    \hat F(\omega) = h\sum^\infty_{k=-\infty}f(kh)e^{-ik\omega h} \approx \hat f(\omega)
+\end{equation*}
+If we use \eqref{eq:7.1} and let $c=h$ and $t=\omega h$ (unfortunately these equations lack some clarity, but this $t$ gets replaced by $\omega$ when generating \eqref{eq:7.1}), we see that 
+\begin{equation*}
+    \hat F(\omega) = \sum^\infty_{k=-\infty}\hat f\left( \frac{\omega h+2\pi k}{h }\right) = \hat f(\omega)+\sum^{-1}_{k=-\infty} \hat f\left( \omega+\frac{2\pi k}{h} \right)+\sum^{\infty}_{k=1} \hat f\left( \omega+\frac{2\pi k}{h} \right)
+\end{equation*}
+What we see here is that the approximation yields both the original frequency distribution $\hat f(\omega)$ and infinite copies spaced out by $\frac{2\pi}{h}$ on the frequency axis. To then retrieve $\hat f(\omega)$, we need to use a window function to isolate what we want. We let our window function in the frequency domain to be defined as 
+\begin{equation*}
+    \hat W(\omega) = \begin{cases}
+        1 & |\omega|<\Omega \\ 0 &\text{otherwise}
+    \end{cases}
+\end{equation*}
+We can now see why want to sample at a bandwidth of $2\Omega$ since we want to sample fast enough such that the spacing $\frac{2\pi}{h} =2\Omega$ allows for the copies to not overlap each other This overlapping is known as \textit{aliasing} and is the result of undersampling. As such, we now multiply our approximation by our window function and invert to get via the convolution theorem 
+\begin{equation*}
+    f(t) =F(t) *W(t)
+\end{equation*}
+The inverse Fourier transform of the window function is 
+\begin{equation*}
+    W(t) = \frac{\sin (\Omega t)}{\pi t}
+\end{equation*}
+If we invert the Simpson's rule approximation, we get 
+\begin{equation*}
+    F(t) = \frac{1}{2\pi}\int^\infty_{-\infty}\hat F(\omega)e^{i\omega t}d\omega = \frac{h}{2\pi}\int^\infty_{-\infty}\sum^\infty_{k=-\infty}f(kh)e^{-ikh\omega}e^{i\omega t}d\omega 
+\end{equation*}
+Assuming the conditions of being able to swap the summation and integration as well as using the identity 
+\begin{equation*}
+    \delta(t-kh) = 2\pi \int^\infty_{-\infty}e^{i\omega(t-kh)}d\omega
+\end{equation*}
+We get that 
+\begin{equation*}
+    \begin{split}
+        F(t) &= \frac{h}{2\pi}\sum^\infty_{k=-\infty}f(kh)\int^\infty_{-\infty}e^{i\omega (t-kh)}d\omega \\
+        &= h \sum^\infty_{k=-\infty}f(kh)\delta (t-kh)
+    \end{split}
+\end{equation*}
+Therefore our convolution becomes 
+\begin{equation*}
+    \begin{split}
+        f(t)&=h\sum^\infty_{k=-\infty}f(kh)\int^\infty_{-\infty}\delta (\tau-kh)W(t-\tau)d\tau \\
+        &=h\sum^\infty_{k=-\infty}f(kh)W(t-kh) \\
+        &=h\sum^\infty_{k=-\infty}f(kh)\frac{\sin[\Omega(t-kh)]}{\pi(t-kh)} \\
+        &= \sum^\infty_{k=-\infty} f(kh)\frac{\sin(\Omega t-k\pi)}{\Omega t-k\pi}
+    \end{split}
+\end{equation*}
+We shall now investigate the Gibbs phenomenon which is the overshoot at the discontinuities of a truncated Fourier series. 
+\begin{equation*}
+    f_N(t) = \sum^N_{k=-N}c_ke^{ik\omega_0t}
+\end{equation*}
+The coefficients are found in the usual manner and if we substitute everything in and swap the order of summation and integration, we arrive at 
+\begin{equation*}
+    \begin{split}
+        f_N(t)&= \sum^N_{k=-N}\frac{1}{T} \int^{T/2}_{-T/2}f(\tau)e^{-ik\omega_0\tau}e^{ik\omega_0t}d\tau \\
+        &= \frac{1}{T}\int^{T/2}_{-T/2}f(\tau)\sum^N_{k=-N}e^{ik\omega_0(t-\tau)}d\tau \\
+        &=\frac{1}{T} \int^{T/2}_{-T/2}f(\tau)\frac{\sin\left[ (N+\frac{1}{2})(t-\tau)\omega_0\right]}{\sin\left[ \frac{1}{2}(t-\tau)\omega_0\right]}
+    \end{split}
+\end{equation*}
+We get the fraction with sin functions through recognizing the sum as a geometric series. It is also the this fraction of sines that leads to the Gibbs phenomenon noted at the discontinuities. 
+\section{Localization}
+We can define the \textit{center} of a distribution as 
+\begin{equation*}
+    \mu_p = \frac{1}{||p(t)||^2}\int^\infty_{-\infty}t|p(t)|^2dt
+\end{equation*}
+where $||p(t)||^2$ is the norm of $p(t)$ defined as 
+\begin{equation*}
+    ||p(t)||^2= \int^\infty_{-\infty}|p(t)|^2dt
+\end{equation*}
+We can also define the root-mean-square (RMS) 
+\begin{equation*}
+    \Delta_p = \frac{1}{||p(t)||}\left[\int^\infty_{-\infty}(t-\mu)^2|p(t)|^2dt \right]^{1/2} 
+\end{equation*}
+which acts as the spread of frequency distribution. This leads the uncertainty principle where the product of the RMS of a function and its Fourier transform is greater than half
+\begin{equation*}
+    \Delta_f \Delta_{\hat f} \geq \frac{1}{2}
+\end{equation*}
+In the case that one of the RMS is equal to zero, the other must be infinite. 
+\section{Short Time Fourier Transform}
+To start, let us take a function $f(t)$ and multiply it by a window function $b(t)$. Let us call 
+\begin{equation*}
+    f_b(t)=f(t)b(t)
+\end{equation*}
+and \begin{equation*}
+    b_{t_0,\omega}(t)=b(t-t_0)e^{i\omega t}
+\end{equation*}
+We can define the Short Time Fourier Transform (STFT) as 
+\begin{equation*}
+    f_G(t_0,\omega)=\int^\infty_{-\infty}f(t)b(t-t_0)e^{-i\omega t}dt = \int^\infty_{-\infty}f(t)\overline{b_{t_0,\omega}(t)}dt
+\end{equation*}
+The G represents the relation with the Green's Functions. That is because the regular Fourier transform makes the assumption that a signal is static and time invariant; however, functions are rarely like this and so we want to find the Green's function of a linear time-varying system that depends on both $t$ and the time of the impulse $\tau$. Ideally we would be able to freeze time and figure this out to get a transfer function. That is why we use the STFT which takes a short period of time to find the time-varying transfer function of the system. We invert to get back the windowed function very easily using 
+\begin{equation*}
+    f_b(t)=\frac{1}{2\pi}\int^\infty_{-\infty}f_G(t_0,\omega)e^{i\omega t}d\omega
+\end{equation*}
+If we replace $t_0$ with the dummy variable $\tau$, the STFT looks like 
+\begin{equation*}
+    f_{G_b}(\tau,\xi)=\int^\infty_{-\infty}f(t)\overline{b_{\tau,\xi}(t)}dt = \int^\infty_{-\infty}f(t)b(t-\tau)e^{-i\xi t}dt = \int^\infty_{-\infty}f_b(t)e^{i\xi t}dt
+\end{equation*}
+and the inversion formula being 
+\begin{equation*}
+    f_b(\tau,t)=\frac{1}{2\pi}\int^\infty_{-\infty}f_{G_b}(\tau,\xi)e^{i\xi t}d\xi
+\end{equation*}
+Let us take this inversion formula and multiply the complex conjugate of $b(t-\tau)$
+\begin{equation*}
+    |b(t-\tau)|^2f(t) =\frac{1}{2\pi}\int^\infty_{-\infty}f_{G_b}(\tau, \xi)\overline{b(t-\tau)}e^{i\xi t}d\xi
+\end{equation*}
+We assume the window function is real valued (for simplicity's sake) so the complex conjugate is just itself. We therefore have 
+\begin{equation*}
+    \begin{split}
+        |b(t)|^2f(t) &=\frac{1}{2\pi}\int^\infty_{-\infty}f_{G_b}(\tau, \xi)b_{\tau,\xi}(t)d\xi \\
+        f(t)\int^\infty_{-\infty}|b(t-\tau)|^2d\tau &= \frac{1}{2\pi}\int^\infty_{-\infty}\int^\infty_{-\infty}f_{G_b}(\tau, \xi)b_{\tau,\xi}(t)d\xi d\tau \\
+        f(t)&= \frac{1}{2\pi ||b(t)||^2}\int^\infty_{-\infty}\int^\infty_{-\infty}f_{G_b}(\tau, \xi)b_{\tau,\xi}(t)d\xi d\tau 
+    \end{split}
+\end{equation*}
+
+
+
+
 
 
 \end{document}
