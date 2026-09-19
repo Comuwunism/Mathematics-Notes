@@ -46,6 +46,7 @@
 \newcommand{\pdt}[2]{\frac{\partial^2 #1}{\partial#2^2}}
 \newcommand{\pull}{\! \! \!}
 
+
 \begin{document}
 
 \maketitle
@@ -2023,7 +2024,6 @@ where $L$ is a second order differential operator and $w(x)$ is the weighting fu
     \end{equation*}
 \end{itemize}
 
-\section{Exercises}
 
 
 \chapter{Partial Differential Equations}
@@ -2128,7 +2128,6 @@ and the value of the expansion
     \varphi(t) = \sum^\infty_{n=1}a_nt^{\lambda+n}
 \end{equation*}
 can be approximated for small values of $t$ by the Initial Value Theorem (\ref{theo:ivt}) for finding the value of the transformed series as $s\rightarrow \infty$.
-\section{Exercises}
 
 
 
@@ -2431,8 +2430,6 @@ and the quantity $|F(\omega)|^2$ is referred to as the \textit{energy spectral d
 \end{proof}
 
 
-\section{Exercises}
-
 
 
 
@@ -2678,6 +2675,202 @@ We assume the window function is real valued (for simplicity's sake) so the comp
         f(t)&= \frac{1}{2\pi ||b(t)||^2}\int^\infty_{-\infty}\int^\infty_{-\infty}f_{G_b}(\tau, \xi)b_{\tau,\xi}(t)d\xi d\tau 
     \end{split}
 \end{equation*}
+
+
+
+\chapter{Complex Analysis}
+\section{Introduction}
+This will by no means be a formal introduction to complex analysis and I plan to study the subject further in detail at a later point (hopefully with Stein and Shakarchi Complex). A complex valued $f(z)$ where $z=x+iy$ can be written in the form 
+\begin{equation*}
+    f(z) =\phi(x,y) +i\psi(x,y)
+\end{equation*}
+where $\phi(x,y)$ gives you the real part of the function and $\psi(x,y)$ gives you the imaginary part. Both are real valued functions. A real valued function is deemed \textit{analytic} or \textit{regular} if one can represent it as a power series. This means that the function is infinitely differentiable. The complex analog is the term \textit{holomorphic}, but is effectively interchangeable with analytic. 
+\begin{theorem}
+    A complex-valued function $f(z)=\phi(x,y) + i \psi(x,y)$ (where $z=x+iy$) is holomorphic if and only if it satisfies the Cauchy-Riemann Equations 
+    \begin{equation*}
+    \pd{\phi}{x}=\pd{\psi}{y} \twen \pd{\phi}{y} =-\pd{\psi}{x}
+\end{equation*}
+\end{theorem}
+\begin{proof}
+    ($\Rightarrow$) We start with the fact that the definition of being holomorphic implies infinite differentiability. For this to happen, we require that the limit definitions of the derivatives coming along different paths to converge to the same value. Let us only consider coming along the real axis and imaginary axis first. Coming along the real axis, we have 
+    \begin{equation*}
+        f'(z_0) = \lim_{\Delta x\rightarrow 0} \frac{[\phi(x_0+\Delta x,y_0)+i\psi(x_0+\Delta x, y_0)]-[\phi(x_0,y_0)+i\psi(x_0,y_0)]}{\Delta x}
+    \end{equation*}
+    and along the imaginary
+    \begin{equation*}
+        f'(z_0) = \lim_{\Delta y\rightarrow 0} \frac{[\phi(x_0 ,y_0+\Delta y)+i\psi(x_0, y_0+\Delta y)]-[\phi(x_0,y_0)+i\psi(x_0,y_0)]}{i\Delta y}
+    \end{equation*}
+    Setting these equal to each other and finishing the limit, we get 
+    \begin{equation*}
+        f'(z_0) =\pd{\phi}{x}+i\pd{\psi}{x} = \pd{\psi}{y} -i\pd{\phi}{y}
+    \end{equation*}
+    Setting the real and imaginary parts equal to each other, we get 
+    \begin{equation*}
+        \pd{\phi}{x} = \pd{\psi}{y} \twen \pd{\phi}{y} = -\pd{\psi}{x}
+    \end{equation*}
+    ($\Leftarrow$) Assume $f(z)$ has derivatives $\{\phi_x, \phi_y,\psi_x,\psi_y\}$ that are continuous. We can approximate a change in $\phi$ and $\psi$ using the following 
+    \begin{equation*}
+        \begin{split}
+            \Delta \phi &= \phi_x\Delta x+ \phi_y\Delta y +\varepsilon_1\Delta z \\
+            \Delta \psi&=\psi_x\Delta x+\psi_y \Delta y+\varepsilon_2\Delta z
+        \end{split}
+    \end{equation*}
+    where $\varepsilon_1, \varepsilon_2$ are error terms that go to zero as $\Delta z=\Delta x+i\Delta y$ goes to zero. We can represent the change in $f(z)$ as 
+    \begin{equation*}
+        \begin{split}
+            \Delta f=\Delta \phi + i\Delta \psi &= (\phi_x\Delta x+ \phi_y\Delta y +\varepsilon_1\Delta z) + i(\psi_x\Delta x+\psi_y \Delta y+\varepsilon_2\Delta z)\\
+            &= (\phi_x+i\psi_x)\Delta x+ (\phi_y+i\psi_y)\Delta y +(\varepsilon_1+i\varepsilon_2)\Delta z
+        \end{split}
+    \end{equation*}
+    Now subbing in the relations $\phi_x=\psi_y$ and $\phi_y = -\psi_x$ for the $\Delta y$ terms and subbing $\eta = \varepsilon_1+i\varepsilon_2$
+    \begin{equation*}
+        \begin{split}
+            \Delta f &= (\phi_x + i\psi_x)\Delta x+(-\psi_x+i\phi_x)\Delta y+\eta \Delta z
+        \end{split}
+    \end{equation*}
+    If we factor an $i$ out of the $\Delta y$ term, we get 
+    \begin{equation*}
+        \begin{split}
+            \Delta f &= (\phi_x+i\psi_x)\Delta x+i(i\psi_x+\phi_x)\Delta y+\eta \Delta z \\
+            &= (\phi_x+i\psi_x)(\Delta x+\Delta y) + \eta\Delta z \\
+            &=[(\phi_x+i\psi_x)+\eta] \Delta z \\
+            \Rightarrow\frac{\Delta f}{\Delta z} &=\phi_x+i\psi_x + \eta
+        \end{split}
+    \end{equation*}
+    Taking the limit, we force the error terms to zero and we get 
+    \begin{equation*}
+        \lim_{\Delta z\rightarrow 0} \frac{\Delta f}{\Delta z} =f'(z) =\phi_x+i\psi_x
+    \end{equation*}
+    Since this limit exists and converges to the same value regardless of what path taken, the function is analytic and therefore holomorphic.
+\end{proof}
+Let us now consider a complex-valued function that is analytic in an annular region $r_1< |z-z_0|<r_2$. This series possesses a \textit{Laurent Series} 
+\begin{equation*}
+    f(z) = \sum^\infty_{n=-\infty}a_n(z-z_0)^n
+\end{equation*}
+The positive $n$ parts are deemed the Taylor part of the Laurent series and the terms associated with negative are deemed the principal part. The coefficient $a_{-1}$ is termed the \textit{residue} and will be of great importance as shown later. 
+As said previously, holomorphic functions are harmonic. These follow from the Cauchy-Riemann equations as follows 
+\begin{equation*}
+    \begin{split}
+        \phi_x=\psi_y \twen \phi_y=-\psi_x \\
+        \phi_{xx}=\psi_{xy} \twen \phi_{yy} =-\psi_{yx}
+    \end{split}
+\end{equation*}
+And assuming the partial derivatives are all continuous, we apply Clairaut's theorem to retrieve that 
+\begin{equation*}
+    \begin{split}
+        \phi_{xx} = \psi_{xy} = -\phi_{yy} \\
+        \Rightarrow \nabla ^2\phi =0
+    \end{split}
+\end{equation*}
+Proving that the imaginary part $\psi$ is harmonic is done via a similar method. Since they are both harmonic functions, we can express the value of $f(z)$ at a point $z=z_0$ using the values of $f(z)$ on some boundary $C$ by the use of Cauchy's integral formula
+\begin{equation*}
+    f^{(n)} (z_0) = \frac{n!}{2\pi i} \int_C \frac{f(z)}{(z-z_0)^{n+1}}dz
+\end{equation*}
+Note that $f(z)$ in this case must be analytic everywhere inside of $C$. If we consider a function $g(z)$ such that is not analytic at $z=z_0$ 
+\begin{equation*}
+    g(z) = \frac{f(z)}{(z-z_0)^n}
+\end{equation*}
+we say that there is a singularity at $z=z_0$. We say that the singularity is a \textit{pole of order n}. If $n=\infty$, then we call that an \textit{essential} singularity and we cannot use the Cauchy integral formula. 
+\section{Complex Integration}
+Suppose $f(t)$ is a complex valued function of the real variable $t\in[a,b]$ with real part $f_r$ and imaginary part $p_i$ which are both real valued, piecewise continuous functions on $[a,b]$. We can integrate $f(t)$ using the line integrals 
+\begin{equation}
+    \int^b_af(t)dt = \int^b_af_r(t)dt +i\int^b_af_i(t)dt
+\end{equation}
+Let us now walk through some important definitions. 
+\begin{definition}
+    \leavevmode 
+    \begin{enumerate}
+        \item An arc $C$ is a set of points $\{ (x(t),y(t)):t\in [a,b]\}$ where $x(t)$ and $y(t)$ are continuous functions of the real variable $t$. The arc is conveniently described in terms of the complex valued function $z$ of the real variable $t$  
+        \item An arc is \emph{simple} if it does not cross itself. That is $z(t_1)=z(t_2) \Rightarrow t_1=t_2 \,\,\, \forall t_1,t_2 \in[a,b]$. 
+        \item An arc is \emph{smooth} if $z'(t)$ exists and is non-zero for $t\in [a,b]$. This ensures that $C$ has a continuously turning tangent.
+        \item A (simple) contour is an arc consisting of a finite number of (simple) smooth arcs joined end to end. When only the initial and final values of $z(t)$ coincide, the contour is a (simple) closed contour.
+    \end{enumerate}
+\end{definition}
+
+\begin{definition}
+    Let $C$ be a simple contour as defined above extending from the point $\alpha = z(a)$ to $\beta =z(b)$. Let a domain $\mathcal{D}$ be a subset of the complex plane and let the curve $C$ lie wholly within it. Define $f(z)$ to be a piecewise continuous function on $C$, that is $f(z(t))$ is piecewise continuous on the interval $[a,b]$. Then the \emph{contour integral} of $f(z)$ is 
+    \begin{equation*}
+        \int_C f(z)dz = \int^b_a f(z)dz = \int^b_a f(z(t))z'(t)dt
+    \end{equation*}
+\end{definition}
+
+We shall now prove Cauchy's theorem which is a vital result from complex analysis. 
+\begin{theorem}
+    If $f(z)$ is analytic in a domain $D$ and on its closed boundary $C$, then 
+    \begin{equation*}
+        \oint_C f(z)dz=0
+    \end{equation*}
+\end{theorem}
+\begin{proof}[Cauchy's Theorem]
+    There a variety of different proofs but the most straightforward uses Green's theorem. Green's theorem states that if $P(x,y)$ and $Q(x,y)$ are $C^1$ functions in $D$ and on $C$, then 
+    \begin{equation*}
+        \oint_C Pdx + Qdy = \int\pull\int_D\left( \pd{Q}{x}-\pd{P}{y}\right)dxdy
+    \end{equation*}
+    Let us consider $f(z) = P(x,y)+iQ(x,y)$ where $z=x+iy$. We then have 
+    \begin{equation*}
+        \begin{split}
+            f(z)dz &=(P(x,y)+iQ(x,y))(dx+idy) \\
+            &=P(x,y)dx - Q(x,y)dy + i(P(x,y)dy+Q(x,y)dx) \\
+            \Rightarrow \oint_C f(z)dz&=\oint_C(P(x,y)-Q(x,y)dy) + i\oint_C(P(x,y)dy+Q(x,y)dx) \\
+            &=\int \pull \int_D\left( -\pd{Q}{x}-\pd{P}{y}\right) dxdy +i\int\pull \int_D\left( \pd{P}{x}-\pd{Q}{y} \right)dxdy
+        \end{split}
+    \end{equation*}
+    The Cauchy-Riemann equations imply $P_x=Q_y$ and $P_y=-Q_x$ which then gives 
+    \begin{equation*}
+        \oint_C f(z)dz = 0
+    \end{equation*}
+\end{proof}
+Using this, we shall now prove the most important result from complex analysis.
+\begin{theorem}[Residue Theorem]
+    If $f(z)$ is analytic within and on $C$ except at points $z_i$ such that $i\in\{1,\ldots,n\}$ lie inside $C$ where $f(z)$ has poles, then 
+    \begin{equation*}
+        \oint_C f(z)dz = 2\pi i \sum^n_{k=1} (\text{sum of residues of $f(z)$ at }z=z_k)
+    \end{equation*}
+\end{theorem}
+\begin{proof}
+Let us take a contour $C$ that encompasses a region of space in the complex plane with just one pole (as this method generalizes to finite number of poles). Let us now consider the contour $C'$ that is mostly the same as $C$ but has protrusion such that it does not actually contain the pole located at $z=z_0$.\begin{figure}[hbtp]
+        \centering
+        \includegraphics[width=0.5\linewidth]{residueContour.png}
+        \caption{Contour that goes around the pole}
+        \label{fig:residueContur}
+    \end{figure} We can therefore say that $f(z)$ is analytic everywhere in $C'$. As such, we can apply Cauchy's theorem. We can also break up our contour integral into smaller line integrals 
+    \begin{equation*}
+        \oint_{C'} =\int_C+\int_{AB}+\int_{BA} -\int_\gamma =0
+    \end{equation*}
+    The negative sign comes from the fact that we are going clockwise around the pole. Since the $AB$ and $BA$ integrals are of the same magnitude and go in opposite direction, their sum is equal to zero and thus we have 
+    \begin{equation*}
+        \int_C f(z)dz= \int_\gamma f(z)dz
+    \end{equation*}
+    where $\gamma$ is the small circle of radius $\epsilon$ surrounding $z=z_0$. We can represent $f(z)$ through its Laurent series and evaluate the integral term by term (which is valid since the Laurent series is uniformly convergent). We therefore evaluate each integral as 
+    \begin{equation*}
+        \int_\gamma (z-z_0)^k dz \twen k\in \mathbb{Z}
+    \end{equation*}
+    On the path $\gamma$, $z-z_0=\epsilon e^{i\theta}$ where $\theta \in [0,2\pi)$ and $\epsilon$ is the radius of path. We therefore have that $dz = i\epsilon e^{i\theta}d\theta$ 
+    \begin{equation*}
+        \begin{split}
+            \int_\gamma (z-z_0)^kdz &=\int^{2\pi}_0 ie^{k+1}e^{(k+1)i\theta}d\theta \\
+            &= \frac{i\epsilon^{k+1}}{i(k+1)}e^{i(k+1)\theta} \Bigg|^{2\pi}_0
+        \end{split}
+    \end{equation*}
+    If $k\neq -1$, the integral evaluates to 0. If $k=1$, we have something different
+    \begin{equation*}
+        \int_\gamma (z-z_0)^{-1}dz = \int^{2\pi}_0 \frac{i\epsilon e^{i\theta}}{\epsilon e^{i\theta}} d\theta =2\pi i
+    \end{equation*}
+    and so therefore the integral 
+    \begin{equation*}
+        \int_\gamma f(z)dz = 2\pi i a_{-1}
+    \end{equation*}
+    Now if there are finite amount of poles, we do this same procedure for each one and so thus we achieve the desired result 
+    \begin{equation*}
+        \int_C f(z)dz = 2\pi i \sum^n_{k=1}\operatorname{Res}(f,z_k)
+    \end{equation*}
+\end{proof}
+    
+
+
+
+
+
 
 
 
