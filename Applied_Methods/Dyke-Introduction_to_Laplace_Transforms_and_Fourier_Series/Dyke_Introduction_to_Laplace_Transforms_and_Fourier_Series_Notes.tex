@@ -2832,7 +2832,7 @@ Let us take a contour $C$ that encompasses a region of space in the complex plan
         \centering
         \includegraphics[width=0.5\linewidth]{residueContour.png}
         \caption{Contour that goes around the pole}
-        \label{fig:residueContur}
+        \label{fig:residueContour}
     \end{figure} We can therefore say that $f(z)$ is analytic everywhere in $C'$. As such, we can apply Cauchy's theorem. We can also break up our contour integral into smaller line integrals 
     \begin{equation*}
         \oint_{C'} =\int_C+\int_{AB}+\int_{BA} -\int_\gamma =0
@@ -2865,13 +2865,117 @@ Let us take a contour $C$ that encompasses a region of space in the complex plan
         \int_C f(z)dz = 2\pi i \sum^n_{k=1}\operatorname{Res}(f,z_k)
     \end{equation*}
 \end{proof}
-    
+\section{Branch Cuts}
+Due to the nature of complex numbers, certain functions may end up being multi-valued. Functions like this include the natural logarithm and root functions. One can search up images of these functions by looking up "Riemann Sheets of Complex Functions." What generally happens is we define the negative real axis to be where we place this branch cut and have $\theta=-\pi$ be defined for some value and $\theta=\pi$ be defined for another value. Let us also take into account how we take the natural log of a complex number. Recall that any complex number $z$ can be represented as $z=re^{i\theta}$
+\begin{equation*}
+    \begin{split}
+        \ln(z) &= \ln(re^{i\theta}) \\
+        &=\ln(r)+i\theta \\
+        &= \ln (r) + i(\vartheta +2\pi k) \twen k\in \mathbb{Z}
+    \end{split}
+\end{equation*}
 
 
+\section{Inverse Laplace Transform}
+\begin{theorem}
+    If the Laplace transform of $f(t)$ exists, then 
+    \begin{equation*}
+        f(x) = \lim_{k\rightarrow \infty} \left\{ \frac{1}{2\pi i}\int^{\sigma+ik}_{\sigma-ik} \bar{f}(s)e^{st} ds\right\} \,\,\, t>0
+    \end{equation*}
+    where $|f(x)| \leq e^{Mx}$ for some positive real number M and $\sigma$ is another real number such that $\sigma > M$.
+\end{theorem}
+\begin{proof}
+    The proof was already given previously but we shall restate it. \\\\Let us consider a complex valued function $F(\omega)$ of the form 
+\begin{equation*}
+    F(\omega) = A(\omega)e^{i\phi(\omega)}
+\end{equation*}
+where $A(\omega)$ and $\phi(\omega)$ are real value functions of $\omega \in \R$. $A(\omega)$ acts as the amplitude and $\phi(\omega)$ acts as the phase angle. Using the inverse Fourier transform, we see that 
+\begin{equation*}
+    f(x)=\frac{1}{2\pi}\int^\infty_{-\infty}A(\omega)e^{i\omega x+i\phi(\omega)}d\omega
+\end{equation*}
+However, this is often not very useful since the oscillatory nature leads to a lot of integrals not converging. As such, let instead do the Fourier transform of the function $e^{-kx}f(x)$ where the exponential decay term allows more functions to converge. We then change the lower bound of integration to 0 and assuming $f(x)$ is of exponential order, we have 
+\begin{equation*}
+    F_k(\omega) = \int^\infty_0e^{-(k+i\omega)x}f(x)dx
+\end{equation*}
+Finding the inverse of $F_k$ using our definition for the inverse Fourier transform gives us 
+\begin{equation*}
+    \frac{1}{2\pi}\int^\infty_{-\infty}e^{i\omega x}F_k(\omega)d \omega = \begin{cases}
+        0 &x<0 \\e^{-kx}f(x)&x\geq 0
+    \end{cases}
+\end{equation*}
+Multiplying both sides to cancel out the damping factor on the right hand side (and bringing it under the integral side on the left), we have 
+\begin{equation*}
+    \frac{1}{2\pi}\int^\infty_{-\infty}e^{(k+i\omega )x}F_k(\omega)d \omega = \begin{cases}
+        0 &x<0 \\f(x)&x\geq 0
+    \end{cases}
+\end{equation*}
+We now make the substitution $s=k+i\omega\rightarrow ds = id\omega$ so now the limits of integration will be $s=k\pm i\infty$ when $\omega=\pm \infty$ where we now have 
+\begin{equation*}
+    f(x)=\frac{1}{2\pi i}\int^{k+i\infty}_{k-i\infty}e^{sx}F(s)ds
+\end{equation*}
 
-
-
-
+\end{proof}
+To use this theorem, we use the Bromwich contour which is a circular contour with a vertical path occurring at the real number $\sigma$. To find the inverse Laplace transform of a function, we simply evaluate the integral along the Bromwich contour (using Cauchy's or Residue theorem) before breaking up the integral and solving for the inversion integral shown above. 
+\section{The Inversion Formula in Asymptotics}
+\begin{theorem}
+    If $\bar f (s)$ is $O\left( \frac{1}{|s|} \right)$ as $s\rightarrow \infty$, the singularity with the largest real part is at $s=s_1$, and in some neighborhood of $s_1$
+    \begin{equation*}
+        \bar f(s) = (s-s_1)^k \sum^\infty_{n=0} a_n(s-s_1)^n \twen -1<k<0
+    \end{equation*}
+    then 
+    \begin{equation*}
+        f(t) = -\frac{1}{\pi}e^{s_1 t}\sin(k\pi) \sum^\infty_{n=0}a_n(-1)^n \frac{\Gamma(n+k+1)}{t^{n+k+1}} \text{ as }t\rightarrow \infty
+    \end{equation*}
+\end{theorem}
+\begin{proof}
+    We wish to evaluate the integral 
+    \begin{equation*}
+        \frac{1}{2\pi i}\int_C e^{st}\bar f(s) ds
+    \end{equation*}
+    as the large circular arc of the Bromwich contour goes to zero by Jordan's Lemma and through other manipulations, we can find the inverse Laplace transform formula. Since $0<k<1$, the function is multi-valued around $s_1$ and so thus we must introduce a branch cut such that on the lower Riemann sheet we have $s=s_1+xe^{-i\pi}$ and on the upper sheet we have $s=s_1+xe^{i\pi}$. Let us now evaluate the ``indentation" integrals along each Riemann sheet 
+    \begin{equation*}
+        f(t) = \frac{1}{2\pi i}\int_\infty^0 e^{(s_1-x)t}\bar f (s_1+xe^{-i\pi})e^{-i\pi}dx + \frac{1}{2\pi i}\int^\infty_0 e^{(s_1-x)t}\bar f(s_1+xe^{i\pi})e^{i\pi}dx
+    \end{equation*}
+    where the $e^{\pm i\pi}$ next to the differentials come from the substitution $s=s_1+xe^{\pm i\pi}$. We now combine the integrals into one using properties of definite integrals to get 
+    \begin{equation*}
+        f(t) = -\frac{1}{2\pi i}\int^\infty_0 e^{(s_1-x)t}[\bar f(s_1+xe^{i\pi}) - \bar f(s_1+x^{-i\pi})]dx
+    \end{equation*}
+    We now use Watson's Lemma and find the value of $f(s)$ around $s=s_1$ 
+    \begin{equation*}
+        \begin{split}
+            \bar f(s_1+xe^{i\pi}) &= (xe^{i\pi})^k\sum^\infty_{n=0}a_n(xe^{i\pi})^n \\
+            \bar f(s_1+xe^{-i\pi})&= (xe^{-i\pi})^k\sum^\infty_{n=0}a_n(xe^{-i\pi})^n \\
+            \Rightarrow \bar f(s_1+xe^{i\pi})-\bar f(s_1+xe^{-i\pi})&=x^k2i \sin(k\pi)\sum^\infty_{n=0}a_n(-1)^nx^n
+        \end{split}
+    \end{equation*}
+    where we note that 
+    \begin{equation*}
+        \sin (x) = \frac{1}{2i}(e^{ix}-e^{-ix})
+    \end{equation*}
+    Performing the actual integration, we get 
+    \begin{equation*}
+        \begin{split}
+            \frac{1}{2\pi i}\int^\infty_0 e^{(s_1-x)t}[\bar f(s_1+xe^{i\pi}) - \bar f(s_1+x^{-i\pi})]dx &= \frac{\sin(k\pi)}{\pi} \int^\infty_0 \sum^\infty_{n=0}a_n(-1)^nx^{n+k}e^{(s_1-x)t}dx \\&= \frac{\sin(k\pi)}{\pi}e^{s_1 t}\sum^\infty_{n=0}a_n(-1)^n \int^\infty_0x^{n+k}e^{-xt} \\&=\frac{\sin(k\pi)}{\pi}e^{s_1 t}\sum^\infty_{n=0}a_n(-1)^n\frac{\Gamma(n+k+1)}{t^{n+k+1}}
+        \end{split}
+    \end{equation*}
+    where we have assumed the conditions of swapping the summation and integration operators and used the definition of the Gamma function 
+    \begin{equation*}
+        \Gamma(n) = \int^\infty_0u^{n-1}e^{-u}du
+    \end{equation*}
+    where in the integral in the problem, we made the substitution $u=xt \rightarrow du =tdx$ such that
+    \begin{equation*}
+        \begin{split}
+            \int^\infty_0 x^{n+k}e^{-xt}dx &= \int^\infty_0 \left( \frac{u}{t} \right)^{n+k}e^{-u}\frac{du}{t}
+            \\
+            &=\frac{1}{t^{n+k+1}}\int^\infty_0 u^{n+k}e^{-u}du \\
+            &=\frac{\Gamma (n+k+1)}{t^{n+k+1}}
+        \end{split}
+    \end{equation*}
+    Putting everything together, we have 
+    \begin{equation*}
+        f(t) = -\frac{\sin (k\pi)}{\pi}e^{s_1t}\sum^\infty_{n=0} a_n (-1)^n \frac{\Gamma (n+k+1)}{t^{n+k+1}}
+    \end{equation*}
+\end{proof}
 
 
 
