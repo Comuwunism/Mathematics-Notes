@@ -19,10 +19,157 @@
 \author{Kyle Wang}
 \date{September 2026}
 
+\newcommand{\pd}[2]{\frac{\partial #1}{\partial #2}}
+\newcommand{\od}[2]{\frac{d #1}{d #2}}
+\newcommand{\pdt}[2]{\frac{\partial ^2 #1}{\partial #2 ^2}}
+\newcommand{\odt}[2]{\frac{d^2 #1}{d #2 ^2}}
+\newcommand{\twen}{\hspace{20pt}}
+
 \begin{document}
 
 \maketitle
 \tableofcontents
-\section{Introduction}
+\section{Motivating Examples}
+Suppose we want to launch a projectile vertically into the air and we want to create a model. We are launching it vertically so we do not have to worry about vectors. We start with Newton's Law of Gravity so we can say that 
+\begin{equation*}
+    \odt{r}{t} =-G\frac{M_e }{r^2}
+\end{equation*}
+where $r$ is the distance from the center of the Earth, $G$ is the gravitational constant, and $M_e$ is the mass of the Earth. However, we want to know how far from the surface of the Earth our projectile goes so we define $r=h+R$ where $R$ is the radius of the Earth and $h$ is the height of the projectile relative to the ground. Since $dr=dh$, we have that 
+\begin{equation*}
+    \odt{h}{t} = - G\frac{M_e}{(h+R)^2} 
+\end{equation*}
+Recalling that $g=\frac{GM_e}{R^2}$, we rewrite the equation as 
+\begin{equation*}
+    \odt{h}{t} = -\frac{gR^2}{(h+R)^2}
+\end{equation*}
+This equation has no analytical solution. However, if make the approximation $h\ll R$, we can obtain an \emph{asymptotic solution}. 
+\begin{equation*}
+    \odt{h}{t} = -g 
+\end{equation*}
+which if we set the initial conditions to be $h(0) = 0, h'(0) = v_0$, we have that the solution is 
+\begin{equation*}
+    h(t) = v_0t-\frac{1}{2}gt^2
+\end{equation*}
+The problem with this is we have no semi-``precise" way to justify when we can make this assumption. We also cannot add any correcting factors. We usually start these by non-dimensionalizing. This allows us to zoom to the scale we want to work with and justify what is ``small." For the gravity problem, let us define the characteristic length and times to be 
+\begin{equation*}
+    L_c = \frac{v_0^2}{g} \twen T_c= \frac{v_0}{g}
+\end{equation*}
+We also define some new normalized variables relative to these characteristic norms (I don't want to use variables and they're mainly about magnitudes, hence norms)
+\begin{equation*}
+    x=\frac{h}{L_c} \twen \tau =\frac{t}{T_c}
+\end{equation*}
+We can transform $\odt{h}{t}\rightarrow \odt{x}{\tau}$ via the chain rule 
+\begin{equation*}
+\begin{split}
+    \od{x}{\tau} &=\od{x}{h} \od{h}{t} \od{t}{\tau} = \frac{1}{L_c}\od{h}{t} \frac{T_c}{1} \\
+    \od{h}{t}& = \frac{L_c}{T_c} \od{x}{\tau} \\
+    \Rightarrow\odt{h}{t}&=\od{}{t}\left( \frac{L_c}{T_c} \od{x}{\tau}\right) =\od{}{t}\od{t}{\tau}\left( \frac{L_c}{T_c} \od{x}{\tau}\right) = \frac{L_c}{T_c^2}\odt{x}{\tau}
+\end{split}
+\end{equation*}
+So our equation now becomes 
+\begin{equation*}
+    \begin{split}
+        \frac{L_c}{T_c^2} \odt{x}{\tau} &= -\frac{gR^2}{(xL_c+R)^2} = -\frac{gR^2}{R^2(x\frac{L_c}{R}+1)^2} \\
+        \odt{x}{\tau}&= -\frac{1}{(x\varepsilon+1)^2} \twen \varepsilon=\frac{L_c}{R} = \frac{v_0^2}{gR}
+    \end{split}
+\end{equation*}
+We then guess our solution is some sort of expansion based off this small parameter of the form 
+\begin{equation*}
+    x(t) = x_0 + \varepsilon x_1+\varepsilon^2x_2 +\ldots
+\end{equation*}
+Our small parameter being the ratio of the characteristic length to the radius of the Earth shows us exactly when we can make certain assumptions.\\\\
+Another application is the Navier-Stokes equations.
+\begin{equation*}
+    \begin{split}
+        \nabla \cdot \vec{u} &= 0 \text{ (incompressibility equation)}\\
+        \rho\left(\pd{\vec{u}}{t} + \left( \vec{u}\cdot \nabla \right) \vec{u} \right) &=-\nabla p+\mu \nabla^2 u \text{ (equation of motion)}
+    \end{split}
+\end{equation*}
+If we non-sensationalize such that $(\tilde x, \tilde y, \tilde z) = \frac{1}{L}(x,y,z), \tilde{\vec{u}} = \frac{\vec{u}}{u_c}, \tilde p = \frac{p}{p_c}, \tilde t = \frac{t}{T_c}, T_c =\frac{L_c}{u_c}$. This transforms our equation into 
+\begin{equation*}
+    \frac{\rho u_c}{T_c} \pd{\tilde{ \vec{u}}}{\tilde t} + \frac{\rho u_c^2}{L_c} \left(\tilde{\vec{u}} \cdot \tilde{\nabla} \right)\tilde{\vec{u}} = -\frac{p_c}{L_c} \tilde{\nabla} \tilde p + \frac{\mu U_c}{L_c^2}\tilde{\nabla ^2}\tilde u
+\end{equation*}
+Notice that the first two coefficients of the left hand side are equal and so we can rewrite the left hand side as one differential operator $\frac{D\vec{u}}{D\tilde t}$. Doing some algebra we get that 
+\begin{equation*}
+    \operatorname{Re}\frac{D\vec{u}}{Dt} = -\frac{p_c L_c}{\mu u_c} \tilde{\nabla}p + \tilde{\nabla^2}\tilde u
+\end{equation*}
+where Re is the Reynold's number which is the ratio of inertial versus viscous forces in a flow. 
+\begin{equation*}
+    \operatorname{Re} = \frac{\rho u_c L_c}{\mu}
+\end{equation*}
+If we take the limit as the Reynold's number go to zero, we go into the length scale of bacteria typically. If we have $\frac{p_cL_c}{\mu u_c} = 1$, we then have that the characteristic pressure is $p_c =\frac{\mu u_c}{L_c}$. Rearranging the equation we get 
+\begin{equation*}
+    \nabla p= \mu \nabla^2 \vec{u}
+\end{equation*}
+which is known as the Stoke's limit. If instead we take the limit as the Reynold's number goes to infinity and if we set the characteristic pressure to be $p_c=\rho u_c^2$, we get 
+\begin{equation*}
+    \frac{D \vec{u}}{D\tilde{t}} = -\nabla p +\frac{1}{\operatorname{Re}}\tilde{\nabla^2}\tilde u
+\end{equation*}
+The Laplacian term goes to zero and we have the Euler Equation for invsicid flow 
+\begin{equation*}
+    \rho\left( \pd{u}{t}+(\vec{u} \cdot \nabla) \vec{u} \right) = -\nabla p
+\end{equation*}
+From this we can get d'Alembert's paradox which states that the force of drag is zero on a body moving at a constant velocity in an inviscid fluid contrary to observations. Due to asymptotics, we can add correction terms to resolve this paradox.
+\section{Algebraic Equations}
+Suppose we want to solve the algebraic equation 
+\begin{equation*}
+    x^2+2\varepsilon x-1=0 \twen \varepsilon\ll 1
+\end{equation*}
+Analytically we can solve this to get that $x_{1,2}=-\varepsilon\pm \sqrt{1+\varepsilon^2}$. If we can't analytically solve, we can use two methods to approximate: expansion or iteration. Let us start with the expansion method first.
+\subsection{Expansion Method}
+Let us start with the zeroth-order approximation and set $\varepsilon=0$. We get that our solutions are $x_{0_{1,2}} = \pm 1$. We then make the guess that our solution can be expressed as the power series 
+\begin{equation*}
+    x=x_0+\varepsilon x_1+\varepsilon^2x_2+\ldots
+\end{equation*}
+We then plug that back into our equation and match together powers of $\varepsilon$ up until the powers of epsilon that we desire. Doing so gets us 
+\begin{equation*}
+    \begin{split}
+        (x_0+\varepsilon x_1+\varepsilon^2x_2+\ldots)^2+2\varepsilon(x_0+\varepsilon x_1+\varepsilon^2x_2+\ldots)-1=0 \\
+        1+2\varepsilon x_1+2\varepsilon^2 x_2+\varepsilon^2x_1+\ldots+2\varepsilon+2\varepsilon^2x_1+\ldots-1=0
+    \end{split}
+\end{equation*}
+Grouping them together by powers of epsilon gives 
+\begin{equation*}
+    \varepsilon(2x_1+2) +\varepsilon^2(2x_2+x_1^2+2x_1)=0 \,\,\, \forall \varepsilon
+\end{equation*}
+Since this equation must be true for all $\varepsilon$, we have that the parenthesis terms must be 0 and so we solve for $x_1$ and then plug that into the $\varepsilon^2$ expression to solve for $x_2$.
+\begin{equation*}
+    \begin{split}
+        \varepsilon:&\,\,\,  2x_1+2=0 \rightarrow x_1=-1 \\
+        \varepsilon^2:& \,\,\, 2x_2+1-2=0 \rightarrow x_2 = \frac{1}{2}
+    \end{split}
+\end{equation*}
+Our three-term expansion is therefore 
+\begin{equation*}
+    x=1-\varepsilon+\frac{1}{2}\varepsilon^2
+\end{equation*}
+If we take the binomial expansion of our analytical solution, we find the same thing. 
+\subsection{Iteration Method}
+We generally solve for the highest order of $x$ 
+\begin{equation*}
+    x^2=1-2\varepsilon x \rightarrow x=\pm \sqrt{1-2\varepsilon x}
+\end{equation*}
+The iteration method says that 
+\begin{equation*}
+    x_{n+1}=\pm \sqrt{1-2\varepsilon x_n}
+\end{equation*}
+We start with the zeroth-order approximation 
+\begin{equation*}
+    \begin{split}
+        \varepsilon=0 \rightarrow x_0=\pm 1\\
+        \varepsilon^1 \,\,\,x_1=\sqrt{1-2\varepsilon} = 1-\varepsilon \\
+        \varepsilon^2\,\,\, x_2 = \sqrt{1-2(1-\varepsilon)\varepsilon} = 1-\varepsilon(1-\varepsilon)-\frac{1}{8}(2\varepsilon(1-\varepsilon))^2
+    \end{split}
+\end{equation*}
+Cleaning all of this up we get the same thing as the previous methods 
+\begin{equation*}
+    x_3=1-\varepsilon+\frac{1}{2}\varepsilon^2
+\end{equation*}
+The expansion and iteration methods are good when the zeroth-order approximation doesn't change the nature of the equation (e.g., if we have $\varepsilon x^2+x+1=0$, the zeroth-order approximation would change the equation from a quadratic to a linear equation).
+
+
+
+
+
 
 \end{document}
