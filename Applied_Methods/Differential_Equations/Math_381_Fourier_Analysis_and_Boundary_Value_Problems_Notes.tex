@@ -19,10 +19,55 @@
 \author{Kyle Wang}
 \date{September 2026}
 
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\pd}[2]{\frac{\partial #1}{\partial #2}}
+\newcommand{\od}[2]{\frac{d #1}{d #2}}
+\newcommand{\pdt}[2]{\frac{\partial ^2 #1}{\partial #2 ^2}}
+\newcommand{\odt}[2]{\frac{d^2 #1}{d #2 ^2}}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+
+\setlength{\parindent}{0pt}
+
 \begin{document}
 
 \maketitle
 \tableofcontents
-\section{Introduction}
+\section{Partial Differential Equations}
+\begin{example}
+    Find the function $u(x,y)$ such that $u: \R^2 \mapsto \R $ that satisfies the differential equation $u_{xy}=0$
+\end{example}
+We can just integrate twice. Once with respect to $x$ and one with respect to $y$. 
+\begin{equation*}
+    \begin{split}
+        u_{xy} &= 0 \\
+        \Rightarrow u_x&=c(x) \\
+        \Rightarrow u(x,y) &=C(x) + D(y)
+    \end{split}
+\end{equation*}
+
+\begin{example}
+    Find a solution $u(x,y)$ to solve the transport equation 
+    \begin{equation*}
+        u_x+yu_y=0
+    \end{equation*}
+\end{example}
+Conceptually we can think of this as $\vec{v}\cdot \nabla u = D_{\vec{v}}u=0$ where $\vec{v} = \langle 1,y\rangle$. We effectively want to travel along a path such that the directional derivative in $\vec{v}$ is 0. These paths are called integral curves as they are tangent to the vector field at every point. We now arrive at the characteristic equation 
+\begin{equation*}
+    \od{y}{x}=\frac{y}{1}
+\end{equation*}
+since the slope at every point is just rise over run and therefore $\frac{y}{1}$. This leads to the solution 
+\begin{equation*}
+    y(x) = Ae^{x}
+\end{equation*}
+where $A$ is found using an initial condition. We note that since the value of the function doesn't depend on where you on each curve but rather \emph{which} curve you're on, we can write $u(x,y) =f(A)$ where $A=ye^{-x}$. Therefore the general solution to the transport equation is 
+\begin{equation*}
+    u(x,y) = f(ye^{-x})
+\end{equation*}
 
 \end{document}
