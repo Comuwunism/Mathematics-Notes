@@ -1,0 +1,84 @@
+\documentclass{article}
+\usepackage{graphicx} % Required for inserting images
+\usepackage[english]{babel}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amssymb}
+\usepackage[margin=.75in]{geometry}
+\usepackage{hyperref}
+\usepackage{amsfonts}
+\usepackage{mathrsfs}
+\usepackage[version=4]{mhchem}
+\usepackage{bigints}
+\usepackage{caption}
+\usepackage{xpatch}
+\usepackage{xr}
+\usepackage{enumitem}
+
+\title{Math 330 Abstract Algebra Notes}
+\author{Kyle Wang}
+\date{September 2026}
+
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\N}{\mathbb{N}}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+
+\begin{document}
+\maketitle
+\tableofcontents
+\section{Group Theory}
+\subsection{Modular Arithmetic}
+\begin{definition}
+    Take $n>0$ and $n\in \Z $. We say that $a,b\in \Z$ are \textit{congruent modulo n} ($a\equiv b \mod{n}$) if $n$ divides $a-b$ ($n|a-b$) or if the remainder of $n/a$ equals the remainder of $n/b$.
+\end{definition}
+Here are some properties:
+\begin{enumerate}
+    \item if $a\equiv b \mod n$ and $c\equiv d \mod n$, then $a+c\equiv b+d \mod n$.
+    \begin{proof}
+        $a\equiv b \mod n$ implies that $n|a-b$ which implies that $\exists q \in \Z$ such that $a-b=nq$. The same can be said for $a\equiv b \mod n$ for some $q' \in \Z$ such that $c-d=nq'$. Adding these equations together we have that $a-b+c-d = (a+c)-(b+d) = n(q+q')$. Since the integers are closed under addition, $q+q'$ is an integer and therefore $n|(a+c)-(b+d)$ and as a result, $a+c\equiv b+d \mod n$.
+    \end{proof}
+    \item if $a\equiv b \mod n$ and $c\equiv d \mod n$, then $ac\equiv bd \mod n$
+    \begin{proof}
+        $a\equiv b \mod n$ implies that $n|a-b$ which implies that $\exists q \in \Z$ such that $a-b=nq$. The same can be said for $a\equiv b \mod n$ for some $q' \in \Z$ such that $c-d=nq'$. Multiplying these equations together we have that $(a-b)(c-d) = ac+bd-bc-ad = n^2qq'$. 
+    \end{proof}
+    \item Congruence $\!\!\!\!\mod n$ is an equivalence relation
+\end{enumerate}
+\subsection{Introduction to Groups}
+\begin{definition}[Group]
+    A group is a set of elements $G$ with a binary operation $*$ that assigns to every pair $(g,h)$ of elements of $G$ another element in $G$ denoted $g*h$. Groups follow the group axioms:
+    \begin{enumerate}
+        \item Associativity
+        \begin{equation*}
+            (g_1*g_2)*g_3 = g_1*(g_2*g_3)
+        \end{equation*}
+        \item There exists an element $e\in G$ that is the identity such that 
+        \begin{equation*}
+            e*g_1=g_1*e=g_1
+        \end{equation*}
+        \item Every element has an inverse element denoted $g^{-1}$ such that 
+        \begin{equation*}
+            g*g^{-1} = g^{-1}*g = e
+        \end{equation*}
+        \item The set of elements is closed under the group operation (although this is implied in the definition).
+    \end{enumerate}
+\end{definition}
+\begin{example}
+    Let us look at some examples
+    \begin{enumerate}
+        \item The set $(\Z,+)$. Addition is associative, the identity is 0, the inverse of each element $g$ is $-g$. 
+        \item The set $(\R_{>0}, \cdot)$ where $\cdot$ denotes regular multiplication. Regular multiplication is associative, the identity is $1$, the inverse element is $\frac{1}{g}$
+        \item The set $(\{-2,-1,0,1,2\},+)$. This fails due since it is not closed (take $1+2=3 \notin $ the set
+        \item The set $\left(\left\{ \frac{1}{2^n} \right\}, \cdot \right)$. This fails since there is no inverse.
+        \item Fix a positive integer $n$. Take the set $\left( \{0,1,2,\ldots,n-1\}, +\mod n\right)$. The identity is 0, addition is associative. The inverse of an element $0\leq a\leq n-1$ is $n-a$ since $(n-a)+a \mod n = n\mod n = 0$. This group is denoted by Fraleigh as $\Z$ but more generally denoted as $\Z/n\Z$.
+        \item Fix an $n\in \N$. We denote the group GL$_n(\R)$ as the set of invertible $n\times n$ matrices with real entries with the operation of matrix multiplication. Matrix multiplication is associative, the identity is the $n\times n$ identity matrix $I_n$. The inverse of every element $A$ is the inverse matrix of $A$. This group is also known as the \textit{General Linear Group}.
+    \end{enumerate}
+\end{example}
+
+\end{document}
