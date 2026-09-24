@@ -45,7 +45,21 @@ Here are some properties:
         $a\equiv b \mod n$ implies that $n|a-b$ which implies that $\exists q \in \Z$ such that $a-b=nq$. The same can be said for $a\equiv b \mod n$ for some $q' \in \Z$ such that $c-d=nq'$. Adding these equations together we have that $a-b+c-d = (a+c)-(b+d) = n(q+q')$. Since the integers are closed under addition, $q+q'$ is an integer and therefore $n|(a+c)-(b+d)$ and as a result, $a+c\equiv b+d \mod n$.
     \end{proof}
     \item if $a\equiv b \mod n$ and $c\equiv d \mod n$, then $ac\equiv bd \mod n$
+    \begin{proof}
+        $a\equiv b \mod n$ implies that $n|a-b$ which implies that $\exists q \in \Z$ such that $a-b=nq$. The same can be said for $a\equiv b \mod n$ for some $q' \in \Z$ such that $c-d=nq'$. We can write $ac$ as
+        \begin{equation*}
+            \begin{split}
+                ac &=(b+nq)(d+nq') \\
+                &=bd+bnq'+dnq+n^2qq' \\
+                \Rightarrow ac-bd&=n(bq'+dq+nqq') 
+            \end{split}
+        \end{equation*}
+        and since everything in the parentheses are integers and the integers are closed under multiplication and addition, their result is an integer and therefore $n|ac-bd$ and $ac\equiv bd \mod n$.
+    \end{proof}
     \item Congruence $\!\!\!\!\mod n$ is an equivalence relation
+    \begin{proof}
+        An equivalence relation is reflexive, symmetric, and transitive. To prove reflexiveness, we show $a\equiv a \mod n \rightarrow n|a-a\rightarrow n|0$ which is always true. To prove symmetry, we have that $a\equiv b \mod n $ implies $(a-b)=nq$ which we can extract a negative sign such that $(b-a)=n(-q)$ and since $-q$ is also an integer, $n|b-a$ and therefore $b\equiv a\mod n$. To prove transitiveness, we say that $a\equiv b \mod n$ implies $a-b=nq$ and $b\equiv c\mod n$ implies $b-c=nr$. We now find that $a-c=b+nq+nr-b =n(q+r)$. Since the integers are closed under addition, $q+r\in \Z$ and therefore $n|a-c$ and $a\equiv c \mod n$.
+    \end{proof}
 \end{enumerate}
 \subsection{Introduction to Groups}
 \begin{definition}[Group]
