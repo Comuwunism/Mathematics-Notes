@@ -1,0 +1,81 @@
+\documentclass{article}
+\usepackage{graphicx} % Required for inserting images
+\usepackage[english]{babel}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amssymb}
+\usepackage[margin=.75in]{geometry}
+\usepackage{hyperref}
+\usepackage{amsfonts}
+\usepackage{mathrsfs}
+\usepackage[version=4]{mhchem}
+\usepackage{bigints}
+\usepackage{caption}
+\usepackage{xpatch}
+\usepackage{xr}
+\usepackage{enumitem}
+
+\setlength{\parindent}{0pt}
+\title{Bio 338 Modeling Biological Dynamics Notes}
+\author{Kyle Wang}
+\date{September 2026}
+
+\begin{document}
+
+\maketitle
+\tableofcontents
+\section{Introduction}
+State: numbers that describe variables (state variables) of interest \\
+State variables: Things we care about and measure\\
+State space: space of allowable values of a state variable \\ 
+One thing to note is that units can affect the state space. For example, the state space for allowable temperatures in Celsius is $C\in[-273.15,+\infty)$ whereas the allowable temperatures in Kelvin is $K \in [0,+\infty)$. \\
+We can express differential equations as compartment diagrams. 
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.5\linewidth]{linearGrowth.png}
+    \caption{Compartment diagram of linear growth}
+    \label{fig:linearGrowth}
+\end{figure}
+This diagram represents linear growth and is isomorphic to the equation 
+\begin{equation*}
+    \dot x=b
+\end{equation*}
+For these examples, let us use $x$ to describe the rabbit population. In this case, the population is increasing by $b$ rabbits per time unit (we shall say month for the example).
+\begin{figure}[hbtp]
+    \centering
+    \includegraphics[width=0.5\linewidth]{perCapitaBirth.png}
+    \caption{Compartment diagram of per capita growth}
+    \label{fig:perCapitaGrowth}
+\end{figure}
+Figure \ref{fig:perCapitaGrowth} is the compartment diagram for the equation 
+\begin{equation*}
+    \dot x=bx
+\end{equation*}
+This effectively represents that more rabbits means more offspring which physically makes sense. We can adjust this model further by adding a death rate $d$. We can then draw the compartment diagram as seen in Figure \ref{fig:perCapitaBirthDeath}.
+ The isomorphic differential equation for this is 
+ \begin{equation*}
+     \dot x=bx-dx = (b-d)x
+ \end{equation*}
+which has the solution 
+\begin{equation*}
+    x(t)=x_0e^{rt} \hspace{20pt} r =b-d
+\end{equation*}
+
+If $r>0$, then the birth rate ``out competes" the death rate which leads to exponential growth. On the other hand, if $r<0$, the death rate overrides the birth and hence the rabbit population disappears. We can make it more realistic by adding carrying capacity that only allows $k$ rabbits in our system. This system is described by the \emph{Euler-Lotka} Model 
+\begin{equation*}
+    \dot x = r\left(1-\frac{x}{k}\right)x
+\end{equation*}
+
+where $r$ is once again the sum of the birth and death rates. The second term effectively scales the birth and death based off of how close the population is to the carrying capacity. We must have that $r>0$ or else we see that the amount of deaths slows down as we approach the carrying capacity which is unphysical.
+\begin{figure}[hbtp]
+    \centering
+    \includegraphics[width=0.5\linewidth]{perCapitaBirthDeath.png}
+    \caption{Compartment diagram of per capita growth and death}
+    \label{fig:perCapitaBirthDeath}
+\end{figure}
+
+
+
+
+
+\end{document}
