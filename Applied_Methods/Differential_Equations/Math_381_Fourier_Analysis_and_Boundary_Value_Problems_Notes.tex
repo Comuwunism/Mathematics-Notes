@@ -24,6 +24,7 @@
 \newcommand{\od}[2]{\frac{d #1}{d #2}}
 \newcommand{\pdt}[2]{\frac{\partial ^2 #1}{\partial #2 ^2}}
 \newcommand{\odt}[2]{\frac{d^2 #1}{d #2 ^2}}
+\newcommand{\twen}{\hspace{20pt}}
 
 \newtheorem{theorem}{Theorem}[section]
 \newtheorem{lemma}[theorem]{Lemma}
@@ -69,5 +70,50 @@ where $A$ is found using an initial condition. We note that since the value of t
 \begin{equation*}
     u(x,y) = f(ye^{-x})
 \end{equation*}
+\subsection{Initial and Boundary Conditions}
+When we have an $n$-order derivative with respect to one variable in an equation, we then need $n$ conditions in order to uniquely determine a solution to a boundary value problem. For derivatives with respect to time, these are generally deemed initial conditions because they are occur at $t=0$. For variables associated with some sort of domains, these are usually deemed boundary conditions since they occur at the boundary of the system of interest. It is worth noting that some boundary conditions can lead to nonsensical and impossible implications. Let us take the boundary value problem 
+\begin{equation*}
+    y''+y=x \twen y(0)=y(\pi)=0
+\end{equation*}
+The solution to the homogeneous equation is $A\cos(x)+B\sin(x)$ and the solution to the particular is $x$. Therefore the general solution is $y_g(x)=A\cos x+B\sin x+x$. Plugging in the boundary values yields to following 
+\begin{equation*}
+    \begin{split}
+        y(0)=0=A\\
+        y(\pi)=0=\pi
+    \end{split}
+\end{equation*}
+For PDEs we generally do not have to worry about dimensions of boundary conditions because generally it's a boundary in space and is ``infinite dimensional."
+\begin{theorem}
+    Every solution to the wave equation can be written in the form 
+    \begin{equation*}
+        u(t,x) = p(\xi)+q(\eta) = p(x-ct)+q(x+ct) \label{theorem:1.2}
+    \end{equation*}
+\end{theorem}
+\begin{proof}
+    We change our variables to get 
+    \begin{equation*}
+        u(t,x) = v(x-ct,x+ct)=v(\xi,\eta)=u\left(\frac{\eta - \xi}{2c}, \frac{\eta+\xi}{2}\right)
+    \end{equation*}
+    By the chain rule, we get
+    \begin{equation}
+        \pd{u}{t}=c\left(-\pd{v}{\xi}+\pd{v}{\eta}\right) \hspace{20pt} \pdt{u}{t} = c^2\left(\pdt{v}{\xi} - 2\frac{\partial^2v}{\partial \xi \partial\eta}+\pdt{v}{\eta}\right) \label{eq:1.19}
+    \end{equation} % Equation 1.19
+    \begin{equation}
+        \pd{u}{x} = \pd{v}{\xi}+\pd{v}{\eta} \hspace{20pt} \pdt{u}{x} = \pdt{u}{\xi}+2\frac{\partial^2v}{\partial\xi\partial\eta} + \pdt{v}{\eta} \label{eq:1.20}
+    \end{equation} % Equation 1.20
+    This implies 
+    \begin{equation}
+        \square u=-4c^2\frac{\partial^2v}{\partial\xi\partial\eta}=0 \text{ iff } \frac{\partial^2v}{\partial\xi \partial\eta} = 0 \label{eq:1.21}
+    \end{equation} % Equation 1.21
+    If we create a new variable $w=\pd{v}{\eta}$, we get from the condition in \eqref{eq:1.21} that $\pd{w}{\xi}=0 \therefore w=r(\eta)$. We then get the differential equation 
+    \begin{equation*}
+        \pd{v}{\eta} = r(\eta) \rightarrow\int\pd{v}{\eta}d\eta = \int r(\eta)d\eta
+    \end{equation*}
+    By performing the integration with respect to $\eta$, we then get a constant as a function of $\xi$ which leads to the following
+    \begin{equation*}
+        v(\xi,\eta) - p(\xi)=q(\eta) \rightarrow v(\xi,\eta)=p(\xi)+q(\eta)
+    \end{equation*}
+\end{proof}
+
 
 \end{document}
