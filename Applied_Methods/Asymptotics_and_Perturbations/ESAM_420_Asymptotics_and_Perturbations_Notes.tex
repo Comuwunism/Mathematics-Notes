@@ -165,10 +165,74 @@ Cleaning all of this up we get the same thing as the previous methods
 \begin{equation*}
     x_3=1-\varepsilon+\frac{1}{2}\varepsilon^2
 \end{equation*}
+The iteration method effectively is a spiral from an initial approximation leading to a value of $x_n$ which we then iterate on more to hopefully get to the desired root. However, if the function changes too much too quickly, this can lead to spiraling away. \\\\
 The expansion and iteration methods are good when the zeroth-order approximation doesn't change the nature of the equation (e.g., if we have $\varepsilon x^2+x+1=0$, the zeroth-order approximation would change the equation from a quadratic to a linear equation).
-
-
-
+\subsection{Method of Dominant Balance}
+Let us take a look at the algebraic equation 
+\begin{equation*}
+    \varepsilon x^2+x-1=0
+\end{equation*}
+If we do either the expansion or iteration method, we change the number of roots we get. Let us go try out this method to see what happens. We once again start with the $\varepsilon=0$ term to get that $a_0=1$. We shall use expansion here and guess $x=1+\varepsilon a_1+\varepsilon^2 a_2+\ldots$. Plugging this in we get 
+\begin{equation*}
+    \begin{split}
+        \varepsilon(1+\varepsilon a_1+\ldots)^2+(1+\varepsilon a_1+\ldots)-1=0 \\
+        \varepsilon(1+2\varepsilon a_1+\ldots)+(1+\varepsilon a_1+\ldots)-1=0 \\
+        \varepsilon(1+a_1)+\mathcal{O}(\varepsilon^2)=0 \rightarrow a_1=-1
+    \end{split}
+\end{equation*}
+Therefore our two term expansion is $x=1-\varepsilon +\mathcal{O}(\varepsilon^2)$. If we look at the actual roots using the quadratic formula and binomial expand the square root, we get the same thing for the positive root.
+\begin{equation*}
+    \begin{split}
+        x=\frac{-1\pm \sqrt{1+4\varepsilon}}{2\varepsilon} = \frac{1}{2\varepsilon}\left(-1 \pm (1+\frac{1}{2}4\varepsilon - \frac{1}{8}(4\varepsilon)^2 +\ldots \right) \\
+        x_{+} =\frac{1}{2\varepsilon}(2\varepsilon-2\varepsilon^2) = 1-\varepsilon+\ldots
+    \end{split}
+\end{equation*}
+If we look at the negative root, we find that there is a $\frac{1}{\varepsilon}$ term which explains the behavior at $\varepsilon=0$ and why it doesn't show up.
+\begin{equation*}
+    x_{-} =\frac{1}{2\varepsilon}(-2-2\varepsilon+2\varepsilon^2) = -\frac{1}{\varepsilon}-1+\varepsilon+\ldots
+\end{equation*}
+equipped with this knowledge, let us introduce the Method of Dominant Balance. This method allows us to rigorously find the other root by introducing a rescaled variable $y=\frac{x}{\delta}$ where $\delta$ is some unknown which may be a function. This relation implies that $x=\delta y$. The reason we are doing this is because in the original equation we are strictly assuming $x=\operatorname{ord} (1)$ with respect to $\varepsilon$ and so as such, the linear and constant terms are both order 1 whereas the quadratic term is very small. As such, the dominant balance was between $x$ and $-1$ and that's why we only recovered one of the roots. This rescaling shifts the dominant balance. Since we know before hand that the irregular root $x\sim \frac{1}{\varepsilon}$, let us plug into the original equation and see what happens.
+\begin{equation*}
+    \begin{split}
+        \varepsilon\left(\frac{1}{\varepsilon}\right)^2 + \left(\frac{1}{\varepsilon}\right) -1=0 \\
+        \frac{1}{\varepsilon}+\frac{1}{\varepsilon}-1=0
+    \end{split}
+\end{equation*}
+We can now see that as $\varepsilon \rightarrow 0$, the quadratic and linear terms are now big compared to the constant. That is effectively what the Method of Dominant Balance is doing except we do not have prior knowledge of what this relation is. As such, we substitute our relation for $x$ to arrive at 
+\begin{equation*}
+    \varepsilon \delta^2 y^2+\delta y-1=0
+\end{equation*}
+and now we balance the two other terms (with the assumption that $y$ is strictly order 1). For this to happen, we must have the relation 
+\begin{equation*}
+    \varepsilon \delta^2\sim\delta
+\end{equation*}
+which we can then extract the relation $\delta \sim \frac{1}{\varepsilon}$. This is exactly the term that caused the negative root to vanish when we used the quadratic formula to solve for it. We now have the relation $x=\frac{1}{\varepsilon}y$. We are now able to substitute this back in for every $x$ in the original algebraic equation and derive a new one that we can apply our previous methods on.
+\begin{equation*}
+    \begin{split}
+        \frac{1}{\varepsilon}y^2+\frac{1}{\varepsilon}y-1&=0\\
+        \Rightarrow y^2+y-\varepsilon&=0
+    \end{split}
+\end{equation*}
+We cannot find the solutions to this using iteration because we would have the relation $y=\pm \sqrt{\varepsilon-y}$ which if we tried to find the leading term expression, we would result in complex values. That is why we shall use expansion 
+\begin{equation*}
+    \begin{split}
+        y=a_0+\varepsilon a_1+\varepsilon^2 a_2+\ldots \\
+        (a_0+\varepsilon a_1+\ldots)^2+(a_0+\varepsilon a_1+\ldots)-\varepsilon=0 \\
+        a_0^2+2\varepsilon a_0a_1+a_0+\varepsilon a_1-\varepsilon=0 \\
+        a_0(a_0+1)+\varepsilon(2a_0a_1+a_1-1)=0
+    \end{split}
+\end{equation*}
+Solving for $a_1$ in the $\varepsilon$ term we see that 
+\begin{equation*}
+    a_1 =\frac{1}{2a_0+1}
+\end{equation*}
+We see that $a_0=0$ or $a_0=-1$. In the first case, we have that $a_1=1$ and so the expansion for that is $y=\varepsilon+\ldots$ and for the second, we have $-1-\varepsilon+\ldots$. Subbing this back into the relation for $x=\frac{1}{\varepsilon}y$, we get the approximations 
+\begin{equation*}
+    \begin{split}
+        x_1 &=1+\ldots \\
+        x_2&=-\frac{1}{\varepsilon}-1+\ldots
+    \end{split}
+\end{equation*}
 
 
 
