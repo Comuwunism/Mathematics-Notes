@@ -87,9 +87,58 @@ Here are some properties:
         \item The set $(\R_{>0}, \cdot)$ where $\cdot$ denotes regular multiplication. Regular multiplication is associative, the identity is $1$, the inverse element is $\frac{1}{g}$
         \item The set $(\{-2,-1,0,1,2\},+)$. This fails due since it is not closed (take $1+2=3 \notin $ the set
         \item The set $\left(\left\{ \frac{1}{2^n} \right\}, \cdot \right)$. This fails since there is no inverse.
-        \item Fix a positive integer $n$. Take the set $\left( \{0,1,2,\ldots,n-1\}, +\mod n\right)$. The identity is 0, addition is associative. The inverse of an element $0\leq a\leq n-1$ is $n-a$ since $(n-a)+a \mod n = n\mod n = 0$. This group is denoted by Fraleigh as $\Z$ but more generally denoted as $\Z/n\Z$.
+        \item Fix a positive integer $n$. Take the set $\left( \{0,1,2,\ldots,n-1\}, +\mod n\right)$. The identity is 0, addition is associative. The inverse of an element $0\leq a\leq n-1$ is $n-a$ since $(n-a)+a \mod n = n\mod n = 0$. This group is denoted by Fraleigh as $\Z_n$ but more generally denoted as $\Z/n\Z$.
         \item Fix an $n\in \N$. We denote the group GL$_n(\R)$ as the set of invertible $n\times n$ matrices with real entries with the operation of matrix multiplication. Matrix multiplication is associative, the identity is the $n\times n$ identity matrix $I_n$. The inverse of every element $A$ is the inverse matrix of $A$. This group is also known as the \textit{General Linear Group}.
     \end{enumerate}
+\end{example}
+\subsection{Properties of Groups}
+\begin{definition}
+    The \emph{order} of a group $G$, denoted $|G|$,is the cardinality of the group/set. If $G$ is finite, then $|G|<\infty$.
+\end{definition}
+\begin{definition}
+    If the group operation $*$ is commutative, then the group is \emph{Abelian}.
+\end{definition}
+Here are some properties:
+\begin{enumerate}
+    \item The identity is unique 
+    \begin{proof}
+        Suppose we have some $f\in G$ such that $f*g=g \,\,\, \forall g\in G$. Then if we compose $f$ with the identity, we should get $f*e =e$. By axiom 2 of the group axioms, we must also have that $f*e=f$ and therefore we have that $f*e=e=f$.
+    \end{proof}
+    \item Each inverse element is unique.
+    \item Cancellation, that is if $a*b=c$ for some $a,b,c\in G$, then $b=a^{-1}*c$. 
+    \begin{proof}
+        By group axiom 3, there exists an inverse $a^{-1}$. We can then left multiply by $a^{-1}$ such that $a^{-1}*a*b=a^{-1}*c$ and by associativity, we then have $b=a^{-1}*c$.
+    \end{proof}
+    The consequences of this is that we can make the following observations: $a*b=a*c$ implies that $b=c$ and $b*a=c*a$ implies $b=c$.
+\end{enumerate}
+For finite groups, we can write a group table where we have the left argument along the rows and the right argument of the operation along the columns. Since Abelian groups are commutative, they have a symmetry across the diagonal. An interesting thing to note with these group tables is that every entry appears only once in each row and column.
+\begin{proof}
+    If we have a repeated entry in a row, that implies $a*b=a*c$ but by cancellation, we have that $b=c$. For each column, this implies that $b*a=c*a$ which also implies $b=c$.
+\end{proof}
+\begin{example}
+    Let us take a group of cardinality 2. We require that there exists an identity element so the set contains $\{e,a\}$ where $a$ is some arbitrary element. We can immediately fill out the sides adjacent to the header rows by the group axioms (since $e*g=g$) in Table \ref{tab:groupCard2}. Therefore we must have that $a*a=e$ and therefore $a$ is its own inverse. We shall also note if we apply the group operation $n$-times to an element, we can represent it as $a^n=a*a*\ldots*a \,\,\,(n$ times).
+    \begin{table}[htbp]
+        \centering
+        \begin{tabular}{c|c|c}
+             &  e&a\\ \hline
+             e& e&a\\ \hline
+             a&a&e\\
+        \end{tabular}
+        \caption{Group table for a group of cardinality 2.}
+        \label{tab:groupCard2}
+    \end{table}
+    If we take a group of cardinality three, we have that $G=\{e,a,b\}$. We once again can fill out the header adjacent row and column by composition with the identity. In the $a*b$ cell, we require that be $e$ because otherwise, that would require $a*a$ to be $e$ and therefore $b*a=a$ but $a$ was already in that column and so hence we have a contradiction. Therefore we must have $a*a=b$ and $a*b=e$. From this, we can see that $a^2=b$ and if we multiply $a*b=e$, this implies $a*a^2=a^3=e$. Our group is therefore $G=\{e,a,a^2\}$.
+    \begin{table}[htbp]
+        \centering
+        \begin{tabular}{c|c|c|c}
+             &  e&a&b\\ \hline
+             e&e&a&b\\ \hline
+             a&a&b&e \\ \hline
+             b&b&e&a \\ 
+        \end{tabular}
+        \caption{Caption}
+        \label{tab:placeholder}
+    \end{table}
 \end{example}
 
 \end{document}
