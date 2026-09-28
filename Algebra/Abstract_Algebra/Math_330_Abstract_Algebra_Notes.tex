@@ -22,10 +22,13 @@
 \newcommand{\R}{\mathbb{R}}
 \newcommand{\Z}{\mathbb{Z}}
 \newcommand{\N}{\mathbb{N}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\twen}{\hspace{20pt}}
 
 \newtheorem{theorem}{Theorem}[section]
 \newtheorem{lemma}[theorem]{Lemma}
 \newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{proposition}[theorem]{Proposition}
 \theoremstyle{definition}
 \newtheorem{definition}[theorem]{Definition}
 \newtheorem{example}[theorem]{Example}
@@ -127,7 +130,7 @@ For finite groups, we can write a group table where we have the left argument al
         \caption{Group table for a group of cardinality 2.}
         \label{tab:groupCard2}
     \end{table}
-    If we take a group of cardinality three, we have that $G=\{e,a,b\}$. We once again can fill out the header adjacent row and column by composition with the identity. In the $a*b$ cell, we require that be $e$ because otherwise, that would require $a*a$ to be $e$ and therefore $b*a=a$ but $a$ was already in that column and so hence we have a contradiction. Therefore we must have $a*a=b$ and $a*b=e$. From this, we can see that $a^2=b$ and if we multiply $a*b=e$, this implies $a*a^2=a^3=e$. Our group is therefore $G=\{e,a,a^2\}$.
+    If we take a group of cardinality three, we have that $G=\{e,a,b\}$. We once again can fill out the header adjacent row and column by composition with the identity. In the $a*b$ cell of Table \ref{tab:groupCard3}, we require that be $e$ because otherwise, that would require $a*a$ to be $e$ and therefore $b*a=a$ but $a$ was already in that column and so hence we have a contradiction. Therefore we must have $a*a=b$ and $a*b=e$. From this, we can see that $a^2=b$ and if we multiply $a*b=e$, this implies $a*a^2=a^3=e$. Our group is therefore $G=\{e,a,a^2\}$.
     \begin{table}[htbp]
         \centering
         \begin{tabular}{c|c|c|c}
@@ -136,9 +139,60 @@ For finite groups, we can write a group table where we have the left argument al
              a&a&b&e \\ \hline
              b&b&e&a \\ 
         \end{tabular}
-        \caption{Caption}
-        \label{tab:placeholder}
+        \caption{Group table for a group of cardinality 3}
+        \label{tab:groupCard3}
     \end{table}
 \end{example}
+\begin{example}
+    Let us look at the Quaternion group. The Quaternion group is the set 
+\begin{equation*}
+    Q_8 = \{ \pm 1, \pm i, \pm j, \pm k\}
+\end{equation*}
+under standard multiplication. 1 is the identity element and $i^2=j^2=k^2=-1$. Quaternion multiplication is defined as 
+\begin{equation*}
+    \begin{split}
+        ij=k \twen jk =i \twen  ki=j \\
+        ji=-k \twen kj=-i \twen ik=-j
+    \end{split}
+\end{equation*}
+This is a group of order 8 and is non-abelian. The inverse of $-1$ is $-1$ and so because of this we can say the inverse $i$ and $-i$ and same for $j$ and $k$. Associativity is also good. This group is the reason why the cross product exists in $\R^3$ and the related Octonion group allows for the existence of the cross product in $\R^7$. 
+\end{example}
+\begin{example}
+    Another important group is the set of complex numbers with norm of 1 under multiplication. In other words, $\{ z\in \C: |z|=1\}$. This is an Abelian group and is of infinite order. This is a group because the norms are all one so multiplication stays within the group ($|z_1||z_2|=|z_1z_2|=1$) and the inverse is also in the group (if $|z_1|=1, \frac{1}{|z_1|} =1$). We can also convert each complex number into its polar form $z=re^{i\theta}\,\,\, r,\theta \in \R$ and since each element has a norm of 1, $r=1$ and we can just take $z_1z_2=e^{i(\theta_1+\theta_2)}$ and since the real numbers are a group under addition, this set of complex numbers also form a group. This group is also used to generate groups which contain the $n^{th}$ primitive roots of unity. To do this, we fix a number $n\in \N$. Then the number 
+    \begin{equation*}
+        e^{\frac{2k\pi}{n}i} \twen k\in\{1,2,\ldots,n-1\}
+    \end{equation*}
+    is an $n^{th}$ primitive root of unity. This means that these are roots to the equation $z^n=1$ and the primitive means that $n$ is the smallest power that can satisfy the equation (e.g., no smaller number (let's call $m$) exists such that $z^m=1$). We then say that the set of the $n^{th}$ groups of unity form an Abelian group under multiplication of order $n$. One can see this because multiplication of complex numbers is associative, the identity is 1 ($k=0$ root) 
+\end{example}
+\begin{definition}
+    Suppose $A$ is any set. A permutation is a function $f:A\mapsto A$ that is bijective.
+\end{definition}
+\begin{proposition}
+    The set of all permutations of a set $A$ is a group where the binary operation $*$ is composition and $e$ is the identity permutation.
+\end{proposition}
+\begin{proof}
+    We must first show that the composition of permutations is also a permutation. Let us say that $\sigma,\tau$ are permutations of $A$. We can now prove that $\sigma \tau$ is injective. Suppose
+    \begin{equation*}
+        (\sigma \tau)(a) = (\sigma\tau )(b) \rightarrow \sigma(\tau(a))=\sigma(\tau(b))
+    \end{equation*}
+    Since $\sigma$ is a permutation, $\sigma$ is injective and therefore 
+    \begin{equation*}
+        \tau(a)=\tau(b)
+    \end{equation*}
+    Using that logic again, $\tau$ is a permutation and therefore injective and 
+    \begin{equation*}
+        a=b
+    \end{equation*}
+    To show that this is onto, we have to show that for some $a\in A$, there exists an $x\in A$ such that $a=\sigma\tau (x)$ Since $\sigma$ is onto, there exists a $y\in A$ such that $a=\sigma(y)$. $\tau$ is also surjective and so we can say there exists an $x\in A$ such that $y=\tau(x)$. Putting everything together we have that 
+    \begin{equation*}
+        a=\sigma(y)=\sigma(\tau(x))=(\sigma\tau)(x)
+    \end{equation*}
+    As such we have shown that $\sigma \tau$ is a permutation. Now we can check the group axioms. The group operation is associative since function is associative
+    \begin{equation*}
+        ((\sigma \tau)\rho)(a) =\sigma(\tau(\rho(a)))=\sigma(\tau\rho(a))=(\sigma(\tau \rho))(a) 
+    \end{equation*}
+    We also denote the identity permutation $\iota $ such that $\iota(a)=a \,\,\, \forall a\in A$. Finally, any permutation is invertible since it surjective and given any $y\in A$, there exists only one $x$ such that $y=\sigma(x)$ since $\sigma$ is bijective. We therefore have that $\sigma^{-1}(y)=x$. We can check that $\sigma^{-1}$ is a permutation by using the fact that $\sigma(\sigma^{-1}(x))=x$. Let us consider $\sigma^{-1}(y)=\sigma^{-1}(x)$ and applying $\sigma$ to both sides we get $x=y$ and hence injectivity. We shall define a $y=\sigma(x)$ and therefore $\sigma^{-1}(y)=\sigma^{-1}(\sigma(x))=x$ for all $y\in A$.
+\end{proof}
+This group is known as the symmetric group and we denote it $S_A$. The most important symmetric group is when $A=\{1,2,\ldots,n\}$. We denote this group as $S_n$ and it has cardinality $|S_n|=n!$.
 
 \end{document}
