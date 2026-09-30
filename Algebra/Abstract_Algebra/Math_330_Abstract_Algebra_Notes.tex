@@ -193,6 +193,91 @@ This is a group of order 8 and is non-abelian. The inverse of $-1$ is $-1$ and s
     \end{equation*}
     We also denote the identity permutation $\iota $ such that $\iota(a)=a \,\,\, \forall a\in A$. Finally, any permutation is invertible since it surjective and given any $y\in A$, there exists only one $x$ such that $y=\sigma(x)$ since $\sigma$ is bijective. We therefore have that $\sigma^{-1}(y)=x$. We can check that $\sigma^{-1}$ is a permutation by using the fact that $\sigma(\sigma^{-1}(x))=x$. Let us consider $\sigma^{-1}(y)=\sigma^{-1}(x)$ and applying $\sigma$ to both sides we get $x=y$ and hence injectivity. We shall define a $y=\sigma(x)$ and therefore $\sigma^{-1}(y)=\sigma^{-1}(\sigma(x))=x$ for all $y\in A$.
 \end{proof}
-This group is known as the symmetric group and we denote it $S_A$. The most important symmetric group is when $A=\{1,2,\ldots,n\}$. We denote this group as $S_n$ and it has cardinality $|S_n|=n!$.
-
+This group is known as the symmetric group and we denote it $S_A$. The most important symmetric group is when $A=\{1,2,\ldots,n\}$. We denote this group as $S_n$ and it has cardinality $|S_n|=n!$.\\\\ From now on, we will write $a*b$ as $ab$ except when working with groups using $\Z,\R,$ etc. with addition as they will be denoted using the usual addition sign. Instead of denoting the identity as $e$, we shall write $1$ under the same condition as the last where there is no confusion is possible.
+\subsection{The Symmetric Group}
+Recall that the Symmetric Group $S_n$ is the defined as the set of all permutations of a set $\{1,2,\ldots,n\}$ where the binary operation is composition. The cardinality of $S_n$ is $|S_n|=n!$. Elements of $S_n$ can be written as 
+\begin{equation*}
+    \begin{pmatrix}
+        1&2&3&4&\ldots&n \\k_1&k_2&k_3&k_4&\ldots &k_n
+    \end{pmatrix} \text{ where } k_1,\ldots,k_n \in \{1,\ldots, n\}
+\end{equation*}
+Since we are using composition, we do the permutation $\tau$ before $\sigma$ in the permutation $\sigma \tau$. Let us look at an example to demonstrate 
+\begin{example}
+    Let us suppose in $S_5$ 
+    \begin{equation*}
+        \sigma = \begin{pmatrix}
+            1&2&3&4&5 \\5&1&2&3&4
+        \end{pmatrix} \twen \tau=\begin{pmatrix}
+            1&2&3&4&5\\1&3&2&5&4
+        \end{pmatrix}
+    \end{equation*}
+    The permutation $\sigma\tau$ is then 
+    \begin{equation*}
+        \sigma \tau = \begin{pmatrix}
+            1&2&3&4&5\\5&1&2&4&3
+        \end{pmatrix}
+    \end{equation*}
+    We can also find the inverse of a permutation by just going in ``reverse"
+    \begin{equation*}
+        \sigma^{-1} = \begin{pmatrix}
+            1&2&3&4&5 \\3&2&4&5&1
+        \end{pmatrix}
+    \end{equation*}
+\end{example}
+\begin{proposition}
+    If $n\geq 3$, the group $S_n$ is non-Abelian
+\end{proposition}
+\begin{proof}
+    Let us first just consider the case $n=3$. Consider the following composition of permutations 
+    \begin{equation*}
+        \begin{pmatrix}
+            1&2&3\\2&3&1
+        \end{pmatrix}
+        \begin{pmatrix}
+            1&2&3\\2&1&3
+        \end{pmatrix} = \begin{pmatrix}
+            1&2&3\\3&2&1
+        \end{pmatrix}\\
+        \begin{pmatrix}
+            1&2&3\\2&1&3
+        \end{pmatrix} \begin{pmatrix}
+            1&2&3\\2&3&1
+        \end{pmatrix}=\begin{pmatrix}
+            1&2&3\\1&3&2
+        \end{pmatrix}
+    \end{equation*}
+    We can prove this for higher $n$ by simply sending everything beyond 3 to their number. For example 
+    \begin{equation*}
+        \begin{pmatrix}
+            1&2&3&4&5&\ldots\\2&3&1&4&5&\ldots
+        \end{pmatrix}
+    \end{equation*}
+\end{proof}
+\subsubsection{Cycle Notation}
+We can express the elements of a group in a more streamlined way.
+\begin{equation*}
+    (k_1,k_2,\ldots,k_l) \text{ where } k_1,\ldots,k_l \in \{1,2,\ldots,n\} \text{ and are distinct}
+\end{equation*}
+This notation denotes the following permutation: $k_1\rightarrow k_2\rightarrow\ldots\rightarrow k_{l-1}\rightarrow k_l\rightarrow k_1$. Any numbers not listed in this cycle is assumed to be fixed. In this case we have to specify what symmetric group we are in because the number of fixed entries could be 1 or 2 or 500.
+\begin{example}
+    In $S_6$, the notation $(3,1,5,4)$ represents the permutation
+    \begin{equation*}
+        \begin{pmatrix}
+            1&2&3&4&5&6\\5&2&1&3&4&6
+        \end{pmatrix}
+    \end{equation*}
+    We can also compose them together as normal 
+    \begin{equation*}
+        (3,1,5,4)(1,2,6,5,3) =\begin{pmatrix}
+            1&2&3&4&5&6\\2&6&5&3&1&4
+        \end{pmatrix}
+    \end{equation*}
+\end{example}
+If we want to invert a permutation, we just reverse the order of the terms. For example $\sigma=(k_1,k_2,\ldots,k_l)$ inverts to $\sigma^{-1}=(k_l,k_{l-1},\ldots,k_1)$. Cycles of length 2 are specifically called \emph{transpositions}. We also note that cycles are not unique since we see that the inverse of a cycle $(a,b)$ is $(b,a)$ which is the same as $(a,b)$. There is a fact that if you have 2 cycles are disjoint, that is, they don't have any entries in common, the disjoint cycles commute. Additionally, every permutation can be written as a product of disjoint cycles. 
+\begin{equation*}
+    \begin{pmatrix}
+        1&2&3&4&5&6&7&8\\8&5&3&6&7&4&2&1
+    \end{pmatrix} = (1,8)(2,5,7)(3)(4,6)
+\end{equation*}
+The cycles with just a single element can be excluded.
 \end{document}
