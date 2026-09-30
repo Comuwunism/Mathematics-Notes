@@ -14,6 +14,7 @@
 \usepackage{xpatch}
 \usepackage{xr}
 \usepackage{enumitem}
+\setlength{\parindent}{0pt}
 
 \title{ESAM 420 Notes}
 \author{Kyle Wang}
@@ -167,6 +168,21 @@ Cleaning all of this up we get the same thing as the previous methods
 \end{equation*}
 The iteration method effectively is a spiral from an initial approximation leading to a value of $x_n$ which we then iterate on more to hopefully get to the desired root. However, if the function changes too much too quickly, this can lead to spiraling away. \\\\
 The expansion and iteration methods are good when the zeroth-order approximation doesn't change the nature of the equation (e.g., if we have $\varepsilon x^2+x+1=0$, the zeroth-order approximation would change the equation from a quadratic to a linear equation).
+\\\\
+Let us now consider a case when we can't use the highest order term to begin our iteration.
+\begin{equation*}
+    x^2+x-\varepsilon=0
+\end{equation*}
+The key thing here is to setup and iteration such that it converges to the desired value. In order for that to happen, we need on an interval $I$ around the root to have the following condition: $|f'(x)|<1\,\,\,\forall x\in I$. It is also worth noting that knowing what the unperturbed function looks like by moving all of the $\varepsilon$ terms to one side and ignoring it (in this case, it would be $x^2+x=0$). Here we can see the unperturbed roots are $x=-1$ and $x=0$. Let us try to find the root around $x=-1$. We can do this with the setup 
+\begin{equation*}
+    x^2=\varepsilon-x
+\end{equation*}
+By dividing by $x$, we can find the relation 
+\begin{equation*}
+    x=\frac{\varepsilon}{x_n}-1
+\end{equation*}
+If we let the right hand side equal $f(x)$, we find that the derivative is $|f'(x)|=\frac{\varepsilon}{x_n^2}$. Since $\varepsilon$ is assumed small, our convergence condition is satisfied.
+
 \subsection{Method of Dominant Balance}
 Let us take a look at the algebraic equation 
 \begin{equation*}
@@ -234,6 +250,26 @@ We see that $a_0=0$ or $a_0=-1$. In the first case, we have that $a_1=1$ and so 
     \end{split}
 \end{equation*}
 
-
+Let us look at another example 
+\begin{equation*}
+    \varepsilon x^3-x+1=0
+\end{equation*}
+Finding the regular root is pretty trivial so we shall ignore it. We start with the ansatz that $x=\delta y$.
+Subbing this in we get 
+\begin{equation*}
+    \varepsilon\delta^3y^3-\delta y+1=0
+\end{equation*}
+We can choose to either balance the first and second term or the first and third term. If we choose to balance the first and last term, we get that $\delta \sim \varepsilon^{-1/3}$. Plugging this in we would get 
+\begin{equation*}
+    y^3-\varepsilon^{-1/3}y+1=0
+\end{equation*}
+The first and third terms are now both order 1 but the middle term is huge as $\varepsilon\rightarrow0$ which is impossible since you now have an unbalanced term. Therefore the correct terms to balance were the first and second. We then get $\delta \sim \frac{1}{\sqrt \varepsilon}$ and so 
+\begin{equation*}
+    \frac{1}{\sqrt \varepsilon}y^3-\frac{1}{\sqrt \varepsilon}y+1=0 \rightarrow y^3-y+\sqrt \varepsilon =0.
+\end{equation*}
+We can now iterate/expand to find the roots we couldn't find earlier. Additionally, it is worth noting since the non-homogeneity is $\sqrt{\varepsilon}$, we should have our expansion be 
+\begin{equation*}
+    y=y+0+\sqrt \varepsilon y_1+(\sqrt \varepsilon)^2y_2+\ldots
+\end{equation*}
 
 \end{document}
