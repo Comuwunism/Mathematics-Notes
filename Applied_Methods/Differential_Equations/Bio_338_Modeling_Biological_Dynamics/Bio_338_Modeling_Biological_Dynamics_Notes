@@ -20,6 +20,9 @@
 \author{Kyle Wang}
 \date{September 2026}
 
+\newtheorem{definition}{Definition}[section]
+\newtheorem{theorem}[definition]{Theorem}
+
 \begin{document}
 
 \maketitle
@@ -136,9 +139,65 @@ These equations are annoying to solve analytically but we can solve it numerical
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.5\linewidth]{HIVPlot.png}
-    \caption{Plot of the amount of HIV in the blood over time with the parameters: $B_u=0.272, B_i=0.00027, B_v=100, D_u=0.00136, D_i=0.33, D_v=2$}
+    \caption{Plot of the amount of HIV in the blood over time with the parameters using McClain's model: $B_u=0.272, B_i=0.00027, B_v=100, D_u=0.00136, D_i=0.33, D_v=2$}
     \label{fig:HIVPlot}
 \end{figure}
-
+We can further adjust the model to include latent infected cells: that is, cells that are infected but do not shed viruses. Let us say that 10\% of cells become latently infected. Let us assume the death rate of latent cells is the same as uninfected ($D_l=D_u$). Let us also say that the latent cells become active (and begin shedding) at a rate $B_a$. Our set of differential equations is now 
+\begin{equation*}
+    \begin{split}
+        \dot N_u &= B_u-D_uN_u-B_iN_vN_u \\
+        \dot N_i &= .9B_iN_vN_u + B_aN_l -D_iN_i \\
+        \dot N_l &= .1B_iN_vN_u - B_aN_l-D_uN_l \\
+        \dot N_v &= B_vN_i - N_vD_v
+    \end{split}
+\end{equation*}
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.5\linewidth]{McClain Latent.png}
+    \caption{McClain's model including latently infected cells}
+    \label{fig:McClainLatent}
+\end{figure}
+\subsection{Tangent Spaces}
+\begin{definition}[Tangent Space]
+    The tangent space of a \emph{manifold} is a vector space that contains all possible directions tangent to the manifold at that point.
+\end{definition}
+\begin{definition}[Manifold]
+    An $n$-dimensional manifold is a topological space with the property that each point has a neighborhood that is homeomorphic to an open subset of $n$-dimensional Euclidean space.
+\end{definition}
+We can effectively think of the a state space as a manifold and each point on that manifold corresponds to a specific state in that state space. We can then think of the tangent spaces as all possible changes that can be made to a certain state in that state space. I wish I knew more about differential geometry but maybe G\'abor Sz\'ekelyhidi can teach me about it. 
+\begin{definition}[Vector Field]
+    A vector is a function $f:$ points in the state space $(\mathbb{R}^n)\mapsto$ points in the tangent space $(\mathbb{R}^n)$. 
+\end{definition}
+Let us look at the example $x\in[0,\infty)$ to be our state space and $\dot x=2x$ as our manifold. The state space is the positive half line and so vectors in this tangent space can point in either direction. So $-5$ or $2$ may be allowable vectors in this tangent space. However, the \emph{vector field} is strictly enforced by $\dot x=2x$ which is a \emph{subset} of the tangent space. We can also look at the vector field for the logistic model where $x\in [0,\infty)$ and $\dot x=rx\left(1-\frac{x}{k}\right),\,\,\, r>0$. We now note for $x<k$, the vector field points in the $+\hat x$ whereas if $x>k$, the vector field points in the $-\hat x$ direction. That is because there exists a fixed point at $k$.
+\begin{theorem}[Banach Fixed Point Theorem]
+    Let $(X,d)$ be a \emph{complete} metric space with a contraction mapping $T:X\mapsto X$. Then $T$ admits a unique fixed point $x^* \in X$ meaning $T(x^*)=x^*$. Furthermore, $X^*$ can be found as follows: start with an arbitrary element $x_0\in X$ and define $x_n = T(x_{n-1})$ for $n\in \mathbb{N}$. Then, $\lim_{x\rightarrow \infty} x_n=x^*$
+\end{theorem}
+Let us look at some vector fields in $\mathbb{R}^2$. Consider the Romeo and Juliet system of differential equations which models Romeo's love $y$ and Juliet's love $x$ as 
+\begin{equation*}
+    \begin{split}
+        \dot y &=-x\\
+        \dot x&=y
+    \end{split}
+\end{equation*}
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.5\linewidth]{RomeoJuliet.png}
+    \caption{Vector field of the Romeo and Juliet set of differential equations}
+    \label{fig:RJ}
+\end{figure}
+We can also take a look at the Lotka-Volterra model which describes predator-prey dynamics and is described by the equations 
+\begin{equation*}
+    \begin{split}
+        \dot x&= x-kxy \\
+        \dot y&=kxy-y
+    \end{split}
+\end{equation*}
+We can see that in Figure \ref{fig:LV}, there exists a fixed point at the origin (no predators and no prey so no dynamics) and another one somewhere in the positive plane which suggests the existence of a steady state.
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.5\linewidth]{LotkaVolterra.png}
+    \caption{Vector field of the Lotka-Volterra model}
+    \label{fig:LV}
+\end{figure}
 
 \end{document}
