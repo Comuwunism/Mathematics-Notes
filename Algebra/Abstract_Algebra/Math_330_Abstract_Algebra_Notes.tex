@@ -15,6 +15,7 @@
 \usepackage{xr}
 \usepackage{enumitem}
 
+\setlength{\parindent}{0pt}
 \title{Math 330 Abstract Algebra Notes}
 \author{Kyle Wang}
 \date{September 2026}
@@ -36,7 +37,7 @@
 \begin{document}
 \maketitle
 \tableofcontents
-\section{Group Theory}
+\section{Introduction to Group Theory}
 \subsection{Modular Arithmetic}
 \begin{definition}
     Take $n>0$ and $n\in \Z $. We say that $a,b\in \Z$ are \textit{congruent modulo n} ($a\equiv b \mod{n}$) if $n$ divides $a-b$ ($n|a-b$) or if the remainder of $n/a$ equals the remainder of $n/b$.
@@ -107,7 +108,10 @@ Here are some properties:
     \begin{proof}
         Suppose we have some $f\in G$ such that $f*g=g \,\,\, \forall g\in G$. Then if we compose $f$ with the identity, we should get $f*e =e$. By axiom 2 of the group axioms, we must also have that $f*e=f$ and therefore we have that $f*e=e=f$.
     \end{proof}
-    \item Each inverse element is unique.
+    \item Each inverse element is unique. 
+    \begin{proof}
+        $(a')'a'=e\rightarrow (a')'a'a=ea\rightarrow (a')'e=a\rightarrow (a')'=a$
+    \end{proof}
     \item Cancellation, that is if $a*b=c$ for some $a,b,c\in G$, then $b=a^{-1}*c$. 
     \begin{proof}
         By group axiom 3, there exists an inverse $a^{-1}$. We can then left multiply by $a^{-1}$ such that $a^{-1}*a*b=a^{-1}*c$ and by associativity, we then have $b=a^{-1}*c$.
@@ -225,7 +229,7 @@ Since we are using composition, we do the permutation $\tau$ before $\sigma$ in 
     \end{equation*}
 \end{example}
 \begin{proposition}
-    If $n\geq 3$, the group $S_n$ is non-Abelian
+    If $n\geq 3$, the group $S_n$ is non-Abelian \label{prop:1.12}
 \end{proposition}
 \begin{proof}
     Let us first just consider the case $n=3$. Consider the following composition of permutations 
@@ -280,4 +284,68 @@ If we want to invert a permutation, we just reverse the order of the terms. For 
     \end{pmatrix} = (1,8)(2,5,7)(3)(4,6)
 \end{equation*}
 The cycles with just a single element can be excluded.
+\subsection{The Dihedral Group}
+Start with a regular $n$-gon. The dihedral group $D_n$ is the group of all symmetries of this $n$-gon. Let us take a look at the symmetries of a triangle.
+\begin{example}
+We can consider the symmetries of triangle as a clockwise rotation by $120^\circ$ once or twice (which is the same as a counter-clockwise rotation by $120^\circ$) or reflecting along an axis of symmetry that goes through one of the vertices. These are described in Figure \ref{fig:d3}.
+    \begin{figure}[htbp]
+        \centering
+        \includegraphics[width=0.5\linewidth]{d3.png}
+        \caption{Elements of the Dihedral Group $D_3$}
+        \label{fig:d3}
+    \end{figure}
+    We can call one clockwise rotation by $\rho_1$, two clockwise (or again, 1 counter-clockwise rotation) by $\rho_2$, and then we have reflections $\mu_1,\mu_2,\mu_3$ about the vertices $1,2,$ and $3$. We also note that $\rho_1^2=\rho_2=1$ and $\mu_1^2=\mu_2^2=\mu_3^2=1$. We claim that $D_3=\{1,\rho_1,\rho_2,\mu_1,\mu_2,\mu_3\}$ are all the elements of the dihedral group $D_3$. What about products though? We can think of dihedral group as a subset of the symmetric group and so the symmetries of the $n$-gon are just permutations of the vertices. However, we need to preserve the relationships between the vertices (basically, there must exist an edge between 1 and 2 and symmetries that don't respect this edge, aren't part of the dihedral group).
+As such, we can write $\rho_1$ and $\mu_2$ as 
+\begin{equation*}
+    \rho_1=\begin{pmatrix}
+        1&2&3\\2&3&1
+    \end{pmatrix} \twen \mu_2=\begin{pmatrix}
+        1&2&3\\3&2&1
+    \end{pmatrix}
+\end{equation*}
+We can then find the products of these two actions 
+\begin{equation*}
+    \rho_1\mu_2=\begin{pmatrix}
+        1&2&3\\1&3&2
+    \end{pmatrix} =\mu_1 \twen \mu_2\rho_1=\begin{pmatrix}
+        1&2&3\\2&1&3
+    \end{pmatrix} = \mu_3
+\end{equation*}
+We see that the product of any two symmetries is also a symmetry. We also see the $D_n$ is non-Abelian (which makes sense because we established previously in Proposition \ref{prop:1.12}).
+\end{example}
+
+\begin{proposition}
+    The cardinality of the dihedral group $D_n$ is $|D_n|=2n$.
+\end{proposition}
+\begin{proof}
+    We can express any rotation as sending the vertex $1$ to any vertex $i\in \{1,\ldots,n\}$. Vertex 2 can then only be sent to $i-1$ or $i+1$ (which come about from reflection). Once these two are established, the rest of the vertices are completely determined due to the ``rigid" edge requirement.\\\\
+    Let $\rho$ be a single rotation clockwise by an angle $\frac{2\pi}{n}$, then there are $n$ distinct rotations $\{1,\rho,\rho^2,\ldots,\rho^{n-1}\}$ (where $\rho^n=1$). We can let $\mu$ be a reflection about an axis containing the center and vertex 1. We can then achieve any reflection by rotating a certain amount of times between $0$ and $n-1$and then reflection. Our Dihedral group can then generalized to be $D_n =\{1,\rho,\ldots,\rho^{n-1},\mu,\mu\rho,\ldots,\mu \rho^{n-1}\}$. Since there are $n$ number of rotations and $n$ vertices we can reflect about, we have $2n$ elements in our group. \\\\
+    We must also check that all elements are distinct. Each rotation is distinct since if not, then there exists two numbers $i,j\in \{0,\ldots,n\}$ such that $\rho^i=\rho^j\rightarrow \rho^{i-j}=e$ which isn't true unless $i=n$ and $j=0$ since that is the only way to get back the identity permutation. For the reflection permutations, this would imply $\mu \rho^i=\mu \rho^j \rightarrow \rho^i=\rho^j$ for some $i,j\in \{0,\ldots,n\}$ which we established isn't possible.
+\end{proof}
+\begin{proposition}
+    $\rho\mu = \mu \rho^{-1}$
+\end{proposition}
+\begin{proof}
+    \begin{equation*}
+        \begin{split}
+            \rho&=\begin{pmatrix}
+            1&2&3&\ldots&n-2&n-1&n\\2&3&4&\ldots&n-1&n&1
+        \end{pmatrix}
+        \twen \rho^{-1}=\begin{pmatrix}
+            1&2&3&\ldots &n-2&n-1&n\\n&1&2&\ldots &n-3&n-2&n-1
+        \end{pmatrix}
+        \\\mu_{}&=\begin{pmatrix}
+            1&2&3&\ldots&n-2&n-1&n\\1&n&n-1&\ldots&4&3&2
+        \end{pmatrix}
+        \end{split}
+    \end{equation*}
+    \begin{equation*}
+        \rho \mu=\begin{pmatrix}
+            1&2&3&\ldots &n-2&n-1&n\\2&1&n&\ldots&5&4&3
+        \end{pmatrix} \twen \mu\rho^{-1}=\begin{pmatrix}
+            1&2&3&\ldots&n-2&n-1&n\\ 2&1&n&\ldots & 5&4&3
+        \end{pmatrix}
+    \end{equation*}
+\end{proof}
+
 \end{document}
