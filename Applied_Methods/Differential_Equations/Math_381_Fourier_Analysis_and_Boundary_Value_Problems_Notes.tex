@@ -83,6 +83,8 @@ The solution to the homogeneous equation is $A\cos(x)+B\sin(x)$ and the solution
     \end{split}
 \end{equation*}
 For PDEs we generally do not have to worry about dimensions of boundary conditions because generally it's a boundary in space and is ``infinite dimensional."
+\section{Wave Equation}
+\subsection{Solutions}
 \begin{theorem}
     Every solution to the wave equation can be written in the form 
     \begin{equation*}
@@ -115,5 +117,174 @@ For PDEs we generally do not have to worry about dimensions of boundary conditio
     \end{equation*}
 \end{proof}
 
+\begin{theorem}[d'Alembert's Formula]
+    The solution to the wave equation $u_{tt}=c^2u_{xx}$ with initial conditions $u(0,x)=f(x)$ and $u_t(0,x)=g(x)$ is 
+    \begin{equation*}
+        u(t,x) = p(\xi)+q(\eta) = \frac{f(\xi)+f(\eta)}{2}+\frac{1}{2c}\int^\eta_\xi g(z)dz 
+    \end{equation*}
+    where $\xi=x-ct$ and $\eta =x+ct$
+\end{theorem}
+
+\begin{proof}
+    \begin{equation}
+    u(0,x)=p(x-0)+q(x-0)=f(x) \rightarrow p'(x)+q'(x)=f'(x) \label{eq:1.22}
+\end{equation} % Equation 1.22
+\begin{equation}
+    u_t(0,x) = -cp'(x)+cq'(x) = g(x) \rightarrow-p'(x)+q'(x)=\frac{1}{c}g(x) \label{eq:1.23}
+\end{equation} % Equation 1.23
+If we subtract Equations $\eqref{eq:1.22}$ and $\eqref{eq:1.23}$, we get 
+\begin{equation*}
+    2p'(x) = f'(x)-\frac{1}{c}g(x) \rightarrow \frac{1}{2}f(x)-\frac{1}{2c}\int^x_0g(z)dz + a 
+\end{equation*}
+\begin{equation*}
+    q(x)=f(x)-p(x)=\frac{1}{2}f(x)+\frac{1}{2c}\int^x_0g(z)dz-a
+\end{equation*}
+By applying Theorem \ref{theorem:1.2} once again, we reach d'Alembert's solution
+\begin{equation}
+    u(t,x) = p(\xi)+q(\eta) = \frac{f(\xi)+f(\eta)}{2}+\frac{1}{2c}\int^\eta_\xi g(z)dz \label{eq:dASol}
+\end{equation}
+\end{proof}
+
+
+
+When undergoing external forcing, we have to add an additional forcing term 
+\begin{equation*}
+    \square u=F(t,x)
+\end{equation*}
+Let us assume for now that we have homogeneous initial conditions, undergoing the same change of variables above, we get 
+\begin{equation*}
+    \square u=-4c^2\frac{\partial^2v}{\partial\xi\partial\eta}=F\left(\frac{\eta-\xi}{2c},\frac{\eta+\xi}{2}\right)
+\end{equation*}
+Integrating both sides with respect to $\eta' /\zeta$ (as a dummy variable) from $\xi$ to $\eta$ gets us
+\begin{equation*}
+    \pd{v}{\xi}(\xi,\eta)-\pd{v}{\xi}(\xi,\xi) = -\frac{1}{4c^2}\int^\eta_\xi F\left(\frac{\zeta-\eta}{2},\frac{\zeta+\eta}{2}\right)d\zeta
+\end{equation*}
+Rearranging and doing some algebra for the first partial derivatives in Equations \eqref{eq:1.19} and \eqref{eq:1.20}, we get the following
+\begin{equation}
+    \pd{v}{\xi}(\xi,\eta)=\frac{1}{2}\pd{u}{x}\left(\frac{\eta-\xi}{2},\frac{\eta+\xi}{2}\right)\label{eq:1.25}
+\end{equation}
+Which if we plug in $\eta=\xi$ and apply the homogeneous initial conditions, we get 
+\begin{equation*}
+    \pd{v}{\xi}=-\frac{1}{2c}\pd{u}{t}(0,\xi) + \frac{1}{2}\pd{u}{x}(0,\xi) = 0
+\end{equation*}
+By the same rearrangement and algebra, we get that $v(\eta,\eta)=0$ and so by integrating 1.25 with respect to $\xi'/\chi$ (once again a dummy variable)
+\begin{equation}
+    -v(\xi,\eta)=-\frac{1}{4c^2}\int^\eta_\xi\int^\eta_\chi F\left(\frac{\eta-\xi}{2},\frac{\eta+\xi}{2}\right)d\zeta d\chi
+\end{equation}
+We want to change our integration domain and so we take the following change of variables
+\begin{equation*}
+    \chi=y-cs \text{ and } \zeta=y+cs
+\end{equation*}
+which then yields the inequality
+\begin{equation*}
+    x-ct \leq y-cs \leq y+cs \leq x+ct \rightarrow x-c(t-s)\leq y \leq x+c(t-s)    
+\end{equation*}
+Effectively what we are doing is changing from the characteristic $\chi\zeta$ domain to the physical integration $tx$ domain. $y$ and $s$ just represent dummy variables that we can integrate $F(s,y)$ over the $tx$ plane. The Jacobian results in the relationship $d\chi d\zeta = 2c dsdy$ which leads to the final result of the particular solution to the forced wave equation to be 
+\begin{equation*}
+    u(t,x) = \frac{1}{2c}\int \! \! \!  \int_DF(s,y)dsdy=\frac{1}{2c}\int^t_0\int^{x+c(t-s)}_{x-c(t-s)}F(s,y)dyds
+\end{equation*}
+We can now write the general solution to the classical wave equation as the sum of d'Alembert's solution with the solution above to get 
+\begin{equation}
+    u(t,x)=\frac{1}{2}[f(x-ct)+f(x+ct)] +\frac{1}{2c}\int^{x+ct}_{x-ct}g(y)dy + \frac{1}{2c}\int^t_0\int^{x+c(t-s)}_{x-c(t-s)}F(s,y)dyds
+\end{equation}
+
+\subsection{Causality and Energy}
+Solutions to the wave equation satisfy causality. That is, a change to the initial conditions can only affect the solution $u(t,x)$ for $t>0$ where $|x-x_0|\leq ct$. In other words, the information only propagates at speed $c$.\\\\
+We define the \emph{energy} of a solution $u(t,x)$ as 
+\begin{equation*}
+    E=\frac{1}{2}\int^\infty_{-\infty}u_t^2+c^2u_x^2dx
+\end{equation*}
+Let us impose the localizing conditions $u(t,x)\rightarrow 0$ as $x\rightarrow \pm \infty$. If we take the time derivative and differentiate under the integral sign
+\begin{equation*}
+    \begin{split}
+        \od{E}{t} &=\int^\infty_{-\infty}u_{tt}u_t+c^2u_xu_{xt}dx \\
+        &=\int^\infty_{-\infty} u_tc^2u_{xx}+c^2u_xu_{xt}dx \\
+        &=c^2\int^\infty_{-\infty}-u_xu_{xt}+u_xu_{xt}dx \\
+        &=0
+    \end{split}
+\end{equation*}
+where we integrated by parts in the middle. This shows that energy is conserved within solutions to the wave equation. 
+
+\section{Heat Equation}
+\subsection{}{The Maximum Principle}
+\begin{theorem}[The Weak Maximum Principle]
+    Let $\gamma >0$. Suppose $u(t,x)$ is a solution to the forced heat equation 
+    \begin{equation*}
+        \pd{u}{t} = \gamma \pdt{u}{x} + F(t,x)
+    \end{equation*}
+    on the rectangular domain 
+    \begin{equation*}
+        R=\{a\leq x \leq b, 0 \leq t \leq c \}
+    \end{equation*}
+    Assuming that the forcing term is nowhere positive, $F(t,x) \leq 0$, then the maximum of $u(t,x)$ on the closed rectangle $\bar{R}$ is attained at $t=0, x=a,$ or $x=b$.
+\end{theorem}
+\begin{proof}
+    Let us first prove the result under the stronger assumption that $F(t,x) = \pd{u}{t} -\gamma \pdt{u}{x} <0$ which implies $\pd{u}{t} < \gamma \pdt{u}{x}$ everywhere in $R$. Suppose there exists a point $(t^\star, x^\star) \in R$ such that $u(t,x)$ is at a local maximum. By definition, its gradient must be 0.
+    \begin{equation*}
+        \nabla u(t^\star, x^\star ) = \vb{0} \rightarrow u_t(t^\star,x^\star) = u_{x}(t^\star, x^\star) = 0
+    \end{equation*}
+    Now let us assume a scalar function $h(x) = (t_\star, x)$. $h(x)$ has a maximum at $x=x^\star$ which means by the second derivative test,
+    \begin{equation*}
+        h''(x^\star) = u_{xx}(t^\star, x^\star) \leq 0
+    \end{equation*}
+    This is impossible since we showed earlier that $u_t < u_{xx}$ but $u_t = 0$ and $u_{xx} \leq 0$. As such, our initial assumption that there exists a maximum within $R$ is false. Now we need to exclude the possibility of the maximum occurring at the right edge of the rectangle at a point $(t^\star,x^\star) = (c,x^\star)$ where $a<x^\star < b$. If this is the case, then $g(t) =u(t,x^\star)$ is nondecreasing with respect to time at $t=c$ which implies $g'(t) = u_t(t,x^\star) \geq 0$ which is once again with the conditions we established earlier. \\\\
+    To generalize our results to the $F(t,x) \leq 0$, we start with a solution to the forced heat equation $u(t,x)$ and add a little perturbation.
+    \begin{equation*}
+        v(t,x) = u(t,x) + \varepsilon x^2 \text{ where } \varepsilon>0
+    \end{equation*}
+    By the chain rule, we get the following 
+    \begin{equation*}
+        \pd{v}{t} = \pd{u}{t} =\gamma \pdt{u}{x}+F(t,x) = \gamma \pdt{v}{x} -2\gamma \varepsilon+F(t,x) = \gamma \pdt{v}{x} +\tilde{F}(t,x)
+    \end{equation*}
+    Since $F(t,x) \leq 0$ and $\varepsilon>0$, we know that 
+    \begin{equation*}
+        \tilde{F}(t,x) = F(t,x) -2\gamma\varepsilon <0
+    \end{equation*}
+    and we can use what we proved previously to state that $v(t,x)$ cannot attain a a maximum anywhere in $R$ or on the right edge of $R$. Now to rigorously show that this applies to $u(t,x)$, let us denote the maximum value of $u(t,x)$ on any of the three sides as $M$. By our previous logic and mimicking the form of $v(t,x)$, we get
+    \begin{equation*}
+    u(t,x) \leq v(t,x) \leq M+\varepsilon \max \{a^2,b^2 \}.
+    \end{equation*}
+    Now let $\varepsilon\rightarrow 0^+$ and we have $u(t,x) \leq M$ everywhere in $R$.
+    
+\end{proof}
+This is known as the \textit{Weak Maximum Principle}. The \textit{Strong Maximum Principle} states that given a non-constant solution $u(t,x)$, any non-initial, non-bonudary point $(t,x) \in \hat{R} = \{a<x<b, 0<t\leq c\}$ is strictly less than its maximum initial and boundary values. In math terms, $u(t,x)<M \ \forall(t,x)\in \hat{R}$. Since the Maximum Principle is used to establish Corollary \ref{coro:mM}, the inequalities become strict in there as well. 
+\begin{corollary}
+    Supposed $u(t,x)$ solves the heat equation $u_t = \gamma u_{xx}$ with $\gamma > 0$ for $a,x<b$ and $0<t<c$. Set 
+    \begin{equation*}
+        B=\{(0,x) \ | \ a\leq x \leq b\} \cup \{(t,a)\ | \ 0\leq t \leq c\} \cup \{(t,b)\ | \ 0 \leq t \leq c\}
+    \end{equation*}
+    and let 
+    \begin{equation*}
+        M = \max \{u(t,x) \ | \ (t,x) \in B\} \hspace{20pt} m=\min \{u(t,x) \ | \ (t,x) \in B \}
+    \end{equation*}
+    be respectively the maximum and minimum values for the initial and boundary temperatures. Then $m \leq u(t,x) \leq M$ for all $a \leq x \leq b, 0 \leq t \leq c$.\label{coro:mM}
+\end{corollary}
+\begin{proof}
+        The upper bound $u(t,x) \leq M$ follows immediately from the Maximum principle. To establish the lower bound, let us define a new function $\tilde{u}(t,x) = -u(t,x)$ that also solves the heat equation. This satisfies $\tilde{u}(t,x) \leq -m$ on $B$ by the Maximum Principle (in essence what we're doing is flipping the sign such that the minimum now becomes the maximum). This implies that $u(t,x) = -\tilde{u}(t,x) \geq m$.
+    \end{proof}
+\begin{theorem}[Uniqueness]
+    There is at most, one solution to the Dirichlet initial-boundary value problem for the forced heat equation.
+\end{theorem}
+\begin{proof}
+    Suppose $u$ and $\tilde{u}$ are any two solutions to the forced heat equation with the same initial and boundary value conditions. Their difference $v=u-\tilde{u}$ then solves the homogeneous initial-boundary value problem for the unforced heat equation (since the forcing terms cancel out). By the Maximum Principle and Corollary \ref{coro:mM}, we get the maximum and minimum must appear on the boundaries and therefore $m=0\leq v(t,x) \leq M=0$ everywhere which implies $u\equiv \tilde{u}$ and therefore $u$ is unique.
+\end{proof}
+We can also use an energy method to determine the uniqueness of the solutions. Suppose $u,v$ solve the heat equation and $u=v$ on $\partial R$. We can define a $w=u-v$ and then $w=0$ on $\partial R$. We now define some quantity 
+\begin{equation*}
+    E(t)=\int^L_0\frac{1}{2}w^2(x,t)dt
+\end{equation*}
+If we take time derivatives, we get 
+\begin{equation*}
+    \begin{split}
+        \od{E}{t} &=\int^L_0ww_tdt \\
+        &=\int^L_0 wkw_{xx}dx \\
+        &=kww_x\bigg|^L_0 - k\int^L_0w_x^2dx\\
+        &=-k\int^L_0w_x^2dx
+    \end{split}
+\end{equation*}
+If we set the time equal to zero, we see that hte energy is 
+\begin{equation*}
+    E(0)=\int^L_0\frac{1}{2}w(x,0)^2dx =0
+\end{equation*}
+by the fact that $w=0$ on $\partial R$. However, $E(t)$ is non-increasing for $t\in [0,T]$ and since energy cannot be negative, $w(x,t)=0$ in $R$. 
 
 \end{document}
