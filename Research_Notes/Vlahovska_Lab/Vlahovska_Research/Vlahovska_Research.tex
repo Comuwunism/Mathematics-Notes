@@ -2041,5 +2041,128 @@ If we eliminate $E$ by combining both equations, we obtain
 The behavior of the solution approaches a soliton shape when considering the localizing boundary conditions. 
 
 
+\newpage
+\section{Numerical Methods}
+\subsection{Introduction}
+The most basic approximation is the idfference quotient 
+\begin{equation*}
+    u'(x)\approx\frac{u(x+h)-u(x)}{h}
+\end{equation*}
+The step size is assumed to be very small $|h|\ll 1$. A positive step size is deemed a \emph{forward} difference and a negative step size is a \emph{backwards} difference. However, we might want to know how good our approximation might be. As such, we can consider the Taylor series expansion 
+\begin{equation*}
+    u(x+h)=u(x)+u'(x)h+\frac{1}{2}u''(\xi)h^2
+\end{equation*}
+where $\xi$ depends on $x,h$. We can rearrange this such that we have 
+\begin{equation*}
+    \frac{u(x+h)-u(x)}{h}-u'(x) = \frac{1}{2}u''(\xi)h
+\end{equation*} 
+and as such, we can bound our error 
+\begin{equation*}
+    \left|\frac{u(x+h)-u(x)}{h}-u'(x) \right| \leq C|h|
+\end{equation*}
+where $C=\max \frac{1}{2}|u''(\xi)|$. This approximation is \emph{first order} since it is directly proportional to the first power of $h$. 
+\begin{equation*}
+    u'(x)=\frac{u(x+h)-u(x)}{h}+\mathcal{O}(h)
+\end{equation*}
+Generally if we want to approximate the $n^{th}$ derivative, you need $n+1$ points to do so. Let us approximate the second derivative. We can take the Taylor series around two points $u(x+h)$ and $u(x-h)$.
+\begin{equation}
+    \begin{split}
+        u(x+h)&=u(x)+u'(x)+u''(x)\frac{h^2}{2}+u'''(x)\frac{h^3}{6} +\mathcal{O}(h^4) \\ u(x-h)&=u(x)-u'(x)+u''(x)\frac{h^2}{2}-u'''(x)\frac{h^3}{6} +\mathcal{O}(h^4)
+    \end{split}
+\end{equation}
+We can now add these equations together to get 
+\begin{equation}
+    u(x+h)+u(x-h)=2u(x)+u''(x)h^2+\mathcal{O}(h^4)
+\end{equation}
+which can be rearranged into 
+\begin{equation}
+    u''(x)=\frac{u(x+h)-2u(x)-u(x-h)}{h^2}+\mathcal{O}(h^2)
+\end{equation}
+The error is proportional to $h^2$ and so therefore this is a \emph{second} order approximation. If instead of adding the two approximations, we subtract them, we get 
+\begin{equation}
+    u(x+h)-u(x-h)=2u'(x)h+\mathcal{O}(h^3)
+\end{equation}
+which then yields us the \emph{centered difference}
+\begin{equation}
+    u'(x)=\frac{u(x+h)-u(x-h)}{2h} + \mathcal{O} (h^2)
+\end{equation}
+\subsection{Numerical Algorithms for the Heat Equation}
+For numerical methods in multiple dimensions, we want to think of a rectangular mesh with nodes at $(t_j,x_m)\in \R^2$ such that $0=t_0<t_1<t_2<\ldots$ and $0=x_0<x_1<\ldots<x_n=l$. We can then define the changes in $t$ and $x$ as $\Delta t=t_{j+1}-t_j$ and $\Delta x=x_{m+1}-x_{m}=\frac{l}{n}$. We shall also define $u_{j,m}=u(t_j,x_m)$ where $t_j=j\Delta t$ and $x_m=m\Delta x$. We apply the centered difference formula for the second spatial derivative to get 
+\begin{equation}
+    \pdt{u}{x}(t_j,x_m)=\frac{u_{j,m+1}-2u_{j,m}+u_{j,m-1}}{(\Delta x)^2}+\mathcal{O}((\Delta x)^2) \label{eq:7.6}
+\end{equation}
+and 
+\begin{equation}
+    \pd{u}{t}(t_j,x_m) = \frac{u_{j+1,m}-u_{j,m}}{\Delta t} +\mathcal{O}(\Delta t) \label{eq:7.7}
+\end{equation}
+We want the errors to be similar to each other so we impose the condition $\Delta t\approx (\Delta x)^2$. We can then set \eqref{eq:7.6} and \eqref{eq:7.7} equal to each other and rearrange it to get 
+\begin{equation*}
+    u_{j+1,m} = \mu u_{j,m+1} + (1-2\mu)u_{j,m}+\mu u_{j,m-1} \twen j\in \{0,1,2,\ldots \} \twen m\in \{1,\ldots,n-1\}
+\end{equation*}
+where $\mu = \frac{\gamma \Delta t}{(\Delta x)^2}$. At the initial condition nodes $u_{0,m}$, we have that $u_{0,m}=f_m=f(x_m)$ and at the boundary conditions, we have $u_{j,0} = \alpha_j=\alpha(t_j)$ and $u_{j,n}=\beta_j=\beta(t_j)$ for the boundary conditions $u(t,0)=\alpha (t)$ and $u(t,n)=\beta (t)$. We can express the interior nodes with the vector $\vb{u}^{(j)} =(u_{j,1},u_{j,2},\ldots, u_{j,n-1})^T$. We now can write the states as 
+\begin{equation}
+    \vb{u}^{(j+1)} = A\vb{u}^{(j)}+\vb{b}^{(j)}
+\end{equation}
+where the matrix $A$ is represented as 
+\begin{equation*}
+    A=\begin{bmatrix}
+        1-2\mu&\mu\\\mu&1-2\mu&\mu \\ &\mu&1-2\mu&\mu\\&&\mu&\ddots&\ddots\\
+        &&&\ddots&\ddots\\&&&&&\mu\\ &&&&\mu&1-2\mu
+    \end{bmatrix} 
+    \twen \vb{b}^{(j)} = \begin{bmatrix}
+        \mu \alpha_j\\0\\0\\ \vdots \\0\\0\\ \mu\beta_j
+    \end{bmatrix}
+\end{equation*}
+This is an \emph{explicit} scheme because we only need the predecessor to calculate the next time step. \\\\
+To understand why some numerics fail, we need to understand how they behave with a complex exponential. Consider that at time $t=t_j$ that $u(t_j,x)=e^{ikx}$ so that $u_{j,m} = e^{ikx_m}$. We now consider the following 
+\begin{equation*}
+    \begin{split}
+        u_{j+1,m} &= \mu e^{ikx_{m+1}}+(1-2\mu )e^{ikx_m}+\mu e^{ikx_{m-1}} \\ &= \mu e^{ik(x_m+\Delta x)}+(1-2\mu )e^{ikx_m}+\mu e^{ik(x_m -\Delta x)} \\
+        &= \lambda e^{ikx_m}
+    \end{split}
+\end{equation*}
+where $\lambda (k) = \mu e^{ik\Delta x}+(1-2\mu)+\mu e^{-ik\Delta x} = 1-4\mu \sin^2(\frac{1}{2}k\Delta x)$. We therefore have that $u(t_{j+1},x)=\lambda e^{ikx}$ and the complex exponential acts as an eigen function. We can generalize this further by stating $u(t_{j+p},x) = \lambda^p e^{ikx}$. We therefore require that $|\lambda|\leq 1$ to prevent the numeric from blowing up. This sort of stability analysis was pioneered by the famous American mathematician, physicist, and computer scientist John von Neumann. We can deduce further that $0\leq \mu \sin^2(\frac{1}{2}k\Delta x) \leq \frac{1}{2}$ and since this needs hold for all values of $k$< we must have that $0\leq \mu \leq \frac{1}{2}$ and therefore $\Delta t \leq \frac{(\Delta x)^2}{2\gamma}$. Since not all combinations of time and space steps are stable, this method is deemed \emph{conditionally} stable. 
+\subsection{Implicit and Crank-Nicolson Methods}
+If instead we use the backwards difference 
+\begin{equation*}
+    \pd{u}{t}(t_j,x_m) = \frac{u_{j,m}-u_{j-1,m}}{\Delta t} + \mathcal{O}(\Delta t)
+\end{equation*}
+We can once again equate this with \eqref{eq:7.6} and solve (while replacing every $j$ with a $j+1$) to get 
+\begin{equation*}
+    u_{j,m} = -\mu u_{j+1,m+1} + (1+2\mu)u_{j+1,m} - \mu u_{j+1,m-1}
+\end{equation*}
+which we can represent in matrix form as 
+\begin{equation}
+    \hat A \vb{u}^{(j+1)} = \vb{u}^{j}+\vb{b}^{(j+1)}
+\end{equation}
+where $\hat A$ is like A but every $\mu$ is replaced with $-\mu$. This is known as an \emph{implicit} scheme since the future value depends on both current data and future data. Doing the Neumann analysis again we get that 
+\begin{equation*}
+    \lambda (-\mu e^{ik\Delta x}+1+2\mu -\mu e^{ik\Delta x}) = 1 
+\end{equation*}
+which implies that 
+\begin{equation*}
+    \lambda = \frac{1}{1+4\mu \sin^2(\frac{1}{2}k\Delta x)}
+\end{equation*}
+Since $\mu >0$,  $|\lambda|<1 \ \forall\Delta x$ so this is unconditionally stable. Another method is the Crank-Nicolson method which is described by 
+\begin{equation*}
+    u_{j+1,m}-u_{j,m}=\frac{\mu }{2}(u_{j+1,m+1}-2u_{j+1,m} + u_{j+1,m-1} + u_{j,m+1} -2u_{j,m} +u_{j,m-1})
+\end{equation*}
+and the matrix equation 
+\begin{equation*}
+    \hat B \vb{u}^{(j+1} = B\vb{u}^{(j)} + \frac{1}{2}(\vb{b}^{(j)} + \vb{b}^{(j+1)})
+\end{equation*}
+\begin{equation*}
+    B = \begin{bmatrix}
+        1-\mu &\frac{1}{2}\mu\\ \frac{1}{2}\mu&1-\mu&\frac{1}{2}\mu &\ddots\\&\frac{1}{2}\mu &\ddots & \ddots
+    \end{bmatrix} 
+    \twen \hat B =\begin{bmatrix}
+        1+\mu &-\frac{1}{2}\mu\\ -\frac{1}{2}\mu&1+\mu&-\frac{1}{2}\mu &\ddots\\&-\frac{1}{2}\mu &\ddots & \ddots
+    \end{bmatrix} 
+\end{equation*}
+The eigenvalue for this equation is 
+\begin{equation*}
+    \lambda = \frac{1-2\mu \sin^2(\frac{1}{2}k\Delta x)}{1+2\mu \sin^2(\frac{1}{2}k\Delta x)}
+\end{equation*}
+and once again since $\mu>0$, $|\lambda |\leq1$ and this numerical solution is also unconditionally stable.
 
 \end{document}
