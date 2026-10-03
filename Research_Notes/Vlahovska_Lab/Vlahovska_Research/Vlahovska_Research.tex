@@ -177,7 +177,7 @@ Equation \eqref{eq:cl} is known as the differential rate law which be written ac
 \end{proof}
 Proposition 1.1 is also known as the integrated form of the conservation law.\\
 
-\subsection{Shocks}\\
+\subsection{Shocks}
 When the function becomes multi-valued, we have to impose a vertical line in order to recover a single valued function. In order to obey conservation of mass, the amount of area we cut off from the overhang must be added back to the area ``left" of where we intend to place our shock line. 
 \begin{proposition}
     Let $u(t,x)$ be solution to the nonlinear transport equation with a discontinuity at $x=\sigma(t)$ where $\sigma(t)$ is the Heaviside unit step function. Assuming the limits for $u^-(t)$ and $u^+(t)$ are unequal, to obey conservation of mass, the speed of the shock is 
@@ -239,7 +239,7 @@ and the associated Rankine-Hugoniot condition is
     \od{\sigma}{t} = \frac{C(u^-(t)) - C(u^+(t))}{u^-(t)-u^+(t)}
 \end{equation*}
 
-\subsection{Wave Equation}\\
+\subsection{Wave Equation}
 \begin{equation}
     \rho(x) \pdt{u}{t} = \frac{\partial}{\partial x} \left( \kappa(x)\pd{u}{x} \right) \label{eq:waveG}
 \end{equation}
@@ -354,7 +354,7 @@ We can now write the general solution to the classical wave equation as the sum 
 \newpage
 
 \section{Green's Functions}
-\subsection{The Dirac Delta Function}\\
+\subsection{The Dirac Delta Function}
 There are two interpretations of the delta function: one as the limit of a series of functions and one as a linear functional. This is because the delta function isn't a function in the traditional but ``akshually a distribution" which I've heard about 5 million times from every Youtube video that mentions a delta function.\\ $\newline$
 In the limit interpretation, we choose a sequence of smooth functions $g_n(x)$ and require the limit $\lim_{n\rightarrow \infty} g_n(x)=0 \hspace{4pt} \forall x\neq \xi$ where $\xi$ is the location we want the impulse to be located. The other requirement is that $\int^b_ag_n(x)dx = 1 \hspace{4pt} \forall n \in \mathbb{N}$. As such, $\delta_\xi(x) = \lim_{n\rightarrow \infty} g_n(x)$. One such example is $g_n(x) = \frac{n}{\pi (1+n^2x^2)}$. \\ $\newline$
 The other interpretation is the delta function as a linear functional. The most important property of the delta function is the sifting property.
@@ -368,7 +368,7 @@ We can define the delta function in this framework as a linear function $L_\xi :
  \end{equation}
 The problem with this with regards to the delta function is that there does not exist a conventional function that satisfies the sifting property. Generalized functions are linear functionals acting on a function space but are intuitively a function through the $L^2$ inner product.\\
 $\newline$
-\subsection{Green's Functions for 1D Boundary Value Problems}\\
+\subsection{Green's Functions for 1D Boundary Value Problems}
 First consider the BVP 
 \begin{equation}
     -c\odt{u}{x}=f(x) \hspace{20pt} u(0)=u(1)=0 \label{eq:2.3}
@@ -436,7 +436,7 @@ the Green's Function have the following properties:
     The proof is ommitted from the text
 \end{proof}
 
-\subsection{Vector Calculus Results} \\
+\subsection{Vector Calculus Results} 
 Take a vector field to $\vb{v(x)}= \vb{v} (x,y) = \begin{bmatrix} v_1(x,y), v_2(x,y)  \end{bmatrix}^T$. $\vb{v}$ takes a 2-tuple $(x,y) \in \Omega$ where $\Omega \subseteq \R^2$ and maps it $\vb{v}:\Omega\mapsto\R^2$. The Laplacian Operator will be denoted with $\lap$ and is defined as
 \begin{equation*}
     \lap u= \pdt{u}{x} + \pdt{u}{y}
@@ -531,7 +531,7 @@ we then obtain that
 \end{equation}
 This last equation physically represents that if something is within equilibrium, then the flux into the area must equal to the flux out through the boundary.\\
 $\newline$
-\subsection{Green's Functions in 2D}\\
+\subsection{Green's Functions in 2D}
 Let $\boldsymbol{\xi} = (\xi,\eta) \in \Omega \subset\R^2$ where the 2D delta function $\delta_\vb{\xi} =\delta(x-\xi)\delta(x-\eta)$ Most Green's Functions do not have a closed form solution in higher dimensions with the exception of the Poisson Equation when $\Omega$ is the entire plane. This Green's Function is known as the \textit{free-space Green's Function.} We shall denote it $G_0(x,y;\xi,\eta) = \fsgf$. We are asking to solve the equation
 \begin{equation*}
     -\lap \fsgf = 0 \hspace{4pt} \forall\vb{x} \neq \boldsymbol{\xi}
@@ -729,7 +729,7 @@ Now notice how the potential outside of the unit disk would have been the same a
         u(x,y) = \dint_\Omega \ggf f(\xi,\eta) d\xi d\eta - \oint_{\partial \Omega} \pd{\ggf}{\un} h(\xi, \eta) ds 
     \end{equation*}
 \end{proof} 
-\subsection{The Method of Images} \\
+\subsection{The Method of Images} 
 The Method of Images is one way to find the solution to a boundary value problem. We already know the logarithmic potential (the free-space Green's Function) so we want to find the correct harmonic part $z(x,y)$ that matches the boundary values required by the problem. We do this by placing an ``image" charge or mass in such a way outside of the domain $\Omega$ such that the required boundary conditions are met. 
 \begin{figure}[htbp]
     \centering
@@ -822,7 +822,7 @@ When $f\equiv0$, we get the Poisson integral formula which can find the value in
 
 
 
-\subsection{The Fundamental Solution to the Heat Equation} \\
+\subsection{The Fundamental Solution to the Heat Equation} 
 The Fourier series solution to the heat equation is sometimes not explicit enough for certain applications. As such, we desire a closed form fundamental solution to the heat equation. What we desire are the Green's Functions for the heat equation. We want to find how the heat diffuses from an initial, concentrated source of heat at a position $\xi$ along the bar. Let us denote the fundamental solution as 
 \begin{equation}
     u(t,x) = F(t,x;\xi) \text{ with initial data } F(0,x;\xi) = \delta(x-\xi)
@@ -892,7 +892,7 @@ and $*$ is the convolution operator
 \begin{equation*}
     f(t)*g(t) =\int_0^tf(\tau)g(t-\tau)d\tau
 \end{equation*}
-\subsection{The Forced Heat Equation} \\
+\subsection{The Forced Heat Equation} 
 Now we want to find the \textit{general fundamental solution} to the heat equation due to some forcing function $h(t,x)$. As such, let us apply a delta heat distribution at position $x=\xi$ and during time $t=\tau$. In other words, we are attempting to solve the equation
 \begin{equation*}
     \pd{u}{t} = \pdt{u}{x} +\delta(t-\tau)\delta(x-\xi)
@@ -949,7 +949,7 @@ This is a demonstration of Duhamel's Principle which effectively states that whe
 \begin{equation}
     u(t,x) = h(t,x) * G(t,x;0,0)
 \end{equation}
-\subsection{The Black-Scholes Equation}\\
+\subsection{The Black-Scholes Equation}
 The most influential equation in quantitative finance is the Black-Scholes Equation
 \begin{equation}
     \pd{u}{t} +\frac{\sigma^2}{2}x^2\pdt{u}{x}+rx\pd{u}{x} -ru= 0
@@ -1049,7 +1049,7 @@ As such, the solution to the Black-Scholes equation for the European call option
     -\; p\, e^{-r(t_\star-t)}\operatorname{erfc}\left(-\frac{\left(r - \tfrac{1}{2}\sigma^{2}\right)(t_{\star} - t) + \ln\frac{x}{p}}{\sqrt{2\,\sigma(t_{\star} - t)}}\right)\right]
 \end{split}
 \end{equation*}
-\subsection{Symmetries and Similarities} \\
+\subsection{Symmetries and Similarities} 
 A \textit{symmetry} of an equation is a transformation that takes one solution to another solution. By knowing a symmetry of an equation, one can generate a second, third, or even more solution to the equation. The general study of the finding the symmetries of a differential equations falls under Lie Theory which is named after Norwegian mathematician Sophus Lie. Lie attempted to analyze the symmetries of the solutions to differential equations in the same way Galois Theory analyzed the roots of polynomials (and is the reason why there exists no quintic formula). It is blend of both group theory and differential geometry.\\\\ We shall use the heat equation to show off these symmetries. The first type of symmetry is a translation.
 \begin{equation}
     t \mapsto t+a \hspace{20pt} x\mapsto x+b
@@ -1099,8 +1099,8 @@ we get that the diffusion coefficient stays the same ($\Gamma =\gamma$). Combini
 \begin{equation}
     U(t,x) = cu(\beta^{-2}t, \beta^{-1}x)
 \end{equation}
-solves the heat equation for the \textit{same} diffusion coefficient. This is therefore a scaling invariance since it solves the \textit{same} differential equation with no rescaling. Once again, we must be vary of any initial and boundary conditions and scale them appropriately. For an object that is twice the length of another object made of the same material, we construct the scaled solution $U(t,x)$ with $\beta = 2$ and $\alpha =4$ and hence $U(t,x) = cu(\frac{1}{4}t, \frac{1}{2}x)$ and we come to the conclusion that an object twice as long will take four times longer to cool. \\ \\
-\subsection{Similarity Solutions}\\
+solves the heat equation for the \textit{same} diffusion coefficient. This is therefore a scaling invariance since it solves the \textit{same} differential equation with no rescaling. Once again, we must be vary of any initial and boundary conditions and scale them appropriately. For an object that is twice the length of another object made of the same material, we construct the scaled solution $U(t,x)$ with $\beta = 2$ and $\alpha =4$ and hence $U(t,x) = cu(\frac{1}{4}t, \frac{1}{2}x)$ and we come to the conclusion that an object twice as long will take four times longer to cool. 
+\subsection{Similarity Solutions}
 A similarity solution is one that remains invariant under any scaling symmetries. Suppose our PDE admits the scaling symmetries
 \begin{equation}
     t\mapsto\beta^at \hspace{20pt} x\mapsto\beta^bx \hspace{20pt} u\mapsto\beta^cu \hspace{20pt}\beta\neq 0
@@ -1204,7 +1204,7 @@ This is known as the \textit{Weak Maximum Principle}. The \textit{Strong Maximum
 \begin{proof}
     Suppose $u$ and $\tilde{u}$ are any two solutions to the forced heat equation with the same initial and boundary value conditions. Their difference $v=u-\tilde{u}$ then solves the homogeneous initial-boundary value problem for the unforced heat equation (since the forcing terms cancel out). By the Maximum Principle and Corollary \ref{coro:mM}, we get the maximum and minimum must appear on the boundaries and therefore $m=0\leq v(t,x) \leq M=0$ everywhere which implies $u\equiv \tilde{u}$ and therefore $u$ is unique.
 \end{proof}
-\subsection{Nonlinear Diffusion} \\
+\subsection{Nonlinear Diffusion} 
 The nonlinear transport equation \eqref{eq:1.11} is known as the inviscid Burgers' Equation due to the lack of a viscous term. By including a viscous term, we arrive at the viscous Burgers' Equation.
 \begin{equation}
     \pd{u}{t}+u\pd{u}{x} = \gamma \pdt{u}{x}
@@ -1241,7 +1241,7 @@ Substituting in for the characteristic variable gets
 \begin{equation}
     u(t,x) =v(\xi) =\frac{ae^{\frac{1}{2\gamma}(b-a)(x-ct-\delta)}+b}{e^{\frac{1}{2\gamma}(b-a)(x-ct -\delta)}+1}
 \end{equation}
-\subsection{Hopf-Cole Transformation} \\
+\subsection{Hopf-Cole Transformation} 
 Burgers' Equation can be linearized to become the heat equation and therefore be solved explicitly. Not all nonlinear differential equations can be linearized but when it is possible, it makes life a lot easier. Let us first start with the heat equation 
 \begin{equation*}
     v_t = \gamma v_{xx}
@@ -1289,7 +1289,7 @@ The Hopf-Cole transformation is now complete.
     \end{equation*}
     By then reverting the exponential change of variables we get that $v(t,x) = e^{\alpha \varphi(t,x)}=e^{-\varphi (t,x)/2\gamma}$. Reversing this, we can easily prove the theorem. We can thus conclude that every solution to Burgers' Equation comes from a positive solution to the heat equation.
 \end{proof}
-\subsection{Linear Dispersion}\\
+\subsection{Linear Dispersion}
 The simplest nontrivial third-order partial differential equation is 
 \begin{equation}
     u_t + u_{xxx} = 0 \label{eq:3.55}
@@ -1338,7 +1338,7 @@ and accordingly, the general solution is
 \begin{equation}
     u(t,x) =\frac{1}{\sqrt[3]{3t}} \int^\infty_{-\infty} f(\xi)\operatorname{Ai}\left( \frac{x-\xi}{\sqrt[3]{3t}} \right) d\xi
 \end{equation}
-\subsection{Dispersion Relations}\\
+\subsection{Dispersion Relations}
 To better understand why the third derivatives lead to dispersion, let us take a look at the dispersion relation. We want to start with a purely oscillatory wave. The reason for this is tied to the fact that for a constant coefficient differential operator (for example, $L = \partial_t+\partial_{xxx}$ for \eqref{eq:3.55}), the purely oscillatory wave of a complex exponential like $e^{i(kx-\omega t)}$, is an eigenfunction of the linear differential operator. Since we care about solutions that conserve a finite amount of energy, we are worried about the $L^2$ function space. Although our purely oscillatory function is not in the $L^2$ function space (one can verify this by taking the norm 
 \begin{equation*}
     \int^\infty_{-\infty}|e^{ikx}|^2dx = \int^\infty_{-\infty}(e^{ikx})(e^{-ikx})dx = \int^\infty_{-\infty}1dx = \infty
@@ -1376,8 +1376,8 @@ where $\varphi(k) =ck-\omega(k)$ and $h(k) =e^{ik\xi}g(k)$. We want to know how 
 \begin{equation}
     0 =\od{}{k}(\omega-ck) =\od{\omega}{k} -c \rightarrow c_g=\od{\omega}{k}
 \end{equation}
-The \textit{group velocity}, $c_g$, determines the speed of propagation of the energy of the wave. An interesting thing to note is that unless the dispersion relation is linear in $k$, the speed of energy propagation is not the same the speed of the individual ripples. Using the dispersion relation $\omega = -k^3$, we find that the group velocity is $c_g =-3k^2$ but the phase velocity is $-k^2$. This implies that the energy of the waves of spatial frequency $k$ moves 3 times faster than the ripples of the waves of that wave number. \\\\
-\subsection{Korteweg-de Vries Equation}\\
+The \textit{group velocity}, $c_g$, determines the speed of propagation of the energy of the wave. An interesting thing to note is that unless the dispersion relation is linear in $k$, the speed of energy propagation is not the same the speed of the individual ripples. Using the dispersion relation $\omega = -k^3$, we find that the group velocity is $c_g =-3k^2$ but the phase velocity is $-k^2$. This implies that the energy of the waves of spatial frequency $k$ moves 3 times faster than the ripples of the waves of that wave number. 
+\subsection{Korteweg-de Vries Equation}
 When we combine dispersion and nonlinearity, we arrive at the famous \textit{Korteweg-de Vries} equation.
 \begin{equation}
     u_t+u_{xxx}+uu_x=0
@@ -1436,7 +1436,7 @@ The phase shift of the $j^{th}$ soliton is denoted by $d_j$ and its wave speed i
 
 
 \section{The Hodgkin Huxley Model}
-\subsection{Paper 5}\\
+\subsection{Paper 5}
 The following is exclusively from the fifth paper published by Hodgkin and Huxley. The previous four papers showed the physiological findings of their experiments, whereas this last paper contains the quantitative analysis of their findings. \\\\
 They start off by stating the Boltzmann equation 
 \begin{equation}
@@ -1461,8 +1461,8 @@ By Ohm's Law, we have the following relationships
 \begin{equation}
     I_{Na} = g_{Na}(V-V_{Na}) \hspace{20pt} I_K=g_k(V-V_K) \hspace{20pt} I_l = g_l(V-V_l)
 \end{equation}
-where $g$ is the conductance and $V_i = E_i - E_r \,\,\, i\in \{Na,K,l,\emptyset\}$ where $E_r$ is the resting potential and $E_i$ is the potential of the $i^{th}$ species.\\\\
-\subsection{Potassium Channel}\\
+where $g$ is the conductance and $V_i = E_i - E_r \,\,\, i\in \{Na,K,l,\emptyset\}$ where $E_r$ is the resting potential and $E_i$ is the potential of the $i^{th}$ species.
+\subsection{Potassium Channel}
 Based off the potassium channel curves they obtained, they believed that the conductance was of the form 
 \begin{equation}
     g_K = \bar{g}_Kn^4
@@ -1502,8 +1502,8 @@ Substituting this into our expression for $g_K$, we get
     \Rightarrow &g_K(t)=\left[ (g_{k,\infty})^{1/4}-( (g_{k,\infty})^{1/4}-(g_{k,0})^{1/4})e^{-t/\tau_n}      \right]^4
 \end{split}
 \end{equation*}
-where $g_{k,\infty} = \bar{g}_Kn^4$ and $g_{k,0} = \bar{g}_Kn_0^4$. By doing some basic algebra, we can also find that $\alpha_n \frac{n_\infty}{\tau_n}$ and $\beta_n=\frac{1-n_\infty}{\tau_n}$.\\\\
-\subsection{Sodium Channel}\\
+where $g_{k,\infty} = \bar{g}_Kn^4$ and $g_{k,0} = \bar{g}_Kn_0^4$. By doing some basic algebra, we can also find that $\alpha_n \frac{n_\infty}{\tau_n}$ and $\beta_n=\frac{1-n_\infty}{\tau_n}$.
+\subsection{Sodium Channel}
 From the data, Hodgkin and Huxley determined that the resulting empirical curves could either be described by a second order differential equation or two first order differential equations. They ultimately on the latter options since it was simpler and the steady state inactiviation was described well by the two state model (as seen in their fourth paper). Therefore the conductance is described using two variables $m$ and $h$:
 \begin{equation}
     g_{Na} =m^3h\bar{g}_{Na} 
@@ -1536,7 +1536,7 @@ Collecting all of our equations, we arrive at the Hodgkin-Huxley model which won
         \od{h}{t} & = \alpha_h(1-h)-\beta_hh \label{eq:HH}
     \end{split}
 \end{equation}
-\subsection{Cable Theory}\\
+\subsection{Cable Theory}
 The following will be a derivation of the cable equation for neurons. Let us approximate the axon of a neuron to be a uniform cylinder of radius $a$. For clarity, the direction of the axon is given by the right hand rule by wrapping your fingers ``around" the cylindrical axon. The voltage outside the axon is at a potential $V_1$ and the inside has a potential $V_2$ with their difference being $V=V_2-V_1$. By Ohms law, the voltage drop by going an infinitesimal length along the axon inside and outside the neuron are respectively 
 \begin{equation}
     \pd{V_2}{x} = -I_2r_2 \hspace{20pt} \pd{V_1}{x} = -I_1r_1 \label{eq:4.17}
@@ -1622,7 +1622,7 @@ This is a constant coefficient and can be solved using the ansatz $V= V_0 e^{\mu
 
 
 \section{Heimburg-Jackson Model}
-\subsection{Acoustic Wave Equation}\\
+\subsection{Acoustic Wave Equation}
 Let us first start by deriving the acoustic wave equation. Let us first start by stating the 1D continuity equation 
 \begin{equation}
     \pd{\rho}{t} +\pd{}{x}(\rho u) =0
@@ -1659,7 +1659,7 @@ Assuming the second mixed partials of $u'$ are continuous, we can apply Clairaut
 \begin{equation}
     \square \rho' = 0
 \end{equation}
-\subsection{On Soliton Propagation in Biomembranes and Nerves}\\
+\subsection{On Soliton Propagation in Biomembranes and Nerves}
 The primary claim of Heimburg and Jackson is that the Hodgkin-Huxley model cannot explain the entirety of what goes on during the action potential. The Hodgkin-Huxley model does describe any thermodynamic changes during the action potential despite work by experimentalists which point towards a heat release coordinate exactly with the action potential. They also note reversible changes in volume and temperature along with changes in physical properties like fluorescence, turbidity, and birefringence. Additionally, they cite Tasaki et al. who showed that sodium can be replaced by other monovalent cations within the external medium and that tetrodoxin, which blocks the sodium channel, still alters the excitability of the nerve. These work against the idea that ion fluxes are indispensable to the action potential. Finally, they cite that the Hodgkin-Huxley model describes irreversible ion fluxes whereas, as noted above, there were observed to be reversible changes during the action potential. \\\\
 Heimburg and Jackson cite a variety of motivating evidence for their model. For one, they note the vast range of liquid-ordered ($L_0$) to liquid-disordered ($L_d$) transition temperatures (also known as the miscibility temperature) which range from $-20^\circ $C to $+60^\circ$C. The exact specifics depend on the membrane composition and vast research has been done to create phase diagrams of different membrane compositions. The miscibility temperature can also be affected by membrane proteins as they may disrupt certain long range electrostatic interactions which may motivate or dissuade phase separation. They also note that many physical constants of the membrane peak around the transition temperature and may all be functions of the heat capacity. Their primary motivation is the fact that many of the physiological membranes have melting temperatures extremely close to the miscibility temperature which would support the noted phenomena of mechanical perturbations and temperature responses found experimentally during the action potential. One group found that following the initial temperature increase during a nerve impulse, there seems to be some cooling that follows in-phase with the voltage changes. This points to the idea that the action potential is isentropic. As such, they propose that solitons are a key part of the action potential. \\\\
 They first start by stating a few of the physical constants of the membranes. They note that the heat capacity $c_P$, isothermal volume compressibility $\kappa_T^V$, and the lateral compressibility $\kappa_T^A$ depend on the variances of enthalpy, volume, and area respectively
@@ -1784,7 +1784,7 @@ and therefore substituting this into the energy density of a capacitor, we get t
 
 
 \section{Das and Schwarz}
-\subsection{Solitons in Cell Membranes}\\
+\subsection{Solitons in Cell Membranes}
 Their main claim in this paper is that they are analyzing the the cell membrane as a smectic C* (SmC*) liquid crystal model. Smectic refers to the phase of the liquid crystals which is when they form parallel layers (which in this case, is the lipid bilayer). The C refers to their director tilt. The director is the direction in the which the longitudinal axis of the liquid crystal points. In Smectic A liquid crystals, the director points in the normal direction to the smectic planes but in Smectic C crystals, the director is offset from the normal by a certain angle. The * refers to the fact that the liquid crystals are chiral. This allows for the model to include electric polarization, anisotropic, and liquid properties of the lipid molecules. According to Das and Schwarz, they claim that the SmC* model has an added innate, transverse ferroelectric property that allows for an electric field to exist within the plane of the lipids along with the longitudinal transmembrane field. They then obtain a Landau-de Gennes like free energy model that contains elastic, fluctuation, polarization, and ferroelectric terms that allow for solitons to propagate. More specifically, minimizing this free energy model and equating it to a damping terms allows them to recover Fitzhugh-Nagumo like PDEs (which simplify the Hodgkin-Huxley model from a 4D phase space to one with just two variables). \\\\
 \begin{figure}[htbp]
     \centering
@@ -1916,8 +1916,8 @@ and $\mu_{BB}$ is zero since although there still may be some interactions betwe
     F = \int dx \left\{ \pi R K_b \left[ \frac{d\theta}{dx} \right]^2 + \pi R K_b \left[ \frac{1}{R} - C_0 \right]^2 + \left[ \left[ \frac{\pi A d}{R} + 4\sigma\pi R \right] - \pi R d \Xi(\xi) \mu_p^2 \cos^2\xi \right] \theta^2 \right. \\ \left.+ \left[ \frac{\pi B d}{R} - \frac{4\sigma\pi R}{3} \right] \theta^4  - 2\pi R d \Xi(\xi) \mu_p E \theta \sin\xi \cos\xi - \pi R d E^2 \sin^2(\xi) \Xi(\xi) \right\}  \label{eq:6.21}
 \end{split}
 \end{equation}
-The most important thing to notice is the coupling between $E$ and $\theta$ in the second to last term. This directly ties the propagation of electric fields with mechanical deformations within the liquid crystal bilayers. It implies that one can stimulate the propagation of electric fields by a mechanical perturbation (which matches the observations cited by Heimburg and Jackson when rejecting the Hodgkin-Huxley model) and vice versa. It is also worth noting that solitons cannot exist when the molecules are achrial as the field coupling term would be zero unless there is some other mechanism connecting the two that is not present in this model. \\\\
-\subsection{Fitzhugh-Nagumo Equations}\\
+The most important thing to notice is the coupling between $E$ and $\theta$ in the second to last term. This directly ties the propagation of electric fields with mechanical deformations within the liquid crystal bilayers. It implies that one can stimulate the propagation of electric fields by a mechanical perturbation (which matches the observations cited by Heimburg and Jackson when rejecting the Hodgkin-Huxley model) and vice versa. It is also worth noting that solitons cannot exist when the molecules are achrial as the field coupling term would be zero unless there is some other mechanism connecting the two that is not present in this model. 
+\subsection{Fitzhugh-Nagumo Equations}
 The first part of this section will give a brief introduction to the Van der Pol Oscillator before we transition into a brief overview of the Fitzhugh paper before we return to the Das and Schwarz paper. The Nagumo paper has been skipped because the analysis that is interesting to me has been replicated by Das and Schwarz. \\\\
 The Van der Pol oscillator is a non-conservative oscillator with nonlinear damping that obeys the equation 
 \begin{equation}
