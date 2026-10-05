@@ -436,7 +436,8 @@ the Green's Function have the following properties:
     The proof is ommitted from the text
 \end{proof}
 
-\subsection{Vector Calculus Results} 
+\subsection{Green's Functions for Higher Dimension BVPs}
+\subsubsection{Vector Calculus Results} 
 Take a vector field to $\vb{v(x)}= \vb{v} (x,y) = \begin{bmatrix} v_1(x,y), v_2(x,y)  \end{bmatrix}^T$. $\vb{v}$ takes a 2-tuple $(x,y) \in \Omega$ where $\Omega \subseteq \R^2$ and maps it $\vb{v}:\Omega\mapsto\R^2$. The Laplacian Operator will be denoted with $\lap$ and is defined as
 \begin{equation*}
     \lap u= \pdt{u}{x} + \pdt{u}{y}
@@ -531,7 +532,7 @@ we then obtain that
 \end{equation}
 This last equation physically represents that if something is within equilibrium, then the flux into the area must equal to the flux out through the boundary.\\
 $\newline$
-\subsection{Green's Functions in 2D}
+\subsubsection{Green's Functions in 2D}
 Let $\boldsymbol{\xi} = (\xi,\eta) \in \Omega \subset\R^2$ where the 2D delta function $\delta_\vb{\xi} =\delta(x-\xi)\delta(x-\eta)$ Most Green's Functions do not have a closed form solution in higher dimensions with the exception of the Poisson Equation when $\Omega$ is the entire plane. This Green's Function is known as the \textit{free-space Green's Function.} We shall denote it $G_0(x,y;\xi,\eta) = \fsgf$. We are asking to solve the equation
 \begin{equation*}
     -\lap \fsgf = 0 \hspace{4pt} \forall\vb{x} \neq \boldsymbol{\xi}
@@ -729,7 +730,7 @@ Now notice how the potential outside of the unit disk would have been the same a
         u(x,y) = \dint_\Omega \ggf f(\xi,\eta) d\xi d\eta - \oint_{\partial \Omega} \pd{\ggf}{\un} h(\xi, \eta) ds 
     \end{equation*}
 \end{proof} 
-\subsection{The Method of Images} 
+\subsubsection{The Method of Images} 
 The Method of Images is one way to find the solution to a boundary value problem. We already know the logarithmic potential (the free-space Green's Function) so we want to find the correct harmonic part $z(x,y)$ that matches the boundary values required by the problem. We do this by placing an ``image" charge or mass in such a way outside of the domain $\Omega$ such that the required boundary conditions are met. 
 \begin{figure}[htbp]
     \centering
@@ -892,7 +893,7 @@ and $*$ is the convolution operator
 \begin{equation*}
     f(t)*g(t) =\int_0^tf(\tau)g(t-\tau)d\tau
 \end{equation*}
-\subsection{The Forced Heat Equation} 
+\subsubsection{The Forced Heat Equation} 
 Now we want to find the \textit{general fundamental solution} to the heat equation due to some forcing function $h(t,x)$. As such, let us apply a delta heat distribution at position $x=\xi$ and during time $t=\tau$. In other words, we are attempting to solve the equation
 \begin{equation*}
     \pd{u}{t} = \pdt{u}{x} +\delta(t-\tau)\delta(x-\xi)
@@ -949,7 +950,7 @@ This is a demonstration of Duhamel's Principle which effectively states that whe
 \begin{equation}
     u(t,x) = h(t,x) * G(t,x;0,0)
 \end{equation}
-\subsection{The Black-Scholes Equation}
+\subsubsection{The Black-Scholes Equation}
 The most influential equation in quantitative finance is the Black-Scholes Equation
 \begin{equation}
     \pd{u}{t} +\frac{\sigma^2}{2}x^2\pdt{u}{x}+rx\pd{u}{x} -ru= 0
@@ -1100,7 +1101,7 @@ we get that the diffusion coefficient stays the same ($\Gamma =\gamma$). Combini
     U(t,x) = cu(\beta^{-2}t, \beta^{-1}x)
 \end{equation}
 solves the heat equation for the \textit{same} diffusion coefficient. This is therefore a scaling invariance since it solves the \textit{same} differential equation with no rescaling. Once again, we must be vary of any initial and boundary conditions and scale them appropriately. For an object that is twice the length of another object made of the same material, we construct the scaled solution $U(t,x)$ with $\beta = 2$ and $\alpha =4$ and hence $U(t,x) = cu(\frac{1}{4}t, \frac{1}{2}x)$ and we come to the conclusion that an object twice as long will take four times longer to cool. 
-\subsection{Similarity Solutions}
+\subsubsection{Similarity Solutions}
 A similarity solution is one that remains invariant under any scaling symmetries. Suppose our PDE admits the scaling symmetries
 \begin{equation}
     t\mapsto\beta^at \hspace{20pt} x\mapsto\beta^bx \hspace{20pt} u\mapsto\beta^cu \hspace{20pt}\beta\neq 0
@@ -1141,7 +1142,7 @@ where $k$ is an integration constant. By making use of the identities from \eqre
 \begin{equation*}
     x=ku^\frac{b}{b-1}+tu
 \end{equation*}
-\subsection{The Maximum Principle}
+\subsubsection{The Maximum Principle}
 Thermodynamics tells us that the overall heat content of a certain body must continually decrease. The Maximum Principle is the mathematical formulation and states that in the absence of external heat sources, the temperature inside an object cannot exceed the initial boundary values.
 \begin{theorem}[The Weak Maximum Principle]
     Let $\gamma >0$. Suppose $u(t,x)$ is a solution to the forced heat equation 
@@ -1241,7 +1242,7 @@ Substituting in for the characteristic variable gets
 \begin{equation}
     u(t,x) =v(\xi) =\frac{ae^{\frac{1}{2\gamma}(b-a)(x-ct-\delta)}+b}{e^{\frac{1}{2\gamma}(b-a)(x-ct -\delta)}+1}
 \end{equation}
-\subsection{Hopf-Cole Transformation} 
+\subsubsection{Hopf-Cole Transformation} 
 Burgers' Equation can be linearized to become the heat equation and therefore be solved explicitly. Not all nonlinear differential equations can be linearized but when it is possible, it makes life a lot easier. Let us first start with the heat equation 
 \begin{equation*}
     v_t = \gamma v_{xx}
@@ -1289,7 +1290,7 @@ The Hopf-Cole transformation is now complete.
     \end{equation*}
     By then reverting the exponential change of variables we get that $v(t,x) = e^{\alpha \varphi(t,x)}=e^{-\varphi (t,x)/2\gamma}$. Reversing this, we can easily prove the theorem. We can thus conclude that every solution to Burgers' Equation comes from a positive solution to the heat equation.
 \end{proof}
-\subsection{Linear Dispersion}
+\subsection{Dispersion}
 The simplest nontrivial third-order partial differential equation is 
 \begin{equation}
     u_t + u_{xxx} = 0 \label{eq:3.55}
@@ -1338,7 +1339,7 @@ and accordingly, the general solution is
 \begin{equation}
     u(t,x) =\frac{1}{\sqrt[3]{3t}} \int^\infty_{-\infty} f(\xi)\operatorname{Ai}\left( \frac{x-\xi}{\sqrt[3]{3t}} \right) d\xi
 \end{equation}
-\subsection{Dispersion Relations}
+\subsubsection{Dispersion Relations}
 To better understand why the third derivatives lead to dispersion, let us take a look at the dispersion relation. We want to start with a purely oscillatory wave. The reason for this is tied to the fact that for a constant coefficient differential operator (for example, $L = \partial_t+\partial_{xxx}$ for \eqref{eq:3.55}), the purely oscillatory wave of a complex exponential like $e^{i(kx-\omega t)}$, is an eigenfunction of the linear differential operator. Since we care about solutions that conserve a finite amount of energy, we are worried about the $L^2$ function space. Although our purely oscillatory function is not in the $L^2$ function space (one can verify this by taking the norm 
 \begin{equation*}
     \int^\infty_{-\infty}|e^{ikx}|^2dx = \int^\infty_{-\infty}(e^{ikx})(e^{-ikx})dx = \int^\infty_{-\infty}1dx = \infty
@@ -1377,7 +1378,7 @@ where $\varphi(k) =ck-\omega(k)$ and $h(k) =e^{ik\xi}g(k)$. We want to know how 
     0 =\od{}{k}(\omega-ck) =\od{\omega}{k} -c \rightarrow c_g=\od{\omega}{k}
 \end{equation}
 The \textit{group velocity}, $c_g$, determines the speed of propagation of the energy of the wave. An interesting thing to note is that unless the dispersion relation is linear in $k$, the speed of energy propagation is not the same the speed of the individual ripples. Using the dispersion relation $\omega = -k^3$, we find that the group velocity is $c_g =-3k^2$ but the phase velocity is $-k^2$. This implies that the energy of the waves of spatial frequency $k$ moves 3 times faster than the ripples of the waves of that wave number. 
-\subsection{Korteweg-de Vries Equation}
+\subsubsection{Korteweg-de Vries Equation}
 When we combine dispersion and nonlinearity, we arrive at the famous \textit{Korteweg-de Vries} equation.
 \begin{equation}
     u_t+u_{xxx}+uu_x=0
@@ -2122,7 +2123,7 @@ To understand why some numerics fail, we need to understand how they behave with
     \end{split}
 \end{equation*}
 where $\lambda (k) = \mu e^{ik\Delta x}+(1-2\mu)+\mu e^{-ik\Delta x} = 1-4\mu \sin^2(\frac{1}{2}k\Delta x)$. We therefore have that $u(t_{j+1},x)=\lambda e^{ikx}$ and the complex exponential acts as an eigen function. We can generalize this further by stating $u(t_{j+p},x) = \lambda^p e^{ikx}$. We therefore require that $|\lambda|\leq 1$ to prevent the numeric from blowing up. This sort of stability analysis was pioneered by the famous American mathematician, physicist, and computer scientist John von Neumann. We can deduce further that $0\leq \mu \sin^2(\frac{1}{2}k\Delta x) \leq \frac{1}{2}$ and since this needs hold for all values of $k$< we must have that $0\leq \mu \leq \frac{1}{2}$ and therefore $\Delta t \leq \frac{(\Delta x)^2}{2\gamma}$. Since not all combinations of time and space steps are stable, this method is deemed \emph{conditionally} stable. 
-\subsection{Implicit and Crank-Nicolson Methods}
+\subsubsection{Implicit and Crank-Nicolson Methods}
 If instead we use the backwards difference 
 \begin{equation*}
     \pd{u}{t}(t_j,x_m) = \frac{u_{j,m}-u_{j-1,m}}{\Delta t} + \mathcal{O}(\Delta t)
@@ -2178,7 +2179,7 @@ We then get the scheme
     u_{j+1,m}=-\sigma u_{j,m+1}+(\sigma +1)u_{j,m} \twen \sigma = c\frac{\Delta t}{\Delta x} \label{eq:7.10}
 \end{equation}
 Since both derivatives are first order, we want $\Delta t \approx \Delta x$.
-\subsection{The CFL Condition}
+\subsubsection{The CFL Condition}
 We know the exact solution is constant on the characteristic $x=ct+\xi$ and depends on the initial condition where $\xi=x-ct$. For the numerical solution, we see that $u_{j,m}$ is dependent on $u_{j-1,m},u_{j-1,m+1}$ which were calculated from $u_{j-2,m},u_{j-2,m+1},u_{j-2,m+2}$ and so on. If we fully propagate this back to $t=0$, we see that our numeric solution depends on $u_{0,m},u_{0,m+1},\ldots, u_{0,m+j}=f(x_m+j\Delta x)$. In other words, $x_m\leq x \leq x_m +j\Delta x$. The actual solution depends on $\xi =x_m-ct_j = x_m-cj\Delta t$. If $\xi$ is outside of the interval $[x_m,x_m+j\Delta x]$, then the numeric solution can't capture any changes since it would be outside of the domain of dependence. 
 \begin{figure}[htbp]
     \centering
@@ -2218,7 +2219,7 @@ The magnitude of this is $\lambda \bar\lambda$ (where the overbar denotes the co
     \end{split}
 \end{equation*}
 This implies $\sigma(\sigma+1)\leq 0$ which implies $-1\leq \sigma \leq 0$. This is exactly the same condition as the CFL condition \eqref{eq:CFL} which we got from looking at the domain of dependence.
-\subsection{Upwind and Lax-Wendroff Scheme}
+\subsubsection{Upwind and Lax-Wendroff Scheme}
 In order to find a solution with positive wave speeds, we replace the forwards difference with the backwards difference which yields 
 \begin{equation}
     u_{j+1,m}=-(\sigma -1)u_{j,m} + \sigma u_{j,m-1} \twen 0\leq\sigma =c\frac{\Delta t}{\Delta x} \leq1 \label{eq:7.13}
@@ -2250,6 +2251,87 @@ which effectively is just \eqref{eq:7.10} when the wave speed is positive and \e
 \begin{equation}
     u_{j+1,m}=\frac{1}{2}\sigma (\sigma -1)u_{j,m+1} - (\sigma^2-1)u_{j,m}+\frac{1}{2}\sigma(\sigma+1)u_{j,m-1}
 \end{equation}
+\subsection{Numerical Solutions to the Wave Equation}
+We shall consider the BVP 
+\begin{equation*}
+    u_{tt}-c^2u_{xx}=0 \twen 0\leq x\leq l \twen t\geq 0
+\end{equation*}
+with boundary conditions 
+\begin{equation*}
+    u(t,0)=\alpha(t) \twen u(t,l)=\beta(t)
+\end{equation*}
+and initial conditions 
+\begin{equation*}
+    u(0,x)=f(x) \twen u_t(0,x)=g(x) \twen t_j=j\Delta t \twen x_m=m\Delta x \twen \Delta x=\frac{l}{n}
+\end{equation*}
+We approximate the derivatives normally:
+\begin{equation*}
+    \begin{split}
+        u_{tt}(t_j,x_m)&=\frac{u_{j+1,m}-2u_{j,m}+u_{j,m-1}}{(\Delta t)^2} + \mathcal{O}((\Delta t)^2)\\ u_{xx}(t_j,x_m)&=\frac{u_{j,m+1}-2u_{j,m}+u_{j,m-1}}{(\Delta x)^2}+\mathcal{O}((\Delta x)^2)
+    \end{split}
+\end{equation*}
+Since $t$ and $x$ both have second order derivatives, we can have their step sizes be similar $\Delta t \approx \Delta x$. Using this, we can now get the scheme 
+\begin{equation}
+    u_{j+1,m}=\sigma^2u_{j,m+1}+2(1-\sigma^2)u_{j,m}+\sigma^2u_{j,m-1}-u_{j-1,m} \twen \sigma = c \frac{\Delta t}{\Delta x} >0
+\end{equation}
+In matrix form, this is represented as 
+\begin{equation}
+    \vb{u}^{(j+1)}=B\vb{u}^{(j)}-\vb{u}^{(j-1)}+\vb{b}^{(j)}
+\end{equation}
+where 
+\begin{equation*}
+    B=\begin{bmatrix}
+        2(1-\sigma^2)&\sigma^2 \\\sigma^2&2(1-\sigma^2)&\sigma^2\\&&\sigma^2&\ddots&\ddots\\&&&\ddots&\ddots \\ &&&&&\sigma^2\\&&&&\sigma^2&2(1-\sigma^2)
+    \end{bmatrix} \twen \vb{u}^{(j)} =\begin{bmatrix}
+        u_{j,1}\\u_{j,2}\\\vdots\\ u_{j,m-3}\\u_{j,m-2}\\u_{j,m-1}
+    \end{bmatrix}  \twen \vb{b}^{(j)} =\begin{bmatrix}
+        \sigma^2 \alpha_j\\0\\ \vdots\\0\\0\\ \sigma^2\beta_j
+    \end{bmatrix}
+\end{equation*}
+Once again, this only describes the interior nodes as the boundary nodes are governed by the boundary conditions. This is what is known as a \emph{second order} iterative scheme since $\vb{u}^{(j+1)}$ depends on $\vb{u}^{(j)}$ and $\vb{u}^{(j-1)}$. The problem with this is how do we calculate the first step? $\vb u^{(0)}$ is determined by the prescribed initial conditions but we don't know how to find $\vb u^{(1)}$. We may be tempted to use $u_t$ and use a first order approximation 
+\begin{equation*}
+    g_m=\frac{u_{1,m}-f_m}{\Delta t} \rightarrow u_{1,m}=f_m+g_m\Delta t
+\end{equation*}
+However, the error is $\mathcal O(\Delta t)$ whereas the rest of the scheme has error $\mathcal O ((\Delta t)^2)$. As such, we are setting our scheme off a large initial error which could lead to our numerical solution deviating from the actual solution. To instead fix this issue, let us look at the Taylor series expansion:
+\begin{equation*}
+    \frac{u(\Delta t, x_m)-u(0,x_m)}{\Delta t} = u_t(0,x_m)+u_t(0,x_m)\Delta t+\frac{c^2}{2}u_{tt}(0,x_m)(\Delta t)^2
+\end{equation*}
+Since $u(t,x)$ solves the wave equation, we can substitute the temporal with the spatial derivative 
+\begin{equation*}
+    \begin{split}
+        u_{1,m} &= u(0,x_m)+u_t(0,x_m)\Delta t+\frac{c^2}{2}u_{xx}(0,x_m)(\Delta t)^2 \\
+        &=f(x_m)+g(x_m)\Delta t+c^2\frac{(f_{m+1}-2f_m+f_{m-1})(\Delta t)^2}{2(\Delta x)^2}
+    \end{split}
+\end{equation*}
+We can thus extract the scheme for the first step to be 
+\begin{equation}
+    u_{1,m}=\frac{1}{2}\sigma^2f_{m+1}+(1-\sigma^2)f_m+\frac{1}{2}\sigma^2f_{m-1}+g_m \Delta t
+\end{equation}
+or in matrix form 
+\begin{equation*}
+    \vb{u}^{(1)}= \frac{1}{2}B\vb{f}+\vb g \Delta t+\frac{1}{2}\vb b^{(0)}
+\end{equation*}
+The CFL area is the same as before which is 
+\begin{equation*}
+    \tilde T_{(t_j,x_m)} = \{(t,x)\big| 0\leq t\leq t_j, x_m-t_j+t\leq x \leq x_m+t_j-t\}
+\end{equation*}
+and we once again have the condition 
+\begin{equation*}
+    \sigma=c\frac{\Delta t}{\Delta x} \leq 1 \rightarrow 0 \leq c \leq \frac{\Delta x}{\Delta t}
+\end{equation*}
+The CFL condition is necessary and the von-Neumann stability analysis is sufficient. Let us walk through the von-Neumann stability analysis 
+\begin{equation*}
+    u_{j-1,m}=e^{ikx_m} \twen u_{j,m}=\lambda e^{ikx_m} \twen u_{j+1,m}=\lambda^2 e^{ikx_m}
+\end{equation*}
+and as such 
+\begin{equation*}
+    \lambda^2=\left(2-4\sigma^2 \sin^2\left( \tfrac{1}{2} k\Delta x\right)\right) \lambda -1
+\end{equation*}
+which we derive that 
+\begin{equation*}
+    \lambda = \alpha \pm \sqrt{\alpha^2-1} \rightarrow \alpha =1-2\sigma^2\sin^2\left(\tfrac{1}{2}k\Delta \right)
+\end{equation*}
+We now have 2 magnification factors since this is a second order scheme. We need \emph{both} moduli to be $\leq 1$. If CFL holds, then $|\alpha|\leq 1 \rightarrow |\lambda|=1$. If $\sigma>1$, $\alpha<-1$ which implies that the magnification factors are completely real and one of them ends up being $<-1$ and therefore the scheme would be unstable.
 
 
 \end{document}
