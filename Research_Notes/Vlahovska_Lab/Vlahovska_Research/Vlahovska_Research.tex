@@ -2165,4 +2165,91 @@ The eigenvalue for this equation is
 \end{equation*}
 and once again since $\mu>0$, $|\lambda |\leq1$ and this numerical solution is also unconditionally stable.
 
+\subsection{Numerical Solutions for the Transport Equation}
+Let us consider the one dimensional transport equation \eqref{eq:transport}. Let the initial condition $u(0,x)=f(x)$. We once again assume uniform distance between nodes in one direction ($t_{j+1}-t_j=\Delta t \ \forall j$ and same for $\Delta x$). We once again approximate the derivatives using the forward difference equation 
+\begin{equation*}
+    \begin{split}
+        \pd{u}{t}(t_j,x_m)&=\frac{u_{j+1,m}-u_{j,m}}{\Delta t} + \mathcal{O}(\Delta t) \\
+        \pd{u}{x}(t_j,x_m)&=\frac{u_{j,m+1}-u_{j,m}}{\Delta x} +\mathcal{O}(\Delta x)
+    \end{split}
+\end{equation*}
+We then get the scheme 
+\begin{equation}
+    u_{j+1,m}=-\sigma u_{j,m+1}+(\sigma +1)u_{j,m} \twen \sigma = c\frac{\Delta t}{\Delta x} \label{eq:7.10}
+\end{equation}
+Since both derivatives are first order, we want $\Delta t \approx \Delta x$.
+\subsection{The CFL Condition}
+We know the exact solution is constant on the characteristic $x=ct+\xi$ and depends on the initial condition where $\xi=x-ct$. For the numerical solution, we see that $u_{j,m}$ is dependent on $u_{j-1,m},u_{j-1,m+1}$ which were calculated from $u_{j-2,m},u_{j-2,m+1},u_{j-2,m+2}$ and so on. If we fully propagate this back to $t=0$, we see that our numeric solution depends on $u_{0,m},u_{0,m+1},\ldots, u_{0,m+j}=f(x_m+j\Delta x)$. In other words, $x_m\leq x \leq x_m +j\Delta x$. The actual solution depends on $\xi =x_m-ct_j = x_m-cj\Delta t$. If $\xi$ is outside of the interval $[x_m,x_m+j\Delta x]$, then the numeric solution can't capture any changes since it would be outside of the domain of dependence. 
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.5\linewidth]{CFLCondition.png}
+    \caption{Geometric intuition for the CFL condition}
+    \label{fig:CFLCondition}
+\end{figure}
+As such, we require that 
+\begin{equation*}
+    x_m\leq x_m-cj\Delta t \leq \Delta x
+\end{equation*}
+which implies that 
+\begin{equation}
+    -1 \leq \sigma =\frac{c\Delta t}{\Delta x} \leq 0 \text{ or } -\frac{\Delta x}{\Delta t}\leq c\leq 0 \label{eq:CFL}
+\end{equation}
+This, in essence, forces the wave speed to be negative. We can also think of the domain of dependence geometrically as the region 
+\begin{equation*}
+    T_{(t_j,x_m)} = \{ (t,x)\big| 0 \leq t \leq t_j, x_m \leq x\leq  x_m+t_j-t \}
+\end{equation*}
+If the true solution goes through this region (like in Figure \ref{fig:CFLCondition}), then the numerical approximation is stable. Otherwise, the numerical approximation is unstable and gives nonsense. \eqref{eq:CFL} is known as the \emph{Courant-Friedrichs-Lewy} condition which were named after the famous German-American mathematicians Richard Courant, Kurt Friedrichs, and Hans Lewy. The first two founded what is now known as the Courant Institute of Mathematics, Computing, and Data Science that is apart of New York University. \\\\
+Let us now employ some von-Neumann stability analysis. Once again we have that 
+\begin{equation*}
+    u_{j,m}=e^{ikx_m} \twen u_{j+1,m}=\lambda e^{ikx_m}
+\end{equation*}
+Subbing this into \eqref{eq:7.10}, we get 
+\begin{equation*}
+    \lambda e^{ikx_m}=-\sigma e^{ikx_{m+1}} + (\sigma +1)e^{ikx_m}=(-\sigma e^{ik\Delta x}+\sigma +1)e^{ikx_m}
+\end{equation*}
+which implies that 
+\begin{equation*}
+    \lambda =1+\sigma(1-e^{ik\Delta }) = (1+\sigma -\sigma \cos(k\Delta x))-i\sigma \sin (k\Delta x)
+\end{equation*}
+The magnitude of this is $\lambda \bar\lambda$ (where the overbar denotes the complex conjugate) 
+\begin{equation*}
+    \begin{split}
+        |\lambda|&=(1+\sigma-\sigma \cos(k\Delta x))^2+(\sigma \sin(k\Delta x))^2 \\&= 1+2\sigma(\sigma+1)(1-\cos(k\Delta x))\\&=1+4\sigma(\sigma +1)\sin^2\left(\tfrac{1}{2} k\Delta x\right) \leq 1
+    \end{split}
+\end{equation*}
+This implies $\sigma(\sigma+1)\leq 0$ which implies $-1\leq \sigma \leq 0$. This is exactly the same condition as the CFL condition \eqref{eq:CFL} which we got from looking at the domain of dependence.
+\subsection{Upwind and Lax-Wendroff Scheme}
+In order to find a solution with positive wave speeds, we replace the forwards difference with the backwards difference which yields 
+\begin{equation}
+    u_{j+1,m}=-(\sigma -1)u_{j,m} + \sigma u_{j,m-1} \twen 0\leq\sigma =c\frac{\Delta t}{\Delta x} \leq1 \label{eq:7.13}
+\end{equation}
+We now wonder if we can use the centered difference formula to get a solution that works for positive and negative $c$. Subbing 
+\begin{equation*}
+    u=\frac{u_{j,m+1}-u_{j,m-1}}{2\Delta x} + \mathcal{O}((\Delta x)^2 
+\end{equation*}
+gets 
+\begin{equation}
+    u_{j+1,m} = -\frac{1}{2}\sigma u_{j,m+1}+u_{j,m}+\frac{1}{2}\sigma u_{j,m-1}
+\end{equation}
+which would work in the region 
+\begin{equation*}
+    \tilde T_{(t_j,x_m)} = \{ (t,x) \big| 0 \leq t\leq t_j, x_m-t_j+t\leq x\leq x_m+t_j-t\}
+\end{equation*}
+and we have the condition $|c|\leq \frac{\Delta x}{\Delta t}$. The thing about this scheme is that it is \emph{unconditionally unstable}. Let us look at the magnification factor 
+\begin{equation*}
+    \lambda =1-i\sigma \sin(k\Delta x) \rightarrow |\lambda |^2=1+\sigma^2\sin^2(k\Delta x)
+\end{equation*}
+Assuming $\sin (k\Delta x) >0 \ \forall k\in \R$, this is unstable for all waves speed except $c=0$. To deal with wave speeds that change in sign, use the \emph{upwind} scheme 
+\begin{equation*}
+    u_{j+1,m} = \begin{cases}
+        -\sigma u_{j,m+1}+(\sigma +1)u_{j,m} &c_{j,m} \leq 0 \\ -(\sigma -1)u_{j,m} + \sigma u_{j,m-1} &c_{j,m}>0
+    \end{cases} 
+    \twen \sigma_{j,m}=c_{j,m}=\frac{\Delta t}{\Delta x} \twen c_{j,m}=c(t_j,x_m)
+\end{equation*}
+which effectively is just \eqref{eq:7.10} when the wave speed is positive and \eqref{eq:7.13} when the wave speed is negative. It's called the ``upwind" scheme because the second node is always away from the direction of motion of the wave. This is good for short intervals but for longer periods, it tends to damp the wave. The Lax-Wendroff scheme attempts to fix this 
+\begin{equation}
+    u_{j+1,m}=\frac{1}{2}\sigma (\sigma -1)u_{j,m+1} - (\sigma^2-1)u_{j,m}+\frac{1}{2}\sigma(\sigma+1)u_{j,m-1}
+\end{equation}
+
+
 \end{document}
