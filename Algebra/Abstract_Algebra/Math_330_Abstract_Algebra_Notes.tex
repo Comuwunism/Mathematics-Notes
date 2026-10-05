@@ -15,7 +15,6 @@
 \usepackage{xr}
 \usepackage{enumitem}
 
-
 \setlength{\parindent}{0pt}
 \title{Math 330 Abstract Algebra Notes}
 \author{Kyle Wang}
@@ -348,5 +347,23 @@ We see that the product of any two symmetries is also a symmetry. We also see th
         \end{pmatrix}
     \end{equation*}
 \end{proof}
+\subsection{Subgroups}
+I am making this a subsection because Tate Darin (who can be contacted at tatedarin28@u.northwestern.edu) said it would be funny if subgroups were a subsection.
+\begin{definition}
+    Suppose $G$ is a group. If $H$ is a subset of $G$ which is also a group under the same group operation defined on $G$, then $H$ is a \emph{subgroup} of $G$.
+\end{definition}
+Being a subgroup implies the following 
+\begin{enumerate}
+    \item 1 (which is the identity in $G$) $\in H$
+    \item The group operation needs to be closed on $H$ 
+    \item Inverse closure is also required
+\end{enumerate}
+Every group $G$ has at least 2 subgroups: the trivial subgroup ($\{ 1\}$) and $G$ itself. If we want a subgroup that is neither of these, we refer to them as \emph{proper, nontrivial} subgroup. 
+\begin{example}
+    If we take $G=\Z$ (if we do not specify which group operation with $\Z$, it is assumed to be addition), then a subgroup would by a group $n\Z$ where $n\Z$ is the set of integers divisible by $n$. In fact, we can state a theorem about the subgroups of $\Z$.
+\end{example}
+\begin{theorem}
+    Every subgroup of $\Z$ is of the form $n\Z$.
+\end{theorem}
 
 \end{document}
