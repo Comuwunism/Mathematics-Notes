@@ -272,4 +272,109 @@ We can now iterate/expand to find the roots we couldn't find earlier. Additional
     y=y+0+\sqrt \varepsilon y_1+(\sqrt \varepsilon)^2y_2+\ldots
 \end{equation*}
 
+\section{Transcendental Equations}
+\subsection{Expansion}
+Let us take the equation 
+\begin{equation*}
+    xe^{-x}=\varepsilon
+\end{equation*}
+as an example. By simply plotting it, we see that there exists a root close to $x=0$ and a large root as $x\rightarrow \infty$. One way to do it is to take the two term expansion for $e^{-x}$ and then iterate on that. Doing so we get 
+\begin{equation*}
+    \begin{split}
+        x_{n+1}&=\varepsilon+x_n^2\\
+        x_1&=\varepsilon\\
+        x_2&=\varepsilon+\varepsilon^2
+    \end{split}
+\end{equation*}
+To find the other root, we take the natural log of both sides and we get 
+\begin{equation*}
+    \ln x-x=\ln \varepsilon
+\end{equation*}
+we then make the guess 
+\begin{equation*}
+    x=\delta_0(\varepsilon)+\delta_1(\varepsilon)+\ldots
+\end{equation*}
+where each of the basis functions are to be solved for on their own. We therefore arrive at 
+\begin{equation*}
+    \ln(\delta_0)-\delta _0=\ln \varepsilon
+\end{equation*}
+We want to balance the second and third terms because if we did the first and third, we would get that $\delta_0=\varepsilon$ and we are trying to find the larger root. We then find that $\delta_0=-\ln \varepsilon = \ln \frac{1}{\varepsilon}$. We now plug this $\delta_0$ back into our ansatz and solve for $\delta_1$ 
+\begin{equation*}
+    \ln \left( \delta_0\left(1+\frac{\delta_1}{\delta_0} \right) \right) - \delta_0 -\delta_1=\ln \varepsilon \\
+    \ln \delta_0+\ln\left(1+\frac{\delta_0}{\delta_1}\right)-\delta_0-\delta_1=\ln \varepsilon \\
+    \ln \delta_0+\ln\left(1+\frac{\delta_0}{\delta_1} \right) -\delta_1=0
+\end{equation*}
+We now want to balance the first and third term since first, it contains $\delta_1$ which we are solving for, and secondly, $\delta_0$ dominates over $\delta_1$ the second term is close to zero. We then find that 
+\begin{equation*}
+    \delta_1=\ln\left(\ln\frac{1}{\varepsilon}\right)
+\end{equation*}
+It is also worth noting that previously we didn't care about signs or constants. That's because we were simply content with finding the same order of magnitude approximations. However, we are now looking for the \emph{functions} for our expansion and so now we do care about these things.
+\subsection{Implicit Equations}
+Let us look at the equation 
+\begin{equation*}
+    x^2+xy-y^3=0
+\end{equation*}
+Say we want to know the asymptotic behavior of $y(x)$ as $x\rightarrow \infty$. We have three total ways to balance the terms in this equation:
+\begin{enumerate}
+    \item $x^2\leftrightarrow xy \Leftrightarrow x^2+xy=0 \rightarrow y=-x$
+    \item $xy \leftrightarrow y^3 \Leftrightarrow xy-y^3=0 \rightarrow y=\sqrt{x} $ 
+    \item $x^2\leftrightarrow y^3 \Leftrightarrow x^2-y^3=0 \rightarrow y=x^{2/3}$
+\end{enumerate}
+If we substitute the each of the results we can check the balances to see which one is correct. 
+\begin{enumerate}
+    \item $x^2 \,\,\,xy\sim-x^2 \,\,\, y^3\sim-x^3$ We see that as $x\rightarrow \infty$, the last term isn't balanced.
+    \item $x^2 \,\,\, xy \sim x^{3/2} \,\,\, y^3\sim x^{3/2}$ This is the wrong choice as well since the $x^2$ term dominates even though we wanted the other two terms to dominate
+    \item $x^2\,\,\, xy\sim x^{5/3} \,\,\, y^3\sim x^2$ We see this is the correct balance because the balanced terms are the dominant terms in the equation. 
+\end{enumerate}
+We now guess that 
+    \begin{equation*}
+        y(x)=x^{2/3} + g(x)
+    \end{equation*}
+    where $g(x)$ is some correction term we seek to find. We want $g(x)$ to be less than the dominant term. Or in other words, 
+    \begin{equation*}
+        \lim_{x\rightarrow \infty}\frac{g}{x^{2/3}}\rightarrow 0
+    \end{equation*}
+    We now plug this into our equation and we get 
+    \begin{equation*}
+        x^2+x^{5/3}+xg=x^2+3x^{2/3}g+3x^{4/3}g+g^3
+    \end{equation*}
+    When we balance $x^{5/3}=3x^{4/3}g$ we get that $g=\frac{1}{3}x^{1/3}$ which is the only correct balance (one can see for others by plugging in their relation and seeing if it matches what we desire). We now have that 
+    \begin{equation*}
+        x^{5/3}+x^{4/3}=3x^{4/3}+3x^{5/3}+x
+    \end{equation*}
+    and we see that our highest order terms are balanced which shows that are balance was correct. As such,  
+    \begin{equation*}
+        y(x)= x^{2/3}+\frac{1}{3}x^{1/3}+\ldots
+    \end{equation*}
+
+\subsection{Approximating Integrals}
+Say we have some function $f(x,\varepsilon)$ which can be represented 
+\begin{equation*}
+    f(x,\varepsilon)=\sum_n a_n(x)\varphi_n(\varepsilon)
+\end{equation*}
+We can integrate this function (however we can't differentiate because differentiation often causes the magnitude to increase with every derivative) and approximate the value of integrals. Let us take a look at the Stieltjes function (? can't find the name online but this is what Gemini gave) 
+\begin{equation*}
+    I(\varepsilon)=\int^\infty_0\frac{e^{-t}}{1+\varepsilon t} dt
+\end{equation*}
+We can define 
+\begin{equation*}
+    I_n=\int^\infty_0\frac{e^{-t}}{(1+\varepsilon t)^n}dt
+\end{equation*}
+If we differentiate by parts, we can derive the recurrence relation as follows 
+\begin{equation*}
+    I_n = -\frac{e^{-t}}{(1+\varepsilon t)^n}\Bigg|^\infty_0 -n\varepsilon\int^\infty_0\frac{e^{-t}}{(1+\varepsilon t)^{n+1}}dt = 1-n\varepsilon I_{n+1}
+\end{equation*}
+We find that $I_1=1-\varepsilon I_2$. We also see that $I_2=1-2\varepsilon I_3$ and we can sub this back in to get that $I_1=1-\varepsilon+2\varepsilon^2 I_3$. We prefer this method to generate the integral approximation since we are adding smaller and smaller corrections with every approximation. We can ultimately arrive at 
+\begin{equation*}
+    I(\varepsilon)=\sum^N_{n=0}(-1)\varepsilon^n n! +\operatorname{error}(N)
+\end{equation*}
+
+
+
+
+
+
+
+
+
 \end{document}
