@@ -350,7 +350,7 @@ We see that the product of any two symmetries is also a symmetry. We also see th
 \subsection{Subgroups}
 I am making this a subsection because Tate Darin (who can be contacted at tatedarin28@u.northwestern.edu) said it would be funny if subgroups were a subsection.
 \begin{definition}
-    Suppose $G$ is a group. If $H$ is a subset of $G$ which is also a group under the same group operation defined on $G$, then $H$ is a \emph{subgroup} of $G$.
+    Suppose $G$ is a group. If $H$ is a subset of $G$ which is also a group under the same group operation defined on $G$, then $H$ is a \emph{subgroup} of $G$. We denote this as $H\leq G$.
 \end{definition}
 Being a subgroup implies the following 
 \begin{enumerate}
@@ -360,10 +360,55 @@ Being a subgroup implies the following
 \end{enumerate}
 Every group $G$ has at least 2 subgroups: the trivial subgroup ($\{ 1\}$) and $G$ itself. If we want a subgroup that is neither of these, we refer to them as \emph{proper, nontrivial} subgroup. 
 \begin{example}
-    If we take $G=\Z$ (if we do not specify which group operation with $\Z$, it is assumed to be addition), then a subgroup would by a group $n\Z$ where $n\Z$ is the set of integers divisible by $n$. In fact, we can state a theorem about the subgroups of $\Z$.
+    If we take $G=\Z$ (if we do not specify which group operation with $\Z$, it is assumed to be addition), then a subgroup would by a group $n\Z$ where $n\Z$ is the set of integers divisible by $n$. In fact, we can state a theorem about the subgroups of $\Z$. However, first we must prove the division algorithm.
 \end{example}
+\begin{theorem}[Division Algorithm]
+    Let $a,b \in \Z$ with $b>0$. Then there exist unique integers $q$ and $r$ such that $a=bq+r$ with $0\leq r<b$.
+\end{theorem}
+\begin{proof}
+    Let $S=\{a-bt: t\in \Z, a-bt \geq 0\}$. If $0\in S$, then $a-bq$ for some $q\in \Z$ and therefore $a=bq+0$. We can also claim that $S\subseteq \N$. We claim that $S$ is nonempty. Let $t=-|a|$, then $a-bt = a+|a|b$. If $a\geq 0$, then $a+|a|b \geq 0$ since $b>0$. If $a<0$ then $a+|a|b=a(1-b)$. Since $a<0$ and $b\geq 1$, we get that $(1-b)\leq 0$ and generally $a(1-b)\geq 0$.\\\\
+    Since $S$ is nonempty we can apply the Well Ordering Principle and so $S$ has a least element we call $r=a-bq$. By definition, $r\geq 0$ and if $r\geq b$, then $0\leq r-b<r$ but also $r-b=a-bq-b=a-b(q+1)$ and therefore $a-b(q+1)$ is a smaller element of $S$ than $r$ which contradicts our choice of $r$. Thus we must have $a=bq+r$ such that $0\leq r<b$.\\\\
+    To prove uniqueness, let us supposed $a=bq_1+r_1=bq_2+r_2$ with $q_i,r_i\in \Z$ and $0\leq r_i<b$. Then $b(q_1-q_2)=r_2-r_1$. Specifically we have $b|q_1-q_2|=|r_2-r_1|$. If $q_1\neq q_2$, then $b|q_1-q_2|\geq b$ but at the same time $0\leq r_1,r_2<b\rightarrow |r_2-r_1|<b$ which is impossible. Therefore $q_1=q_2$ and $r_1=r_2$.
+\end{proof}
 \begin{theorem}
     Every subgroup of $\Z$ is of the form $n\Z$.
 \end{theorem}
+\begin{proof}
+    Suppose $H \leq \Z$. If $H=\{0\}$, there is nothing show $n\Z$. Otherwise, $H$ contains at least one positive number since if $H$ contains a negative number, we need its inverse which is its negative which is positive. We now say $n$ is the smallest positive number in $H$ by the Well Ordering Principle. Since $n\in H$, $n\Z \subseteq H$ since we require that $n^2,n^3,\ldots$ and so $n\Z$. Let us suppose $a\in H$ and we say that $a=qn+r \,\,\, 0\leq r<n$. Since $a\in H$ and $n$ is also $\in H$, $r=a-qn$ so $r=a-qn \in H$ and $r<n$. But $n$ is the smallest positive number in $H$, we must have that $r=0$ and therefore $n|a\rightarrow a=nq\in n\Z$. Since $a$ is arbitrary, this means that $H=n\Z$.
+\end{proof}
+\begin{proposition}
+    If $H_i \leq G \,\,\, \forall i$, then $\bigcap H_i \leq G$. 
+\end{proposition}
+\begin{proof}
+    $1\in \bigcap H_i$ since $1\in H_i\,\,\, \forall i$. That proves the identity is in the intersection. If $x,y\in \bigcap H_i$, then $x,y\in H_i \,\,\, \forall i$ so $xy\in H_i \,\,\, \forall i$ (by the definition of a subgroup), so $xy\in \bigcap H_i$ which proves closure. Finally, $x\in \bigcap H_i$ so $x\in H_i \,\,\, \forall i$, and by the definition of a subgroup, the inverse $x^{-1} \in H_i \,\,\, \forall i$ so $x^{-1} \in \bigcap H_i$.
+\end{proof}
+\subsection{Generators}
+\begin{definition}
+    Suppose $S$ is a subset of $G$. We define the subgroup \emph{generated} by $S$ (denoted $\langle S\rangle $) to be the smallest subgroup of $G$ that contains $S$. In other words, 
+    \begin{equation*}
+        \langle S\rangle =\bigcap_{\substack{H\leq G \\ S\subseteq H}}H
+    \end{equation*}
+\end{definition}
+\begin{example}
+    In $\Z$, $\langle6,9\rangle$ generates the subgroup $3\Z$. In $\Z_6$, $\langle 2\rangle$ generates $\{0,2,4\}$.
+\end{example}
+Generators are generally not unique. 
+\begin{example}
+    $Z_8 = \langle 1\rangle =\langle 3\rangle = \langle 5\rangle =\langle 7 \rangle$.
+\end{example}
+One observation is that if $G$ is a group and $H\leq G$, then if $S\subseteq H$, we must have $\langle S\rangle \subseteq H$.
+\begin{definition}
+    A group that is generated by one element is deemed \emph{cyclic}.
+\end{definition}
+\begin{proposition}
+    Any cyclic is abelian
+\end{proposition}
+\begin{proof}
+    Say $G=\langle x\rangle = \{ x^n : n\in \Z\}$. Let us propose 
+    \begin{equation*}
+        x^nx^m=x^{n+m} = x^{m+n} = x^mx^n
+    \end{equation*}
+    by the commutativity of addition.
+\end{proof}
 
 \end{document}
