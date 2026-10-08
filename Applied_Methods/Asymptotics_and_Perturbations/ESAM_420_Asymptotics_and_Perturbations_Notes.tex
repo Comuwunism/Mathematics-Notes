@@ -369,12 +369,92 @@ We find that $I_1=1-\varepsilon I_2$. We also see that $I_2=1-2\varepsilon I_3$ 
     I(\varepsilon)=\sum^N_{n=0}(-1)\varepsilon^n n! +\operatorname{error}(N)
 \end{equation*}
 
-
-
-
-
-
-
+\subsection{Asymptotic Expansion}
+Let us say there exists a function such that 
+\begin{equation*}
+    f(\varepsilon)=\sum^N_{n=1} a_n\varphi_n(\varepsilon) + \operatorname{error}
+\end{equation*}
+where the error is $o(\varphi_{N})$ for some basis of function space $\varphi_1,\varphi_2,\ldots,\varphi_N,\varphi_{N+1},\ldots$. The interesting thing is that the series need not be convergent. Let us take a look at the error function 
+\begin{equation*}
+    \operatorname{erf}(x)=\frac{2}{\sqrt \pi} \int^x_0e^{-t^2}dt
+\end{equation*}
+For small $t\ll1$, we can Taylor expand such that 
+\begin{equation*}
+    e^{-t^2} = 1-t^2+\ldots=\sum^\infty_{n=0} (-1)^n\frac{t^{2n}}{n!}
+\end{equation*}
+We can integrate this Taylor expansion because integration is safer than differentiation. For example, if we take 
+\begin{equation*}
+    f(\varepsilon)=\varepsilon\sin \frac{1}{\varepsilon} = \mathcal{O}(\varepsilon)
+\end{equation*}
+as $\varepsilon\rightarrow 0$ but if we differentiate, we end up getting a $\frac{1}{\varepsilon}$ which blows up. As such, we have that 
+\begin{equation*}
+    \begin{split}
+        \operatorname{erf}(x) &=\frac{2}{\sqrt{\pi}}\sum^\infty_{n=0} \frac{(-1)^n}{n!}\int^x_0 t^{2n}dt \\ &= \frac{2}{\sqrt{\pi}} \sum^\infty_{n=0} \frac{(-1)^n}{n!}\frac{x^{2n+1}}{2n+1} \\
+        &= \frac{2}{\sqrt \pi} \left( x-\frac{x^3}{3}+\ldots \right)
+    \end{split}
+\end{equation*}
+We now know the behavior of $x$ close to $0$, but what about as $x\rightarrow \infty$. Let us rewrite the error function in terms of the complementary error function 
+\begin{equation*}
+    \operatorname{erf}(x)=1-\operatorname{erfc}(x)=1-\frac{2}{\sqrt \pi}\int^\infty_x e^{-t^2}dt
+\end{equation*}
+and then we integrate by parts to get 
+\begin{equation*}
+    \operatorname{erf}(x) =1-\frac{2}{\sqrt \pi} \left( -\frac{1}{2t}e^{-t^2} \Bigg|^\infty_x -\frac{1}{2}\int^\infty_x \frac{e^{-t^2}}{t^2} dt\right)
+\end{equation*}
+which if we integrate by parts multiple times, we get the series 
+\begin{equation*}
+    \operatorname{erf}(x)=1-\frac{e^{-x^2}}{x\sqrt \pi } \sum^\infty_{n=0}(-1)^n\frac{(2n-1)!!}{(2x^2)^n}
+\end{equation*}
+Sometimes, the series diverges and therefore adding more terms leads to a diverging from the true value. We can have the inverse of the radius of convergence to be 
+\begin{equation*}
+    \frac{1}{R}=\lim_{n\rightarrow 0} \frac{a_{n+1}}{a_n} =\lim_{n\rightarrow 0}\frac{(2n+1)!!}{(2n-1)!!} =\lim_{n\rightarrow 0}(2n+1)
+\end{equation*}
+We now asks what is the optimal $N$ that ensures convergence for the approximation $\sum^N_{n=0}$. This happens when $a_{N+1}\tilde >{} a_N$ and this is when we should stop. For a given $x$, we want to solve 
+\begin{equation*}
+    (2x^2)^{-(N+1)}a_{N+1} \tilde > (2x^2)^{-N}a_N
+\end{equation*}
+which implies \begin{equation*}
+    \begin{split}
+        \frac{a_{N+1}}{a_N}\frac{(2x^2)^N}{(2x^2)^{N+1}} \geq 1 \\
+        \frac{2n+1}{2x^2}\geq 1
+    \end{split}
+\end{equation*}
+where $N_{optimal}$ is the solution to the above inequality. We can get that 
+\begin{equation*}
+    N_{opt}\sim\frac{1}{2}+x^2
+\end{equation*}
+For the transcendental equation 
+\begin{equation*}
+    \tan x=x
+\end{equation*}
+we can see that the line $y=x$ contacts the tangent function right before the tangent blows up. As such, we can guess 
+\begin{equation*}
+    x=A_n-\delta_n \twen A_n=\frac{\pi}{2}(2n+1)
+\end{equation*}
+We can plug this into the tangent and express it as 
+\begin{equation*}
+    \begin{split}
+        \tan x &=\frac{\sin(A_n-\delta _n)}{\cos(A_n-\delta _n)}  \\
+        &=\frac{\sin A_n\cos \delta_n -\cos A_n \sin \delta_n}{\cos A_n \cos\delta_n +\sin A_n \sin \delta_n} \\
+        &= \frac{\cos \delta_n}{\sin \delta_n}
+    \end{split}
+\end{equation*}
+Taking the Taylor series of sines and cosines we have that 
+\begin{equation*}
+    \tan x =\frac{1-\tfrac{1}{2}\delta^2+\mathcal{O}(\delta^4)}{\delta -\tfrac{1}{6}\delta^3+\mathcal{O}(\delta^5)} = A-\delta
+\end{equation*}
+which if we pull a $\delta $ out of the denominator and and then cancel it 
+\begin{equation*}
+    \begin{split}
+        1-\frac{1}{3}\delta^2=A\delta-\delta^2 \\
+        A\delta =1+\frac{2}{3}\delta^2 \\
+        \delta =\frac{1}{A}\left(1+\frac{2}{3}\delta^2+\ldots \right)
+    \end{split}
+\end{equation*}
+and if we use the leading order approximation $\delta \sim \frac{1}{A}$ which we then plug in 
+\begin{equation*}
+    \delta = \frac{1}{A}\left( 1+\frac{2}{3}\frac{1}{A^2}+\mathcal{O}\left( \frac{1}{A^3}\right) \right)
+\end{equation*}
 
 
 \end{document}
