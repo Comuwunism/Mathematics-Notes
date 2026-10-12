@@ -411,4 +411,44 @@ One observation is that if $G$ is a group and $H\leq G$, then if $S\subseteq H$,
     by the commutativity of addition.
 \end{proof}
 
+\begin{theorem}
+    Any subgroup of a cyclic group is itself cyclic.
+\end{theorem}
+\begin{proof}
+    Suppose $G=\langle a\rangle$ and $H\leq G$. If $H$ is trivial, then $\{e\}$ generates itself and there is nothing to show. Otherwise, let $a^n$ be the smallest positive power of $a$ in $H$. Since $a^n\in H$, we therefore have that $\langle a^n \rangle \subseteq H$. We now must show the reverse inclusion. Take any $a^k \in H$ for some $k$ since $H\leq G$ and $G$ is cyclic. We now use the division algorithm to say that $k=qn+r$ for $0\leq  r<n$. We then have $a^k = a^{qn+r}=(a^n)^qa^r$. $(a^n)^q\in H$ since it is a multiple of the smallest power of $a\in H$. Using cancellation, we have $a^r=(a^n)^{-q}a^k\in H$ and since the right hand side is closed under the group operation, we have that $a^r\in H$ but since $a^n$ is the smallest power of $a\in H$, we must have that $r=0$. Since $a^k$ is some arbitrary element in $H$, we have that $H\subseteq \langle a^n\rangle$ which establishes that $H=\langle a^n\rangle$.
+\end{proof}
+Let us look at an example of the subgroups of $\Z_{12}$. 
+\begin{example}
+    $\{0\}$ is the trivial subgroup. We can see that $\langle 1 \rangle =\Z_{12}$. $\langle 2 \rangle = \{ 0,2,4,6,8,10\}$. $\langle 3\rangle = \{0,3,6,9\}$. $\langle 4 \rangle =\{0,4,8\}$. $\langle 5\rangle =\Z_{12}$. $\langle 6 \rangle =\{0,6\}$. $\langle 7\rangle = \Z_{12}$. $\langle 8\rangle =\langle 4\rangle$. $\langle 9\rangle =\langle 3\rangle$. $\langle 2\rangle =\langle 10\rangle$. $\langle 11\rangle =\Z_{12}$. 
+\end{example}
+This example is a demonstration of a theorem we will soon prove. Let us first state some definitions
+\begin{definition}
+    If $a,b\in \Z \backslash 0$, their \emph{greatest common divisor} is the unique $g\in \Z^+$ satisfying 
+    \begin{enumerate}
+        \item $g|a$ and $g|b$
+        \item If $c|a$ and $c|b$ then $c|g$
+    \end{enumerate}
+\end{definition}
+\begin{theorem}[Bezout's]
+    Given any nonzero integers $a,b$ we can find integers $m,n$ such that $ma+nb=\gcd (a,b)$
+\end{theorem}
+We can now state our theorem.
+\begin{theorem}
+    In $Z_n$, $\langle a \rangle=\langle \gcd(a,n)\rangle$. Particularly, generators of $\Z_n$ are precisely those that are relatively prime to $n$.
+\end{theorem}
+\begin{proof}
+    Find $k,l$ such that $ka+ln =\gcd(a,n)$. Then in $\Z_n$, we have that $ka \equiv \gcd(a,n)$. Thus we have that $\langle \gcd(a,n)\rangle \subseteq \langle a \rangle$. Conversely, $a$ is a multiple of $\gcd(a,n)$ so $\langle a \rangle \subset \langle \gcd(a,n)\rangle$ so now $\langle a \rangle = \langle \gcd(a,n)\rangle$.
+\end{proof}
+
+\section{Mappings Between Groups}
+Consider the following groups: $\Z_2=\{0,1\}$ under addition mod 2, $\{1,-1\}$ under multiplication, and  
+\begin{equation*}
+    \left\{ I_2,\begin{pmatrix}
+        0&1\\1&0
+    \end{pmatrix} \right\}
+\end{equation*}
+All these groups are of the form $\{e,a\}$ where $a\neq e$ and $a^2=e$. In other words, they all have the same group table (\ref{tab:groupCard2}). In some sense, all these groups are ``the same." 
+\begin{definition}
+    A function $\varphi:G_1 \mapsto G_2$ is a \emph{homomorphism} if it satisfies $\varphi(x*y)=\varphi(x)*\varphi(y)$ where the left hand side is the group operation on $G_1$ and the right hand side is the group operation on $G_2$.
+\end{definition}
 \end{document}
