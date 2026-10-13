@@ -456,5 +456,94 @@ and if we use the leading order approximation $\delta \sim \frac{1}{A}$ which we
     \delta = \frac{1}{A}\left( 1+\frac{2}{3}\frac{1}{A^2}+\mathcal{O}\left( \frac{1}{A^3}\right) \right)
 \end{equation*}
 
+\section{Ordinary Differential Equations}
+\subsection{Series Solutions}
+Consider the equation of the form 
+\begin{equation*}
+    a_2(x)y''+a_1(x)y'+a_0(x)y=0
+\end{equation*}
+A natural question to ask are what are the solutions $y_1(x)$ and $y_2(x)$ around some point $x=x_0$. To do this, we need to consider three types of points:
+\begin{enumerate}
+    \item Regular points like in $y''+p(x)y'+q(x)y=0$ where $p(x)$ and $q(x)$ are analytic at the point $x=x_0$
+    \item Regular singular points which have a "replaceable" singularity. This would be like 
+    \begin{equation*}
+        (x-x_0)^2R(x)y''+(x-x_0)P(x)y'+Q(x)y=0
+    \end{equation*}
+    where the following limits are finite 
+    \begin{equation*}
+        \lim_{x\rightarrow x_0}\frac{P(x)}{x-x_0} \twen \lim_{x\rightarrow x_0} \frac{Q(x)}{(x-x_0)^2}
+    \end{equation*}
+    \item Irregular singular which often do not possess convergent series solutions.
+\end{enumerate}
+Let us consider the Airy Equation 
+\begin{equation*}
+    y''-xy=0 \twen x_0=0
+\end{equation*}
+Going with the standard procedure, we guess $y(x)=\displaystyle{\sum^\infty_{n=0}}A_nx^n$. Differentiating twice and subbing it into the equation, we have 
+\begin{equation*}
+    \sum^\infty_{n=2}A_nx^{n-2}n(n-1) - \sum^\infty_{n=0}A_nx^{n+1}=0
+\end{equation*}
+We now want to shift the indices such that they match the same powers of $x$. We use the change of indices $n+1=m-2 \rightarrow m=n+3$ so we now have 
+\begin{equation*}
+    \sum^\infty_{n=2}A_nx^{n-2}n(n+1) -\sum^\infty_{m=3}A_{m-3}x^{m-2} =2A_2+\sum^\infty_{n=3}(A_nn(n-1)-A_{n-3})x^{n-3}=0
+\end{equation*}
+Which then gets the recurrence relation 
+\begin{equation*}
+    A_n=\frac{A_{n-3}}{n(n+1)}
+\end{equation*}
+We can then write the solution as 
+\begin{equation*}
+    y=A_0\left(1+\frac{1}{6}x^3+\ldots \right)+A_1\left(x+\frac{1}{12}x^4+\ldots \right)
+\end{equation*}
+where can think of each term in parenthesis as the ``$y_1(x)$" and ``$y_2(x)$." Let us take a look at an equation with a regular singular point 
+\begin{equation*}
+    x^2y'' -(x^2+2)y=0 \twen x_0=0
+\end{equation*}
+In this case, we use the Frobenius Method where we guess a solution of the form $y=x^s \displaystyle{\sum^\infty_{n=0}A_nx^{n}}$. Differentiating and substituting we get 
+\begin{equation*}
+    \sum^\infty _{n=0}A_n(n+s)(n+s-1)x^{n+s} - \sum^\infty_{n=0}A_nx^{n+s+2} -2\sum^\infty_{n=0}A_nx^{n+s}
+\end{equation*}
+We now want to make the change of indices using $n+2 = m \rightarrow n=m-2$ and thus our equation becomes 
+\begin{equation*}
+    \sum^\infty _{n=0}A_n(n+s)(n+s-1)x^{n+s} - \sum^\infty_{n=2}A_{n-2}x^{n+s} -2\sum^\infty_{n=0}A_nx^{n+s}
+\end{equation*}
+and by iterating the first values of $n$ for the first and third series we get 
+\begin{equation*}
+    (s(s-1)-2)A_0x^s +((s+1)-2)A_1x^{s+1}+\sum^\infty_{n=2}(A_n((n+s)(n+s-1)-2)-A_{n-2})x^{n+s} =0
+\end{equation*}
+The recurrence relation is therefore 
+\begin{equation*}
+    A_n=\frac{A_{n-2}}{(n+s)(n+s-1)-2}
+\end{equation*}
+and we also get the indicial equation 
+\begin{equation*}
+    s(s-1)-2=0\rightarrow s=2,-1
+\end{equation*}
+We therefore have our two solutions to be of the form 
+\begin{equation*}
+    \begin{split}
+        y_1&=x^2\sum^\infty_{n=2}A_nx^n \\
+        y_2&=\frac{1}{x}\sum^\infty_{n=2}A_nx^n
+    \end{split}
+\end{equation*}
+If we once again consider the Airy Equation, we can see that $x\rightarrow \infty$ is an essential singularity. To see this, we use the change of variables $t=\frac{1}{x}$ such that $y(x)\rightarrow y(t)$. Using the chain rule, we see that 
+\begin{equation*}
+    \od{y}{x}=\od{y}{t}\od{t}{x} =-t^2\od{y}{t}
+\end{equation*}
+and 
+\begin{equation*}
+    \od{}{x}\left(-t^2 \od{y}{t}\right) = \od{}{t}\left(-t^2\od{y}{t}\right)(-t^2) = t^4y''+2t^3y'
+\end{equation*}
+Substituting this into the Airy Equation, we have that 
+\begin{equation*}
+    \begin{split}
+        y''-xy=t^4y''+2t^3y'-\frac{1}{t}y=0\\
+        \Rightarrow t^5y''+2t^4y'-y=0
+    \end{split}
+\end{equation*}
+and we can see clearly that $x\rightarrow \infty$ is an essential singularity.
+
+
+
 
 \end{document}
