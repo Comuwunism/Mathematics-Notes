@@ -26,6 +26,8 @@
 \newcommand{\C}{\mathbb{C}}
 \newcommand{\twen}{\hspace{20pt}}
 
+\DeclareMathOperator{\im}{im}
+
 \newtheorem{theorem}{Theorem}[section]
 \newtheorem{lemma}[theorem]{Lemma}
 \newtheorem{corollary}[theorem]{Corollary}
@@ -437,10 +439,11 @@ We can now state our theorem.
     In $Z_n$, $\langle a \rangle=\langle \gcd(a,n)\rangle$. Particularly, generators of $\Z_n$ are precisely those that are relatively prime to $n$.
 \end{theorem}
 \begin{proof}
-    Find $k,l$ such that $ka+ln =\gcd(a,n)$. Then in $\Z_n$, we have that $ka \equiv \gcd(a,n)$. Thus we have that $\langle \gcd(a,n)\rangle \subseteq \langle a \rangle$. Conversely, $a$ is a multiple of $\gcd(a,n)$ so $\langle a \rangle \subset \langle \gcd(a,n)\rangle$ so now $\langle a \rangle = \langle \gcd(a,n)\rangle$.
+    Find $k,l$ such that $ka+ln =\gcd(a,n)$. Then in $\Z_n$, we have that $ka \equiv \gcd(a,n)$. Thus we have that $\langle \gcd(a,n)\rangle \subseteq \langle a \rangle$. Conversely, $a$ is a multiple of $\gcd(a,n)$ so $\langle a \rangle \subseteq \langle \gcd(a,n)\rangle$ so now $\langle a \rangle = \langle \gcd(a,n)\rangle$.
 \end{proof}
 
-\section{Mappings Between Groups}
+\section{Homomorphisms}
+\subsection{Properties of Homomorphisms}
 Consider the following groups: $\Z_2=\{0,1\}$ under addition mod 2, $\{1,-1\}$ under multiplication, and  
 \begin{equation*}
     \left\{ I_2,\begin{pmatrix}
@@ -451,4 +454,38 @@ All these groups are of the form $\{e,a\}$ where $a\neq e$ and $a^2=e$. In other
 \begin{definition}
     A function $\varphi:G_1 \mapsto G_2$ is a \emph{homomorphism} if it satisfies $\varphi(x*y)=\varphi(x)*\varphi(y)$ where the left hand side is the group operation on $G_1$ and the right hand side is the group operation on $G_2$.
 \end{definition}
+
+\begin{proposition}
+    If $\varphi : G_1\mapsto G_2$ is a homomorphism, then 
+    \begin{enumerate}
+        \item $\varphi_1(e_1)=e_2$
+        \item $\varphi(g^{-1})=\varphi (g)^{-1} \,\,\, \forall g\in G$
+    \end{enumerate}
+\end{proposition}
+\begin{proof}
+    To prove the first fact, we have that $e_1e_1=e_1$ so $\varphi (e_1e_1)=\varphi(e_1)$ but also by the definition of a homomorphism, $\varphi (e_1e_1) = \varphi(e_1)\varphi(e_1)$ which implies $\varphi(e_1)\varphi(e_1)=\varphi(e_1) \rightarrow \varphi(e_1)=e_2$. To prove the second fact, we know that $g^{-1}g=e_1$ and so we apply $\varphi$ to get $\varphi(g^{-1}g)=\varphi(e_1)$ but also is equal to $\varphi(g^{-1})\varphi(g)$ and so therefore $\varphi(g^{-1})\varphi(g)=e_2\rightarrow \varphi(g^{-1})=\varphi(g)^{-1}$  
+\end{proof}
+\begin{definition}
+    Suppose $\varphi: G_1 \mapsto G_2$ is a homomorphism. We define the \emph{kernel} of $\varphi$ as the set $\ker \varphi= \{x\in G_1: \varphi(x)=e_2\}$ and the \emph{image} of $\varphi$ as the set $\im \varphi = \{y\in G_2:y=\varphi(x)$ for some $x\in G_1\}=\{\varphi(x):x\in G_1\}$.
+\end{definition}
+
+\begin{proposition}
+    $\ker \varphi$ is a subgroup of its domain $G_1$ and $\im \varphi$ is a subgroup of the codomain $G_2$.
+\end{proposition}
+\begin{proof}
+    To prove that the kernel of $\varphi$ is a subgroup of $G_1$, we show that $\varphi(e_1)=e_2 \therefore e_1\in \ker \varphi$. If $\varphi(x)=e_2=\varphi(y)$, then $\varphi (xy)=\varphi(x)\varphi(y)=e_2e_2=e_2$ and therefore it is closed. Finally, if $\varphi(x)=e_2$, then $\varphi(x^{-1})=\varphi(x)^{-1} = e_2^{-1}=e_2$ and inverse closure exists in $\ker \varphi$. Hence, $\ker \varphi \leq G_1$. \\\\
+    Proving the image of $\varphi$ is a subgroup of $G_2$ is much of the same. The identity is in the image since $\varphi(e_1)=e_2$. If $y_1,y_2\in \im \varphi$, then $y_1y_2=\varphi(x_1)\varphi(x_2)=\varphi(x_1x_2)$ and hence it is closed. By the previous proposition, we know that $y^{-1} = \varphi(x^{-1})$ and hence the inverse also exists in the image. Hence, $\im \varphi \leq G_2$.
+\end{proof}
+Let us look at an example. 
+\begin{example}
+    Let us define a mapping $\det :GL_2(\R) \rightarrow \R^{\times}$ where $\R^{\times}$ are nonzero real numbers under multiplication. The determinant is a homomorphism since $\det(AB)=\det A \det B$. The kernel of the determinant is the set of all $2\times2$ invertible matrices with determinant 1 and is represented by the subgroup $SL_2(\R)$. The image of the determinant is just $\R^{\times}$ since if $a\in \R^{\times}$, it can be represented as
+    \begin{equation*}
+        a=\det \begin{bmatrix}
+            a&0\\0&1
+        \end{bmatrix}
+    \end{equation*}
+\end{example}
+
+
+
 \end{document}
