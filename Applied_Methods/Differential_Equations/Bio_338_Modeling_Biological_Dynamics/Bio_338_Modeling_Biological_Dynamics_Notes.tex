@@ -20,6 +20,8 @@
 \author{Kyle Wang}
 \date{September 2026}
 
+\newcommand{\pd}[2]{\frac{\partial #1}{\partial #2}}
+
 \newtheorem{definition}{Definition}[section]
 \newtheorem{theorem}[definition]{Theorem}
 
@@ -27,7 +29,7 @@
 
 \maketitle
 \tableofcontents
-\section{Rates of Change and Basic Modeling}
+\section{Basic Modeling with ODEs}
 \subsection{Introduction}
 State: numbers that describe variables (state variables) of interest \\
 State variables: Things we care about and measure\\
@@ -199,5 +201,90 @@ We can see that in Figure \ref{fig:LV}, there exists a fixed point at the origin
     \caption{Vector field of the Lotka-Volterra model}
     \label{fig:LV}
 \end{figure}
+\begin{definition}
+    \emph{Trajectories} are solutions to ODEs that exist and are unique (assuming the conditions of the Picard-Lindel\"of Theorem are satisfied) and are \emph{curves} in the state space that follow the vector field.
+\end{definition}
+We can describe a vector field $V$ to be a function $V: \mathbb{R}^n\mapsto T_pM$ where $T_pM$ denotes the tangent space at a point $p$ along the state space manifold $M$. It is worth noting that two trajectories can \emph{never} cross since that would require the vector field to be multi valued which is not possible over $\mathbb{R}$. One way to approximate solution curves to ODEs is via Euler's method which is as follows 
+\begin{equation*}
+    x(t+\Delta t) = x(t)+x'(t)\Delta t
+\end{equation*}
+Other numerical methods improve on Euler's method like Runge-Kutta but Euler's method is the most clear to see. Some numerical integrators can have adaptive time steps that are based on the magnitude of the local vector field. This is because small time steps offer better accuracy at the expense of compute time. Large time steps are faster to calculate but may not converge to the true solution and are prone to deviations. 
+\subsection{Fixed Points and Stability}
+\begin{definition}
+    A \emph{fixed point} $\bold{x}$ is a point in the state space such that $\dot{\bold{x}} =0$. 
+\end{definition}
+The vector field at a fixed point is the zero vector. We can classify the stability of a fixed point into a few categories: 
+\begin{enumerate}[label=(\roman*)]
+    \item A system is \emph{stable} if it returns to its fixed point when given a slight perturbation from it 
+    \item A system is \emph{unstable} if it leaves its fixed point when given a slight perturbation
+    \item A system is \emph{quasi-stable} or \emph{semi-stable} if one direction is stable while the direction is unstable (saddle point). We generally consider this to be unstable since there is only an infinitesimally small line of stability and the rest of the space unstable.
+\end{enumerate}
+It is worth noting that there are different notions of stability. We shall state two.
+\begin{definition}
+    Consider an autonomous nonlinear dynamical system 
+    \begin{equation*}
+        \dot x =f(x(t)) \hspace{20pt} x(0)=x_0
+    \end{equation*}
+    where $x(t)\in \mathcal{D}\subseteq \mathbb{R}^n$ denotes the system state vector, $\mathcal{D}$ denotes an open set containing the origin, and $f:\mathcal{D} \mapsto \mathbb{R}^n$ is a continous vector field on $\mathcal D$. Suppose $f$ has an equilibrium at $x_e$ such that $f(x_e)=0$. Then:
+    \begin{enumerate}[label=(\roman*)]
+        \item The fixed point is said to be \emph{Lyapunov stable} if for every $\epsilon>0\,\,\, \exists\delta >0$ such that $||x(0)-x_e||<\delta $ then for every $t\geq0$ we have that $||x(t)-x_e|| \leq \epsilon$.
+        \item The fixed point is said to be \emph{asymptotically stable} if it is Lyapunov stable and there exists a $\delta>0$ such that if $||x(0)-x_e||<\delta $ then $\lim_{t\rightarrow \infty}||x(t)-x_e||=0$
+    \end{enumerate}
+\end{definition}
+In essence, a \emph{Lyapunov stable} system just needs to stay within an $\epsilon$ distance from the fixed point given it starts $\delta$ away. An \emph{asymptotically stable} system implies that close enough starting conditions will lead to convergence to the fixed. This means something that just orbits the fixed point can be consider Lyapunov stable but not asymptotically stable.
+\begin{definition}
+    A \emph{nullcline} is a curve in the tangent space where the vector field is 0 in a particular direction.
+\end{definition}
+In a two dimensional state space, the location where two nullclines meet is a fixed point provided the nullcines are of \emph{different} state variables. If we look at the Lotka-Volterra models and add in competition or communicable disease, we have 
+\begin{equation*}
+    \begin{split}
+        \dot x&=Ax-Bxy-x^2 \\
+        \dot y&= Cy-Dxy-y^2
+    \end{split}
+\end{equation*}
+We can solve for nullclines by setting $\dot x=\dot y=0$ and solving a system of equations. If we ignore the trivial nullclines, we get that nontrivial fixed point of this model is 
+\begin{equation*}
+    x=\frac{A-BC}{1-BD} \hspace{20pt} y=C-D\left(\frac{A-BC}{1-BD} \right)
+\end{equation*}
+When $\frac{A}{B}>C$, this fixed point is stable but when $\frac{A}{B}<C$, this fixed point is now unstable.
+\begin{definition}
+    An \emph{attactor} of a dynamical system is a set of states to which the system tends to evolve for a large number of starting states. We define ``a large number" to be a set that isn't of measure $0$.
+\end{definition}
+An attractor can be a stable fixed point or a limit cycle. It cannot be an unstable fixed point nor a saddle (which is a set of starting states that leads to a fixed point of measure 0). The \emph{Basin of Attraction} is the set of states that will evolve to a particular attractor over time. Let us consider a logistic model with the allee effect which states that a population needs to be above some minimum value to reproduce. It is described by the following model: 
+\begin{equation*}
+    \dot x =rx\left(1-\frac{x}{k}\right)\left(\frac{x}{a}-1\right) \hspace{20pt} 0<a<k
+\end{equation*}
+We see that there are fixed points at $x=0,a,k$. If we take derivatives of the time deriavtives with respect to $x$ we can classify their stabilities 
+\begin{equation*}
+    \pd{\dot x}{x} = r\left(1-\frac{x}{k}\right)\left(\frac{x}{a}-1\right)-\frac{r}{k}x\left(\frac{x}{a}-1\right) +\frac{r}{a}x\left(1-\frac{x}{k}\right)
+\end{equation*}
+At $x=a$, we have 
+\begin{equation*}
+    \pd{\dot x}{x} \Bigg|_{x=a} =r\left(1-\frac{a}{k}\right) >0 
+\end{equation*}
+which therefore makes this point unstable. At $x=k$, we have 
+\begin{equation*}
+    \pd{\dot x}{x} \Bigg|_{x=k} = r\left(\frac{k}{a}-1\right) <0
+\end{equation*}
+and is hence stable. At $x=0$, the derivative evaluates to $-r<0$ and is also stable. We therefore have two basis of attraction: one that goes towards $x=0$ and one towards $x=k$. The set $[0,a)$ leads to the fixed point $x^*=0$ and the set $(a,+\infty)$ leads to $x^*=k$. An attractor is an element of its basin. The boundary between basis is known as the \emph{separatrix}. In one dimension, it is an unstable fixed point. In two dimensions, its a curve. For higher dimensions, the separatrix is always a hyperplane.
+\subsection{Bifurcations}
+Recall in the competitive Lotka-Volterra model that depending on whether $\frac{A}{B}>C$ determined the stability of the fixed point. This transition due to a change in parameters is known as a \emph{bifurcation}. Let us look at an example in one dimension. E. coli can consume lactose but importing lactose is an energy expensive process. As such, there is a switch that causes the E. coli to import lactose or not. Let us define $x$ to be hte intracellular lactose level. The change in it $\dot x$ is equal to the production minus the degradation.  The production is modeled by 
+\begin{equation*}
+    \text{production}=\frac{a+x^n}{1+x^n}
+\end{equation*}
+and the degradation is per capita degradation and therefore modeled as $rx$. As such, 
+\begin{equation*}
+    \dot x=\frac{a+x^n}{1+x^n}-rx
+\end{equation*}
+We can plot the production and degradation terms separately to get Figure \ref{fig:prodDegrad}
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.5\linewidth]{prodDegrad.png}
+    \caption{Production and degradation terms plotted separately via the over-under method}
+    \label{fig:prodDegrad}
+\end{figure}
+Regions where the red line (degradation) is greater than the purple sigmoid (production) is net negative change in lactose levels and vice versa.
+
+
 
 \end{document}
