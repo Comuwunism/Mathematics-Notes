@@ -541,9 +541,70 @@ Substituting this into the Airy Equation, we have that
         \Rightarrow t^5y''+2t^4y'-y=0
     \end{split}
 \end{equation*}
-and we can see clearly that $x\rightarrow \infty$ is an essential singularity.
+and we can see clearly that $x\rightarrow \infty$ is an essential singularity. 
+\subsection{Asymptotics for ODEs}
 
-
-
+Let us go back to the original Airy's equation. Let us make the ansatz that our solution for large $x$ is $y(x)=e^{S(x)}$ where $S(x)=S_1(x)+S_0(x)+\ldots$. Taking derivatives we have that $y'(x)=S'e^S$ and $y''=S''e^S+(S')^2e^S$. Plugging this into Airy's Equation, we have 
+\begin{equation}
+    \begin{split}
+        [S''+(S')^2]e^{S} &= xe^S \\
+        \Rightarrow S''+(S')^2&=x
+    \end{split}
+\end{equation}
+We want large $x$ and so we need to select a term to balance with it. If we balance the first and third term we get  that $S'' \sim x \rightarrow S\sim x^3$ which if we substitute this balance into the second order differential equation, we would have that the first term $\sim x$, the second term $\sim x^4$, and the third would be $\sim x$. Since the second term, which is the term we don't want to balance, is larger than the two balanced terms, this is the incorrect choice for balancing. The correct balance is between the second and third terms which yields $S' =\sqrt{x} \rightarrow S=\frac{2}{3}x^{3/2}$ and $S'' = \frac{1}{2\sqrt x}$. Therefore we get the balance to be $\frac{1}{2\sqrt x},x,x$ which we can see that the second and third terms are the highest order terms. We therefore have that the leading order behavior for large $x$ is 
+\begin{equation*}
+    y=e^{2x^{3/2}/3}
+\end{equation*}
+Now we plug in the next order approximation. We therefore have 
+\begin{equation*}
+    \begin{split}
+        \left( \frac{1}{2\sqrt x} +S_1''
+        \right) + \left( \sqrt{x}+S_1'\right)^2=x \\
+        \frac{1}{2\sqrt{x}}+S_1''+x+(S_1')^2+2\sqrt{x}S_1' =x\\
+        S''+(S_1')^2+s\sqrt x S_1'+\frac{1}{2\sqrt x} =0
+    \end{split}
+\end{equation*}
+If we take a balance like $S_1' \sim -2\sqrt{x}\rightarrow S_1\sim -\frac{4}{3}x^{3/2}$, this would be incorrect because we can't have the correction term be the same order as the leading order term. In other words, we require that this correction term needs to be $o(x^{3/2})$. The correct balance is between the third and fourth terms which yields $-2\sqrt{x}S_1'= \frac{1}{2\sqrt x} \rightarrow S_1'= -\frac{1}{4x} \rightarrow S_1 = -\frac{1}{4}\ln x$. Our two term expansion for large $x$ yields 
+\begin{equation*}
+    y(x)=\exp \left( \frac{2}{3}x^{3/2}-\frac{1}{4}\ln x \right)
+\end{equation*}
+Let us recall the rocket/projectile problem in the motivating example. We can describe the height $y(t)$ of a projectile given some initial velocity $v_0$ with the following differential equation 
+\begin{equation*}
+    \odt{y}{t} = -\frac{1}{(1+\varepsilon y)^2} \twen 0<\varepsilon =\frac{v_0^2}{gR_e} \ll 1
+\end{equation*}
+We guess our $y$ in the form $y=y_0+\varepsilon^{\alpha}y_1+\ldots$. Using $\varepsilon=0$, we find the leading order term is described by 
+\begin{equation*}
+    \odt{y_0}{t} = -1 \twen y_0(0)=0 \twen y_0'(0)=1
+\end{equation*}
+where we have chosen the initial velocity to be $1$ as it is the ``characteristic" velocity and therefore is the non-dimensionalized form. This yields the leading term behavior to be $y_0(t)=t-\frac{1}{2}t^2$. Moving onto the next order, let us use the binomial expansion 
+\begin{equation*}
+    \frac{1}{(1+z)^2} \approx 1-2x
+\end{equation*}
+to get that 
+\begin{equation*}
+    \odt{y_0}{t} +\varepsilon\odt{y_1}{t}=-1+2\varepsilon(y_0+\varepsilon y_1+\ldots) 
+\end{equation*}
+Grouping up the terms based off their orders with respect to $\varepsilon$, we have that 
+\begin{equation*}
+    \begin{split}
+        \mathcal O(1)& :\twen \odt{y_0}{t}=-1 \\
+        \mathcal O(\varepsilon)&: \twen \odt{y_1}{t}=2y_0
+    \end{split}
+\end{equation*}
+We also have the initial conditions to be 
+\begin{equation*}
+    \begin{split}
+        y(0)&=0=y_0(0)+\varepsilon y_1(0)+\ldots \\
+        y'(0)&=1=y_0'(0)+\varepsilon y_1'(0) +\ldots
+    \end{split}
+\end{equation*}
+We notice that the leading term takes out the inhomogeneity and the later correction terms become homogenous initial conditions. This leads to the first correction term becoming 
+\begin{equation*}
+    y_1(t) = \frac{1}{3}t^3-\frac{1}{12}t^4
+\end{equation*}
+and so our combined solution is 
+\begin{equation*}
+    y(t)=y_0(t)+\varepsilon y_1(t) = t-\frac{1}{2}t^2+\varepsilon\left(\frac{1}{3}t^3-\frac{1}{12}t^4 \right)
+\end{equation*}
 
 \end{document}
