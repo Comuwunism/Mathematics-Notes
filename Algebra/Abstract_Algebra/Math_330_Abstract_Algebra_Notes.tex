@@ -27,6 +27,7 @@
 \newcommand{\twen}{\hspace{20pt}}
 
 \DeclareMathOperator{\im}{im}
+\DeclareMathOperator{\id}{id}
 
 \newtheorem{theorem}{Theorem}[section]
 \newtheorem{lemma}[theorem]{Lemma}
@@ -485,7 +486,80 @@ Let us look at an example.
         \end{bmatrix}
     \end{equation*}
 \end{example}
+There always exists two homomorphisms: the trivial and identity homomorphisms. The trivial homomorphism is defined as $\varphi : G_1 \mapsto G_2$ by $\varphi (x) = e_2$ where the kernel is $\ker \varphi = G_1$ and the image is $\im \varphi = \{e_2\}$. The identity homomorphism is defined as $\id_G :G\mapsto G$ such that $\id (x)=x$. The kernel is $\ker \id_G = \{ e\}$ and the image is $\im \id_G = G$.
 
-
+\subsection{Isomorphisms}
+\begin{definition}
+    A homomorphism is an isomorphism if it is invertible. More precisely, $\varphi : G_1 \mapsto G_2$ is an isomorphism if it is a homomorphism and there exists another homomorphism $\varphi ^{-1} : G_2 \mapsto G_1$ such that $\varphi ^{-1} \circ \varphi = \id _{G_1}$ and $\varphi \circ \varphi^{-1} = \id_{G_2}$.
+\end{definition}
+Two groups are isomorphic if there exists an isomorphism between them which is denoted by 
+\begin{equation*}
+    G_1 \cong G_2
+\end{equation*}
+\begin{theorem}
+    A homomorphism is an isomorphism if and only if it is bijective.
+\end{theorem}
+\begin{proof}
+    ($\Rightarrow$) Suppose we have an isomorphism $\varphi : G_1 \mapsto G_2$ so therefore $\varphi ^{-1}$ exists. To prove $\varphi$ is injective, we have that $\varphi (x_1)=\varphi (x_2) \rightarrow \varphi^{-1}\varphi(x)=\varphi^{-1}\varphi(x) \rightarrow x_1=x_2$. To prove surjectivity, let $y\in G_2$. $\varphi^{-1}$ exists so let $x=\varphi^{-1}(y) \in G_1$. $\varphi (x) =\varphi \varphi^{-1}(y)=y$ which proves surjectivity. \\\\
+    ($\Leftarrow$) Now suppose $\varphi$ is bijective. We now need to find $\varphi ^{-1}$. Let $\varphi ^{-1}$ be as follows.; $y\in G_2$ and $\varphi^{-1} (y) = $ the unique $x\in G_1$ for which $y=\varphi(x)$. This exists since $\varphi $ is surjective and is unique since $\varphi$ is injective. We then have $\varphi \circ \varphi^{-1} (y) = \varphi (\varphi^{-1}(y))=\varphi($ the unique $x\in G_1$ such that $\varphi(x)=y)=y$. Now we check the other arrangement $\varphi ^{-1} \circ \varphi(x) = \varphi^{-1}(\varphi ($unique $x$ such that $\varphi(x)=y)) = \varphi^{-1}(y) = $ the unique $x$ such that $\varphi(x)=y$. This is our inversion. We still need to prove it is a homomorphism. Suppose $y_1 y_2 \in G_2 $ such that $\varphi^{-1} (y_1y_2) = $ unique $x\in G_1$ such that $\varphi(x)=y_1y_2$. We know that $\varphi ^{-1}(y_1) =x_1 \in G_1$ and $\varphi ^{-1}(y_2) =x_2$. Since $\varphi$ is a homomorphism, we have that $\varphi (x_1x_2) = \varphi(x_1)\varphi(x_2) = y_1y_2$ and therefore $\varphi^{-1}(y_1y_2) =x_1x_2 = \varphi ^{-1}(y_1)\varphi^{-1}(y_2)$. We therefore have proved that $\varphi^{-1}$ is a homomorphism.
+\end{proof}
+\begin{proposition}
+    A homomorphism is injective if and only if $\ker \varphi = \{ e_1 \}$.
+\end{proposition}
+\begin{proof}
+    ($\Rightarrow$) Suppose $\varphi$ is injective. $\ker \varphi = \{x \in G_1: \varphi(x)=e_2\}$. We have that $\varphi(e_1)=e_2$ and since $\varphi $ is injective, if $\varphi (x)=e_2$, $x=e_1$ and $\ker \varphi = \{e_1\}$. \\\\
+    ($\Leftarrow$) Now suppose $\ker \varphi = \{ e_1\}$.If $\varphi (y)=\varphi(h)$ then $\varphi (y) \varphi (h)^{-1} = e_2 \rightarrow \varphi (gh^{-1}) =e_2$ since $\varphi$ is a homomorphism. We therefore have that $gh^{-1} \in \ker \varphi$ but since we're assuming the only element in the kernel is $e_1$, we have that $gh^{-1}=e_1 \rightarrow g=h$ and therefore $\varphi $ is injective.
+\end{proof}
+In a similar way, one can prove that $\varphi$ is surjective if and only if $\im \varphi = G_2$. \\\\
+An isomorphism effectively means that if you rename the elements, two groups have the same group table. 
+\begin{proposition}
+    Any cyclic group of order $n$ is isomorphic to $\Z_n$ and any cyclic group of order $\infty$ is isomorphic to $\Z$.
+\end{proposition}
+\begin{proof}
+    Suppose $G$ is cyclic and has order $n$, then $G=\{ 1,a,a^2,\ldots,a^{n-1}\}$ where $a^n=1$. We now define $\varphi : G\rightarrow \Z_n$ by $\varphi (a^k) = k \mod n$. In $G$, we see that $a^ka^l = a^{(k+l)\mod n}$ so $\varphi(a^ka^l) = (k+l)\mod n = \varphi(a^k)+\varphi(a^l)$ in $\Z_n$. This is indeed a homomorphism. To see if $\varphi$ is injective, if we have $\varphi (a^k) =0\mod n$ then since $0\leq k \leq n-1$, it must be that $k=0$ since $a^k=1$. To check surjectivity, we can see that $\forall k \in \Z_n, k=\varphi (a^k)$.\\\\
+    If $|G| = \infty$ then $G=\{\ldots,a^{-2},a^{-1},1, a,a^2,\ldots\}$ with $a^k \neq 1 \,\,\, \forall k \in \Z$. We now define $\varphi (a^k)=k$ and therefore $\varphi(a^ka^l) = \varphi (a^{k+l})=k+l = \varphi(a^k)+\varphi (a^l)$. This proves it is a homomorphism. We can see that $\varphi(a^0) =0$ so it is injective and $k=\varphi(a^k)$ for all $k\in \Z$ so it is surjective.
+\end{proof}
+This classifies all cyclic groups up to isomorphism. A natural question to ask from this is, can we classify all groups up to isomorphism? 
+\begin{equation*}
+    \text{no.}
+\end{equation*}
+But if we modify the question, we can answer it and it has been answered. \\\\
+Note, if $\varphi : G_1 \mapsto G_2$ is an injective homomorphism, it may not always be an isomorphism onto $G_2$ but it will always be an isomorphism onto its image 
+\begin{equation*}
+    G_1 \cong \im \varphi
+\end{equation*}
+If $G$ is cyclic, let $\langle a \rangle =G$, then to uniquely define a homomorphism, we only need to specify where to send $a$ since $\varphi (a^k) =\varphi (a)^k$. 
+\begin{theorem}[Cayley's Theorem]
+    Every group is a group of permutations.
+\end{theorem}
+\subsubsection{Classifications of Small Groups}
+The trivial group is naturally isomorphic to $\Z_1$. We showed previously that groups of order 2 and 3 are fixed and therefore isomorphic to $\Z_2$ and $\Z_3$ respectively. For order 4, we need to split into cases. For the first case, we have that $a^2=1$.
+\begin{table}[htbp]
+    \centering
+    \begin{tabular}{c|c|c|c|c}
+         &  1&a&b&c  \\ \hline
+         1&1&a&b&c \\ \hline 
+         a&a&1&c&b \\ \hline
+         b&b&c&&\\ \hline
+         c&c&b&&
+    \end{tabular}
+    \caption{Case 1 when $a^2=1$}
+    \label{tab:case1}
+\end{table}
+We can split this into further subcases. The first is if $b^2=1$ which then forces $c^2=1$ and therefore $bc=a$ and $cb=a$. This is a group. The second subcase is $b^2\neq 1$ and so $b^2=a$ which implies $cb=1=bc$ and $c^2=a$. This is also a group. \\\\
+In case 2, without a loss of generality (since we can just rename the elements), we let $a^2\neq 1$ but rather $a^2 =b$. This gets the group table 
+\begin{table}[htbp]
+    \centering
+    \begin{tabular}{c|c|c|c|c}
+         &  1&a&b&c  \\ \hline
+         1&1&a&b&c \\ \hline 
+         a&a&b&c&1 \\ \hline
+         b&b&c&1&a\\ \hline
+         c&c&b&a&b
+    \end{tabular}
+    \caption{Case 2 when $a^2\neq 1$}
+    \label{tab:case2}
+\end{table}
+This also forms a group. If we look at this group and consider the mapping $1\leftrightarrow 0, a\leftrightarrow 1, b\leftrightarrow 2, c\leftrightarrow 3$, we see that this is an isomorphism between $G \cong \Z_4$. If we look at the second subcase of case 1, we have the mapping $1\leftrightarrow 0, b\leftrightarrow 1, a\leftrightarrow 2, c\leftrightarrow 3$ which is once again isomorphic to $\Z_4$. The first subcase is not isomorphic to $\Z$ since every element satisfies $x^2=1$. However, it is abelian and is called the \emph{Klein 4-group.} It is not a cyclic group. It is denoted as $V$ or $K_4$.
 
 \end{document}
