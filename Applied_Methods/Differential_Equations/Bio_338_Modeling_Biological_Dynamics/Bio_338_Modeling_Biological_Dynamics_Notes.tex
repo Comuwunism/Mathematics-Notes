@@ -21,6 +21,7 @@
 \date{September 2026}
 
 \newcommand{\pd}[2]{\frac{\partial #1}{\partial #2}}
+\newcommand{\p}{\mathbb{P}}
 
 \newtheorem{definition}{Definition}[section]
 \newtheorem{theorem}[definition]{Theorem}
@@ -268,7 +269,7 @@ which therefore makes this point unstable. At $x=k$, we have
 \end{equation*}
 and is hence stable. At $x=0$, the derivative evaluates to $-r<0$ and is also stable. We therefore have two basis of attraction: one that goes towards $x=0$ and one towards $x=k$. The set $[0,a)$ leads to the fixed point $x^*=0$ and the set $(a,+\infty)$ leads to $x^*=k$. An attractor is an element of its basin. The boundary between basis is known as the \emph{separatrix}. In one dimension, it is an unstable fixed point. In two dimensions, its a curve. For higher dimensions, the separatrix is always a hyperplane.
 \subsection{Bifurcations}
-Recall in the competitive Lotka-Volterra model that depending on whether $\frac{A}{B}>C$ determined the stability of the fixed point. This transition due to a change in parameters is known as a \emph{bifurcation}. Let us look at an example in one dimension. E. coli can consume lactose but importing lactose is an energy expensive process. As such, there is a switch that causes the E. coli to import lactose or not. Let us define $x$ to be hte intracellular lactose level. The change in it $\dot x$ is equal to the production minus the degradation.  The production is modeled by 
+Recall in the competitive Lotka-Volterra model that depending on whether $\frac{A}{B}>C$ determined the stability of the fixed point. This transition due to a change in parameters is known as a \emph{bifurcation}. Let us look at an example in one dimension. E. coli can consume lactose but importing lactose is an energy expensive process. As such, there is a switch that causes the E. coli to import lactose or not. Let us define $x$ to be the intracellular lactose level. The change in it $\dot x$ is equal to the production minus the degradation.  The production is modeled by 
 \begin{equation*}
     \text{production}=\frac{a+x^n}{1+x^n}
 \end{equation*}
@@ -283,8 +284,83 @@ We can plot the production and degradation terms separately to get Figure \ref{f
     \caption{Production and degradation terms plotted separately via the over-under method}
     \label{fig:prodDegrad}
 \end{figure}
-Regions where the red line (degradation) is greater than the purple sigmoid (production) is net negative change in lactose levels and vice versa.
-
+Regions where the red line (degradation) is greater than the purple sigmoid (production) is net negative change in lactose levels and vice versa. For a small $r$, the red line in Figure \ref{fig:prodDegrad} is very shallow and intersects the production term at one large $x^*$. As $r$ increases, eventually we eventually hit a bifurcation as now the degradation intersects the production term at a lower $x^*$ which then splits into a middle unstable fixed point and a lower stable fixed point. As $r$ increases even more, the top two fixed points collide and annihilate each other and all that remains is the lower fixed point. These two bifurcations are known as a "saddle node" bifurcation. \\\\
+In 1 dimension, we always require an unstable fixed point between two stable fixed points. This is easy to see because if we have some sort of smooth function $\gamma$ that describes the value of $\dot x$ and in so the middle region $[x^*_-,x^*_+]$, we require $\gamma >0$ or $\gamma <0$ and it must remain that value within that interval by the Intermediate Value Theorem. We can generalize this to higher dimensions by requiring a separatrix. \\\\
+Let us look at a two gene toggle which can be represented by 
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.5\linewidth]{twoGeneToggle.png}
+    \caption{Diagram to describe the relationship of this two gene toggle}
+    \label{fig:twoGeneToggle}
+\end{figure}
+$x$ inhibits the production production of $y$ and vice versa. In other words, they mutually inhibit one another. Repression of either gene requires binding of the repressor to the other genes operon. If, for example, we take $\p(y$ binds operon $x)$, we can express the dynamics of this probability as 
+\begin{equation*}
+    \begin{split}
+        \dot \p (\text{bound}) =(\text{binding rate})\p(\text{unbound})-(\text{unbinding rate})\p(\text{bound})\\
+        =k_{\text{on}}C(1-\p(\text{bound}))-\beta_{\text{off}}\p(\text{bound})
+    \end{split}
+\end{equation*}
+where $k_{\text{on}}$ is the binding rate per repressor (mM), $C$ is the concentration of repressor (mM), and $\beta_{\text{off}}$ is the dissociation rate. In steady state, we have that $\dot \p ($bound)$=0$. In that case, we have 
+\begin{equation*}
+    \begin{split}
+        k_{\text{on}}C(1-\p(\text{bound})) = \beta_{\text{off}}\p(\text{bound}) \\
+        \P(\text{bound}) = \frac{k_{\text{on}}C}{\beta_\text{off}+k_\text{on}C}
+    \end{split}
+\end{equation*}
+which is the location of this fixed point. Doing some more algebraic manipulation, we get that 
+\begin{equation*}
+    \begin{split}
+        \p(\text{bound}) &= \left(1+\frac{\beta_\text{off}}{k_\text{on}C}\right)^{-1} \\
+        &= \frac{1}{1+\frac{K_d}{C}}
+    \end{split}
+\end{equation*}
+where $K_d$ is the equilibrium dissociation constant and described by $\frac{\beta_\text{off}}{k_\text{on}}$. Since the cumulative probability of the repressor being bound and unbound is $1$, we can write that 
+\begin{equation*}
+    \begin{split}
+        \p(\text{unbound} ) &= 1-\frac{1}{1+\frac{K_d}{C}} \\
+        &=\frac{1}{\frac{C}{K_d}+1}
+    \end{split}
+\end{equation*}
+Sometimes we want to incorporate some sort of cooperativity where we require multiple repressors to bind to an operon. $n$ can be non-integer values because sometimes one can get away with repression with different amounts of repressors. If we let RNA production rate be a function of the repressor concentration $c$, we have that 
+\begin{equation*}
+    f(c)=\p (\text{unbound})\Gamma
+\end{equation*}
+where $\Gamma$ is the maximum production rate. If we add in a per capita clearance rate, we can describe this two switch gene toggle as 
+\begin{equation*}
+    \begin{split}
+        \dot x = \frac{\Gamma_x}{\left(\frac{y}{K_{d,y}}\right)^n+1}-k_xx \\
+        \dot y =\frac{\Gamma_y}{\left(\frac{x}{K_{d,x}}\right)^n+1}-k_yy 
+    \end{split}
+\end{equation*} 
+\subsection{Oscillations}
+Historically, we thought that we need an external driving force for self sustaining oscillations. This isn't true. Instead, autonomous oscillations require some form of negative feedback. This is a necessary but not a sufficient condition for oscillations. The following cannot have oscillations since both feedback are positive. 
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.5\linewidth]{twoGenePositive.png}
+    \caption{Both are positive and so no oscillations}
+    \label{fig:twoGenePositive}
+\end{figure}
+The configuration in Figure \ref{fig:twoGeneToggle} is also incapable of support oscillations since a negative times a negative is positive and hence no oscillations. If $x$ promotes $y$ but $y$ antagonizes $x$, oscillations are possible. However, there also needs to be a delay for oscillations to occur. There are two types of oscillations: transient and limit cycle. Transient oscillations settle down to a fixed point. Limit cycles are sustained oscillations that don't settle down towards a fixed point. Limit cycles can be described as Lyapunov stable attractors and transient oscillations are most specifically described as asymptotically stable attractors. If we recall the Romeo and Juliet model, $\forall r\in \mathbb{R}$ where $r=\sqrt{x^2+y^2}$, there exists a stable limit cycle where the amplitude is $r$ which is dependent on the initial conditions. In the Lotka-Volterra model, the period and amplitude of the oscillations are also dependent on the initial conditions. These are undesirable behaviors when we want to regulate these oscillations. Three element oscillators help overcome these limitations. \\\\
+Let us take a look at this model that describes hormonal cycles. 
+\begin{figure}
+    \centering
+    \includegraphics[width=0.5\linewidth]{PGHmodel.png}
+    \caption{Model of hormonal cycles due to the pituitary gland, hypothalamus, and the ovaries}
+    \label{fig:PGHmodel}
+\end{figure}
+The hypothalamus secretes gonadotropin-releasing hormone (GnRH) which promotes the pituitary gland to secrete luteinizing hormone (LH) and folice stimulating hormone (FSH) which then promotes the ovaries to secrete estrogen and progesterone which downregulates GnRH production. This is a negative feedback system since we have two positive terms and one negative. Downregulation can either be increased degradation or decreased production. In this case, the ovaries decrease the production of GnRH by the hypothalamus. If we use the double suppressor function to decsribe $G$'s effect on $H$ and let $\Gamma =1$ and $K_d=1$, we get 
+\begin{equation*}
+    \begin{split}
+        \dot H &= \frac{1}{1+G^n} -k_H H \\
+        \dot P &= H-k_PP\\
+        \dot G &= P-k_GG
+    \end{split}
+\end{equation*}
+For simplicity, we shall take the one constant approach which is $k_H=k_P=k_G=k$ for some random constant $k$. We can modify this model further by having a constant production term like 
+\begin{equation*}
+    \dot G = P-kG+q
+\end{equation*}
+In general, we require either strong feedback with shorter time delay or weaker feedback with a longer time delay or some sort of combination in between. In general, there exists some separatrix that separates non-oscillatory and oscillatory behavior. Crossing this separatrix is a bifurcation. One of the most common types of these bifurcation is the \emph{Hopf} bifurcation where a fixed point loses/gains stability that leads to a loss/gain of a limit cycle.
 
 
 \end{document}
