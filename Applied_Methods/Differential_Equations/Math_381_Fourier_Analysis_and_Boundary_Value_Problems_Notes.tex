@@ -25,6 +25,7 @@
 \newcommand{\pdt}[2]{\frac{\partial ^2 #1}{\partial #2 ^2}}
 \newcommand{\odt}[2]{\frac{d^2 #1}{d #2 ^2}}
 \newcommand{\twen}{\hspace{20pt}}
+\newcommand{\ip}[2]{\left\langle #1,#2\right\rangle}
 
 \newtheorem{theorem}{Theorem}[section]
 \newtheorem{lemma}[theorem]{Lemma}
@@ -83,8 +84,8 @@ The solution to the homogeneous equation is $A\cos(x)+B\sin(x)$ and the solution
     \end{split}
 \end{equation*}
 For PDEs we generally do not have to worry about dimensions of boundary conditions because generally it's a boundary in space and is ``infinite dimensional."
-\section{Wave Equation}
-\subsection{Solutions}
+\subsection{Wave Equation}
+\subsubsection{Solutions}
 \begin{theorem}
     Every solution to the wave equation can be written in the form 
     \begin{equation*}
@@ -188,7 +189,7 @@ We can now write the general solution to the classical wave equation as the sum 
     u(t,x)=\frac{1}{2}[f(x-ct)+f(x+ct)] +\frac{1}{2c}\int^{x+ct}_{x-ct}g(y)dy + \frac{1}{2c}\int^t_0\int^{x+c(t-s)}_{x-c(t-s)}F(s,y)dyds
 \end{equation}
 
-\subsection{Causality and Energy}
+\subsubsection{Causality and Energy}
 Solutions to the wave equation satisfy causality. That is, a change to the initial conditions can only affect the solution $u(t,x)$ for $t>0$ where $|x-x_0|\leq ct$. In other words, the information only propagates at speed $c$.\\\\
 We define the \emph{energy} of a solution $u(t,x)$ as 
 \begin{equation*}
@@ -205,8 +206,8 @@ Let us impose the localizing conditions $u(t,x)\rightarrow 0$ as $x\rightarrow \
 \end{equation*}
 where we integrated by parts in the middle. This shows that energy is conserved within solutions to the wave equation. 
 
-\section{Heat Equation}
-\subsection{The Maximum Principle}
+\subsection{Heat Equation}
+\subsubsection{The Maximum Principle}
 \begin{theorem}[The Weak Maximum Principle]
     Let $\gamma >0$. Suppose $u(t,x)$ is a solution to the forced heat equation 
     \begin{equation*}
@@ -286,5 +287,225 @@ If we set the time equal to zero, we see that hte energy is
     E(0)=\int^L_0\frac{1}{2}w(x,0)^2dx =0
 \end{equation*}
 by the fact that $w=0$ on $\partial R$. However, $E(t)$ is non-increasing for $t\in [0,T]$ and since energy cannot be negative, $w(x,t)=0$ in $R$. 
+\subsubsection{The Fundamental Solution to the Heat Equation}
+Suppose $u(t,x)$ solves the heat equation. Some special properties of these solutions are that they are space and time invariant, there are some special symmetry and similarity solutions, its derivatives solve the heat equation, and linear combinations also solve the heat equation. We therefore seek a solution $Q(t,x)$ with initial condition $Q(0,x)=H(x)$. We choose this form of a solution since $Q(0,ax)=Q(0,x)\,\,\, \forall a>0$. Let us say $Q(x,t)=g(p) $ where $p=\frac{x}{\sqrt{4kt}}$. Therefore 
+\begin{equation*}
+    \begin{split}
+        Q_t &=-\frac{x}{2\sqrt{4k}}xt^{-3/2}g'(p) \\
+        Q_{xx}&= g''(p)\left(\frac{1}{\sqrt{4k}}t^{-1/2}\right)^2
+    \end{split}
+\end{equation*}
+and therefore the heat equation turns into 
+\begin{equation*}
+    -g'(p)\frac{x}{2\sqrt{4k}}xt^{-3/2} = kg''(p)\frac{1}{4k}t^{-1}
+\end{equation*}
+and therefore we get 
+\begin{equation*}
+    g''(p)+g'(p)2p=0
+\end{equation*}
+If we let $h(p)=g'(p)$, we can see that this is a linear first order differential equation and we using an integrating factor $e^{p^2}$. This leads us to get that 
+\begin{equation*}
+    h=g'(p)=Ae^{-p^2}
+\end{equation*}
+Therefore 
+\begin{equation}
+    Q(t,x)=g(p)=A\int^p_{-\infty} e^{-q^2}dq+B
+\end{equation}
+If $x>0$ and $t\rightarrow 0^+$, then $Q(t,x)$ we have that 
+\begin{equation}
+    Q(t,x)=A\sqrt{\pi}=1 \to A=\frac{1}{\sqrt\pi}
+\end{equation}
+If we have some initial condition $\phi (x)$, we can impose some localizing boundary conditions as $x\to \pm \infty$. We can write $\phi(x)$ in the following form 
+\begin{equation*}
+    \begin{split}
+        \phi(x)&=\int^x_{-\infty}\phi'(y)dy \\&= \int^\infty_{-\infty}Q(0,x-y) \phi '(y)dy \\
+        &= - \int\phi(y)Q_x(0,x-y) (-1)dy \\
+        &=\int^\infty_{-\infty}\phi (y)Q_x(0,x-y)dy
+    \end{split}
+\end{equation*}
+where the $Q_x$ derivative implies with respect to the second entry and not $x$ explicitly inside of the argument. From above, we can wee that 
+\begin{equation*}
+    Q_x(t,x) = \frac{1}{\sqrt {4\pi kt}}e^{-x^2/4kt}
+\end{equation*}
+and therefore 
+\begin{equation*}
+    \phi (x)=\frac{1}{\sqrt{4\pi kt}}\int^\infty_{-\infty} \phi(y)e^{-\frac{(x-y)^2}{4kt}}dy
+\end{equation*}
+\section{Separation of Variables}
+Let us suppose we are given the equation 
+\begin{equation*}
+    u_t=ku_{xx} \twen x\in [0,l] \twen t\geq 0
+\end{equation*}
+with $u(0,t)=u(l,t)=0 \,\,\, \forall t$ and $u(0,x)=\phi(x)$. We start with the ansatz $u(t,x)=T(t)X(x)$. Substituting this into the heat equation, we have 
+\begin{equation*}
+    T'X=kTX'' 
+\end{equation*}
+and dividing both sides by $XT$, we get 
+\begin{equation*}
+    \frac{T'}{kT} = \frac{X''}{X} = \lambda
+\end{equation*}
+For the temporal equation, we get that 
+\begin{equation*}
+    \frac{T'}{kT}=\lambda \to T=Ae^{\lambda kt}
+\end{equation*}
+and for the spatial we have 
+\begin{equation*}
+    \frac{X''}{X}=\lambda
+\end{equation*}
+We see with here that we require $\lambda <0$ because if $\lambda >0$, we would get $\sinh$ and $\cosh$ spatial solutions which can't satisfy the boundary conditions. $\lambda \neq 0$ because we wold get a linear eigenfunction which can't generate an arbitrary function. The boundary conditions also imply that the linear function would be the trivial solution and therefore 0 can't be an eigenvalue because of that. As such, let $\lambda = -\alpha^2$. With these, we get that $X=B\cos(\alpha x)+C\sin(\alpha x)$. From the boundary values, we see that $B=0$ and $\alpha l = n\pi$ and therefore $\alpha = \frac{n\pi}{l}$. Combining everything, we get 
+\begin{equation*}
+    u(t,x)=\sum^\infty_{n=1}e^{-\alpha_n^2kt}b_n\sin(\alpha_nx)
+\end{equation*}
+and thus the initial condition 
+\begin{equation*}
+    \phi(x) = \sum^\infty_{n=1}b_n\sin (\alpha_nx)
+\end{equation*}
+This is the genesis of Fourier Analysis.
+
+\section{Fourier Series}
+We saw in the previous section that any arbitrary function $\phi(x)$ can be represented as 
+\begin{equation*}
+    \phi (x) = \sum^\infty_{n=1} A_n \sin\left(\frac{n\pi x}{l}\right)
+\end{equation*}
+We also have a key identity that 
+\begin{equation*}
+    \int^l_0 \sin \frac{n\pi x}{l} \sin \frac{m\pi x}{l} dx = \frac{l}{2}\delta_{n,m}
+\end{equation*}
+where $\delta_{n,m}$ is the Kronecker delta and is 0 when $n\neq m$ and 1 when $n=m$. If we take the integral of $\phi$ and its series representation, we get 
+\begin{equation*}
+    \begin{split}
+        \int^l_0 \phi(x)\sin \frac{m\pi x}{l}dx &= \sum^\infty_{n=1}A_n \int^l_0 \sin \frac{n\pi x}{l}\sin \frac{m\pi x}{l}dx\\ &= A_m \frac{l}{2} \\
+        \Rightarrow A_m&=\frac{2}{l}\int^l_0 \phi(x)\sin \frac{m\pi x}{l}dx
+    \end{split}
+\end{equation*}
+\subsection{Sturm-Liouville Theory}
+Let us consider $A$ to be the differential operator $-\odt{}{x}$ which acts on all smooth function on the interval $(a,b)$. To see if it's a symmetric operator, we want to see if $\langle Af, g\rangle = \langle f,Ag\rangle $. This is analogous to symmetric matrices which we see 
+\begin{equation*}
+    \begin{split}
+        \ip{Mx}{y} &= (Mx)^Ty \\
+        &=x^TM^Ty \\
+        &=\ip{x}{My}\,\,\, \forall x,y
+    \end{split}
+\end{equation*}
+We start by just computing it using the $L^2$ inner product
+\begin{equation*}
+    \begin{split}
+        \ip{Af}{g}&=\int^b_a -\odt{}{x}fgdx \\
+        &=-\od{f}{x}g\Bigg|^b_a +\int^b_a \od{f}{x}\od{g}{x}dx \\
+        &=-\od{f}{x}g\Bigg|^b_a +f\od{g}{x} -\int^b_af \odt{}{x}gdx \\
+        &=\ip{f}{Ag} + \left[-f'(b)g(b)+f(b)g'(b)+f'(a)g(a)-f(a)g'(a) \right]
+    \end{split}
+\end{equation*}
+where everything in brackets we shall denote as $B$. If we want $A$ to be a symmetric operator, we require that $B=0$. Under various boundary conditions, $B=0$ and these would be homogeneous Dirichlet, homogeneous Neumann, and periodic boundary conditions. 
+\begin{definition}
+    Boundary conditions are \emph{symmetric} if $B=0$ for all smooth functions $f(x)$ and $g(x)$ on $(a,b)$.
+\end{definition}
+This means we need 2 linear combinations of boundary conditions that vanish. 
+\begin{theorem}
+    Suppose we impose symmetric boundary conditions. If $f,g$ are eigenfunctions of some operator $A$ with different eigenvalues,  $\lambda_f \neq \lambda _g$, then $\ip{f}{g} =0$.
+\end{theorem}
+\begin{proof}
+    \begin{equation*}
+        \begin{split}
+            \ip{Af}{g} &=\ip{\lambda_ff}{g} \\
+            &= \lambda_f \ip{f}{g}\\
+        \end{split}
+    \end{equation*}
+    but also $\ip{Af}{g} =\ip{f}{Ag}=\lambda_g\ip{f}{g}$ and therefore we have the equality 
+    \begin{equation*}
+        \lambda_f \ip{f}{g} = \lambda_g\ip{f}{g}
+    \end{equation*}
+    Since $\lambda_f\neq \lambda_f$, this equality can only be true if $\ip{f}{g}$. 
+\end{proof}
+\subsection{Generalized Fourier Series}
+Suppose $\phi(x)$ can be written in the form 
+\begin{equation*}
+    \phi(x) = \sum^\infty_n A_n X_n(x)
+\end{equation*}
+where $X_n(x)$ are distinct eigenfunctions with distinct eigenvalues. Then 
+\begin{equation*}
+    \begin{split}
+        \ip{\phi}{X_m} &= \ip{ \sum^\infty_n A_nX_n(x)}{X_n} \\
+        &=A_m\ip{X_m}{X_m} \\
+        \Rightarrow A_m&= \frac{\ip{\phi}{X_m}}{\ip{X_m}{X_m}}
+    \end{split}
+\end{equation*}
+These eigenvaules must also be real. Let us take a look as to why. If $f,g:(a,b)\mapsto \mathbb{C}$, we define the inner product to be 
+\begin{equation*}
+    \ip{f}{g} =\int^b_af(x)\overline{g(x)}dx
+\end{equation*}
+We then have $\ip{Af}{g} =\ip{f}{Ag}$ if 
+\begin{equation*}
+    f'\bar g - f\bar g' \Big|^b_a=0
+\end{equation*}
+\begin{theorem}
+    If we have symmetric boundary conditions, then all eigenvalues are real.
+\end{theorem}
+\begin{proof}
+    If $Af=\lambda f$, then $\ip{Af}{f}=\lambda \ip{f}{f}$ but also $ \ip{Af}{f} =\ip{f}{Af}=\bar \lambda \ip{f}{f}$. Therefore we require that $\lambda =\bar \lambda$ which is only true when $\lambda $ is real.
+\end{proof}
+If we suppose $X_1,X_2,\ldots$ are pairwise orthogonal eigenfunctions with eigenvalues $\lambda_1,\lambda_2,\ldots$, then we can arrange them in such a way that $\lambda_1 \leq \lambda_2\leq \ldots$. Suppose we have a function $f:(a,b)\mapsto \R$, we can write its generalized Fourier Series as 
+\begin{equation*}
+    f(x) =\sum^\infty_{n=1} \frac{\ip{f}{X_n}}{\ip{X_n}{X_n}} X_n
+\end{equation*}
+Our question is, in what sense can this generalized Fourier Series equal $f(x)$? To understand this, we need to understand some notions of convergence.
+\begin{definition}[Pointwise Convergence]
+    A series $\displaystyle{\sum^\infty_{n=1}g_n(x)}$ converges \emph{pointwise} to $f$ on $(a,b)$ if for all $x\in (a,b)$, we have 
+    \begin{equation*}
+        \left| f(x)-\sum^N_{n=1}g_n(x) \right| \rightarrow 0 \text{ as } N\to \infty
+    \end{equation*}
+\end{definition}
+\begin{definition}[$L^2$ Convergence]
+    A series $\displaystyle{\sum^\infty_{n=1}g_n(x)}$ \emph{converges in $L^2$} (or \emph{mean squared convergence} if 
+    \begin{equation*}
+        \bigintsss
+        ^b_{\!\!\!\!\!\!\!\!a}\,\,\,\left|f(x)-\sum^N_{n=1}g_n(x)\right|^2dx \to 0 \text{ as } N\to \infty
+    \end{equation*}
+\end{definition}
+In a sense, pointwise convergence allows for slow convergence of some points. $L^2$ convergence allows for there to be big errors but over intervals with small measures such that the integral smooths over it.\\\\
+If we assume $X_n$ are orthonormal, then we have 
+\begin{equation*}
+    f = \sum^\infty_{n=1}\ip{f}{X_n}X_n
+\end{equation*}
+If we let the partial sums be denoted as $S_N(x)=\displaystyle{\sum^N_{n=1}\ip{f}{X_n}{X_n}}$, we then calculate their differences with $f$ as 
+\begin{equation*}
+    \begin{split}
+        ||f-S_n||^2 &= \ip{f-S_N}{f-S_N} \\
+        &= \ip{f}{f}-2\ip{f}{S_N}+\ip{S_N}{S_N} \\
+        &= ||f||^2-2\sum^N_{n=1}\ip{f}{X_n}^2 + \ip{\sum^N_{n=1}\ip{f}{X_n}X_n}{\sum^N_{k=1}\ip{f}{X_k}X_k} \\
+        &= ||f||^2-2\sum^N_{n=1} \ip{f}{X_n}^2+\sum^N_{n=1}\ip{f}{X_n}^2 \\
+        &=||f||^2-\sum^N_{n=1}\ip{f}{X_n}^2
+    \end{split}
+\end{equation*}
+There are three important consequences from this calculation:
+\begin{enumerate}
+    \item Bessel's Inequality
+    \begin{equation*}
+        \sum^\infty_{n=1} \ip{f}{X_n}^2 \leq ||f||^2
+    \end{equation*}
+    which effecitvely says this series will always converge since it is bounded above.
+    \item Parseval's Equality which states that $S_N(x)$ converges to $f(x)$ in $L^2$ if and only 
+    \begin{equation*}
+        \sum^\infty_{n=1}\ip{f}{X_n}^2 = ||f||^2
+    \end{equation*}
+    \item Riemann-Lebesgue Lemma 
+    \begin{equation*}
+        \lim_{n\to \infty} \ip{f}{X_n} \to 0
+    \end{equation*}
+\end{enumerate}
+These results are under the assumption that $f(x)$ is square integrable. We can state a few theorems.
+\begin{theorem}
+    $S_N(x)$ converges to $f(x)$ in $L^2$ for any symmetric boundary conditions.
+\end{theorem}
+\begin{theorem}[Dirichlet's Theorem]
+    For classical Fourier series, consider the function periodic function $f:\R \mapsto \R$. Suppose the partial sums are described by 
+    \begin{equation}
+        S_N(x) = \frac{A_0}{2} + \sum^N_{n=1}(A_n\cos(nx)+B_n\sin (nx))
+    \end{equation}
+    If $f$ and $f'$ are piecewise continuous functions, then $\displaystyle{\lim_{N\to \infty}S_N(x)}$ converges pointwise for all $x$ and at the discontinuities, we have that 
+    \begin{equation*}
+        \lim_{N\to\infty}S_N(x)=\frac{1}{2}(f(x_-)+f(x_+))
+    \end{equation*}
+\end{theorem}
 
 \end{document}
