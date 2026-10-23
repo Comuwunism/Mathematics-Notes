@@ -532,6 +532,17 @@ If $G$ is cyclic, let $\langle a \rangle =G$, then to uniquely define a homomorp
 \begin{theorem}[Cayley's Theorem]
     Every group is a group of permutations.
 \end{theorem}
+\begin{proof}
+    Given any set $A$, there exists a symmetric group $S_A=\{$all bijections $\sigma: A\mapsto A\}$ where the operation is composition. Given $G$, consider $S_G$ and given any $g \in G$, define $\sigma_g:G\mapsto G$ by $\sigma_g(x)=gx$. We claim that 
+    \begin{enumerate}
+        \item Each $\sigma_g$ is a permutation of the set $A$ 
+        \item $\varphi:G\mapsto S_G$ by $\varphi (g)=\sigma_g$ is a homomorphism
+        \item $\varphi$ is injective
+    \end{enumerate}
+    If we show this, then $G \cong $ a subgroup of $S_G$. Let us start by proving the first point. If $\sigma_g(x)=\sigma_g(y)$ then $gx=gy \rightarrow x=y$ and hence injective. Given anny $y=\in G$, $y=\sigma_g(g^{-1}y)$ which proves surjectivity and therefore $\sigma_g$ is bijective and a permutation. \\\\
+    To prove claim 2, we consider $\varphi (gh) =\sigma_{gh}$ where $\sigma_{gh}(x)=ghx$. If we consider $\varphi(g) \varphi(h) = \sigma_g(\sigma_h(x)) = \sigma_g(hx)=ghx$ and therefore $\varphi(gh)=\varphi(g)\varphi(h)$. Let us note that $\varphi(g)$ is a permutation and the operation between $\varphi(g) $ and $\varphi(h)$ is function composition. \\\\
+    To prove the final claim, we just need see the kernel of $\varphi$. Let us suppose $\varphi(g)=\id$ in $S_G$. Then $\sigma_g =\id $ so $\forall x, gx=x \to g=e$ and therefore $\varphi$ is injective.
+\end{proof}
 \subsubsection{Classifications of Small Groups}
 The trivial group is naturally isomorphic to $\Z_1$. We showed previously that groups of order 2 and 3 are fixed and therefore isomorphic to $\Z_2$ and $\Z_3$ respectively. For order 4, we need to split into cases. For the first case, we have that $a^2=1$.
 \begin{table}[htbp]
@@ -561,5 +572,38 @@ In case 2, without a loss of generality (since we can just rename the elements),
     \label{tab:case2}
 \end{table}
 This also forms a group. If we look at this group and consider the mapping $1\leftrightarrow 0, a\leftrightarrow 1, b\leftrightarrow 2, c\leftrightarrow 3$, we see that this is an isomorphism between $G \cong \Z_4$. If we look at the second subcase of case 1, we have the mapping $1\leftrightarrow 0, b\leftrightarrow 1, a\leftrightarrow 2, c\leftrightarrow 3$ which is once again isomorphic to $\Z_4$. The first subcase is not isomorphic to $\Z$ since every element satisfies $x^2=1$. However, it is abelian and is called the \emph{Klein 4-group.} It is not a cyclic group. It is denoted as $V$ or $K_4$.
+
+\subsection{Back to the Symmetric Group}
+Let us consider $G=S_N$ and some cycle $(a_1,a_2,\ldots, a_k)$. We can write this cycle as a product of transpositions $(a_1,a_2,\ldots, a_k)=(a_1,a_k)(a_1,a_{k-1})\ldots (a_1,a_2)$. Every cycle can be written as product of transpositions $\tau$ where $\tau^2=1$. Since every permutation is a product of cycles, we can deduce that every permutation is a product of cycles as well. 
+\begin{theorem}
+    For any $\sigma \in S_n$, every way of writing it as a product of transpositions is either always even or odd.
+\end{theorem}
+\begin{proof}
+    First let us show that the identity $1=(a_1,b_1)(a_2,b_2)\ldots (a_m,b_m)$ must be such that $m$ is even. We shall perform induction on $m$. We can see that $m\neq 1$ since $1\neq (a,b)$. $m=2$ is possible but 2 is even. So let us assume then that $m\geq 3$. By looking at the structure, we require that $a_1$ needs to show up again in a transposition to swap the $a_1$ back into place. Therefore, it must be true that some $a_i/b_i$. Without loss of generality, let us say $a_i=a_1$. Suppose that $i$ is the first index for which this happens. Then we have 
+    \begin{equation*}
+        1=(a_1,b_1)\ldots(a_{i-1},b_{i-1})(a_i,b_i)\ldots (a_m,b_m)
+    \end{equation*}
+    If all the numbers are different, we can commute these transpositions. If either $a_{i-1}$ or $b_{i-1}$ is equal to $b_i$, we use the formula $(x,y)(x,z)=(x,z)(y,z)$ and we get that $(a_{i-1},b_{i-1})(a_i,b_i)=(a_1,*)(*,*)$ where $*\neq a_1$. We can now move this transposition left without changing the number of transpositions or the number of $a_1$'s in transpositions. Repeating this, we get 
+    \begin{equation*}
+        1=(a_1,b_1)(a_1,c)\ldots (a_m,b_m)
+    \end{equation*}
+    We now have two cases. Case 1: $c=b_1$ and the two front terms cancel each other and then $1$ can be written as a product of $m-2$ transpositions and by induction, $m-2$ is even and so is $m$.\\\\ 
+    Case 2: $c\neq b_1$ and therefore we have 
+    \begin{equation*}
+        \begin{split}
+            1&=(a_1,b_1)(a_1,c)\ldots(a_m,b_m)\\
+            &=(a_1,c)(b_1,c)\ldots(a_m,b_m)
+        \end{split}
+    \end{equation*}
+    which means we have one fewer $a_1$ than with what we started with. Therefore there exists another $a_1$ somewhere and we have to keep doing this process. If we get lucky, we go back to case 1 and the number of products is even. If we're not lucky, we get 
+    \begin{equation*}
+        1=(a_1,*)\ldots(*,*)
+    \end{equation*}
+    where again, $*\neq 1$. This is impossible. Therefore the number of transpositions must be even in order to recover the identity. Finally, if $\sigma$ is any permutation, we can write it as $\sigma =\tau_a\ldots\tau _m$ or as $\sigma=\tau_1'\ldots \tau_l'$ since a permutation can be expressed with different products of transpositions. Then we have 
+    \begin{equation*}
+        \tau_m\ldots \tau_1\tau_1'\ldots \tau_l'=1
+    \end{equation*}
+    Since there are $m+l$ transpositions and by the previous case we showed that there must be an even number of transpositions, $m+l$ must be even and therefore $m,l$ must have the same parity.
+\end{proof}
 
 \end{document}
