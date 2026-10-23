@@ -465,7 +465,7 @@ Consider the equation of the form
 A natural question to ask are what are the solutions $y_1(x)$ and $y_2(x)$ around some point $x=x_0$. To do this, we need to consider three types of points:
 \begin{enumerate}
     \item Regular points like in $y''+p(x)y'+q(x)y=0$ where $p(x)$ and $q(x)$ are analytic at the point $x=x_0$
-    \item Regular singular points which have a "replaceable" singularity. This would be like 
+    \item Regular singular points which have a ``replaceable" singularity. This would be like 
     \begin{equation*}
         (x-x_0)^2R(x)y''+(x-x_0)P(x)y'+Q(x)y=0
     \end{equation*}
@@ -626,11 +626,94 @@ We now see once small second derivative is now very large and we want to balance
 \end{equation*}
 For this, we see the leading order behavior to be 
 \begin{equation*}
-    Y_0(\eta) =-A_0 \eta (1+e^{-\eta})
+    Y_0(\eta) =A_0 (1-e^{-\eta})
 \end{equation*}
 where we have the initial conditions $x=0, y(0)=0$ which implies $Y_0(0)=0$. This equation above is known as the \emph{inner} solution since it captures the behavior near the boundary layer which isn't captured by the \emph{outer} solution which is 
 \begin{equation*}
     y_0(x) = e^{1-x}
+\end{equation*}
+These solutions are \emph{non-uniform} approximations because for some values, they deviate significantly from the true solution value. What we are looking for is a \emph{uniform} approximation. We do this by ``stitching" the inner and outer solution together by matching asympotitcs. In this case we take $x\rightarrow 0$ and $\eta \to \infty$ since the boundary layer is on the left.
+\begin{equation*}
+    \lim_{x\to 0}y(x) = \lim_{\eta \to \infty} Y_0(\eta) 
+\end{equation*}
+Substituting our inner and outer solutions, we get $A_0 =e$. We then write our uniform approximation as 
+\begin{equation*}
+    y(x)=\text{inner}+\text{outer} - \text{matching term}
+\end{equation*}
+And we subtract the matching constant to prevent double counting. So our completed solution is 
+\begin{equation*}
+    \begin{split}
+        y_0(x)&=e(1-e^{-x/\varepsilon})+e^{1-x}-e\\
+        &=e^{1-x}-e^{1-x/\varepsilon}
+    \end{split}
+\end{equation*}
+Let us take a step back and consider the general case of 
+\begin{equation*}
+    \varepsilon y''+p(x)y'+q(x)y=0 \twen y(a)=A\twen y(b)=B \twen a<x<b
+\end{equation*}
+Our outer solution is of the form 
+\begin{equation*}
+    y\sim \exp\left[-\int \frac{q(x)}{p(x)}dx \right]
+\end{equation*}
+If we suppose the boundary layer is on the left, we make the coordinate change $\eta=\frac{x-a}{\varepsilon}$. Our equation then becomes 
+\begin{equation*}
+    \begin{split}
+        Y''+p(a+\varepsilon\eta)Y'+\varepsilon q(a+\varepsilon\eta)Y=0  \\
+        Y_0''+p(a)Y_0'=0 \\
+        Y_0\sim\exp[-p(a)\eta]
+    \end{split}
+\end{equation*}
+For this to generate our desired uniform solution, we need $Y_0$ to stay finite as $\eta \rightarrow \infty$ and therefore $p(a)>0$ if the boundary layer is on the left. In a similar fashion, we can see that we require $p(b) <0$ if the boundary layer is on the right. Let us take a look at the boundary value problem 
+\begin{equation*}
+    \varepsilon y''-(1+x)y'+3y =0 \twen y(0)=y(1)=1
+\end{equation*}
+We can see that $p(x)=-(1+x)$ and since $p(0)<0$, we cannot have the boundary layer be on the left and therefore it is at the right. We can either make the change of variables $\eta =\frac{1-x}{\varepsilon}$ with $\eta \to \infty $ or $\eta =\frac{x-1}{\varepsilon}$ with $\eta \rightarrow -\infty$.
+The outer solution is 
+\begin{equation*}
+    \begin{split}
+        -(1+x)y_0'+3y_0=0 \\
+        y_0=(1+x)^3
+    \end{split}
+\end{equation*}
+If we're using the $\frac{\eta-1}{\varepsilon}$ scheme, we have $x=1+\varepsilon \eta$. Therefore for the inner solution, we have 
+\begin{equation*}
+    \begin{split}
+        Y''-(2+\varepsilon\eta)Y'+3\varepsilon Y =0 \\
+        Y_0''-2Y_0'=0\\
+        Y_0=A_0(e^{2\eta}-1)+1
+    \end{split}
+\end{equation*}
+From this, we see that 
+\begin{equation*}
+    \begin{split}
+        \lim_{x\to1}(1+x)^3&=\lim_{\eta \to -\infty} A_0(e^{2\eta}-1)+1\\
+        8&=1-A_0\\
+        A_0&=-7
+    \end{split}
+\end{equation*}
+And therefore our composite solution is 
+\begin{equation*}
+    y(x)=(x+1)^3-7(e^{\frac{x-1}{\varepsilon}}-1)
+\end{equation*}
+Let us consider an example where $\alpha \neq 1$. 
+\begin{equation*}
+    \varepsilon y''+x^{1/2}y'-y=0 \twen y(0)=0 \twen y(1)=e^2 
+\end{equation*}
+We start by noting that the boundary layer is on the left. This leads the outer solution being 
+\begin{equation*}
+    y_0=e^{2\sqrt{x}}
+\end{equation*}
+We apply the change of variables $\eta = \frac{x}{\varepsilon^\alpha}$ and this gets us 
+\begin{equation*}
+    \varepsilon^{-2\alpha+1}Y''+\varepsilon^{-\alpha/2}\sqrt\eta Y'-Y=0
+\end{equation*}
+Balancing the first two terms, we get that $1-2\alpha = -\frac{\alpha}{2}\to \alpha=\frac{2}{3}$. We then get 
+\begin{equation*}
+    Y_0''+Y_0'\sqrt{\eta}=0
+\end{equation*}
+Therefore integrating twice gives us 
+\begin{equation*}
+    Y_0=C\int^\eta_0e^{-2\eta'^{3/2}/3}d\eta'
 \end{equation*}
 
 \end{document}
