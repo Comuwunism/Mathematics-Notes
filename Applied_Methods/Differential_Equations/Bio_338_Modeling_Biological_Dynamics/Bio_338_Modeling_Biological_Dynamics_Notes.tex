@@ -21,7 +21,9 @@
 \date{September 2026}
 
 \newcommand{\pd}[2]{\frac{\partial #1}{\partial #2}}
+\newcommand{\od}[2]{\frac{d #1}{d #2}}
 \newcommand{\p}{\mathbb{P}}
+\newcommand{\twen}{\hspace{20pt}}
 
 \newtheorem{definition}{Definition}[section]
 \newtheorem{theorem}[definition]{Theorem}
@@ -362,5 +364,214 @@ For simplicity, we shall take the one constant approach which is $k_H=k_P=k_G=k$
 \end{equation*}
 In general, we require either strong feedback with shorter time delay or weaker feedback with a longer time delay or some sort of combination in between. In general, there exists some separatrix that separates non-oscillatory and oscillatory behavior. Crossing this separatrix is a bifurcation. One of the most common types of these bifurcation is the \emph{Hopf} bifurcation where a fixed point loses/gains stability that leads to a loss/gain of a limit cycle.
 
+\subsection{SIR Model}
+In around 1916, Ronald Ross classified three different types of disease dynamics: 
+\begin{itemize}
+    \item Endemic: low steady prevalence (tuberculosis, leprosy) 
+    \item Epidemic: intense outbreaks before disappearing (plague, cholera) 
+    \item Outbreaks: constantly present with regular flareups (measles, dysentery)
+\end{itemize}
+The question is then why are there these different dynamics? In 1927, Karmac and Kundric publish the SIR model.  
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.5\linewidth]{SIRmodel.png}
+    \caption{Compartment diagram of the SIR model}
+    \label{fig:SIRmodel}
+\end{figure}
+The constants $\beta$ and $\gamma$ are the transmission coefficient and recovery rates respectively. The model makes a few assumptions. The first is that once you are infected, you have complete immunity. Additionally, these dynamics are happening much quicker than the birth or death rates. Finally, everyone is equally susceptible and nobody is actually dying. We can express this in terms of differential equations as 
+\begin{equation*}
+    \begin{split}
+        \dot S_{pop} &= -\beta \frac{I_{pop}}{N_{pop}} S_{pop}  \\ 
+        \dot I_{pop} &= \beta\frac{I_{pop}}{N_{pop}} S_{pop} - \gamma I_{pop} \\
+        \dot R_{pop}&= \gamma I_{pop}
+    \end{split}
+\end{equation*}
+with initial conditions $I_{pop}(0) >0, R_{pop}(0)=0, S_{pop}(0)=N_{pop}-I_{pop}(0)$
+where $N_{pop}$ is the total population and $\frac{I_{pop}}{N_{pop}}$ is effectively the probability of encountering an infected person. The units of $\gamma$ is reciprocal time and therefore $\frac{1}{\gamma}$ is effectively how long the infection lasts. $\beta$ can be represented as $\displaystyle{\frac{\text{ \# new infections}}{(\text{\# infected})(\text{time})}}$ and so therefore the ratio $R_0=\frac{\beta}{\gamma} = \displaystyle{\frac{\text{\# new infections}}{\text{\# infected}}} $ and effectively represents the number of people a single infected person will infect. This is known as the \emph{basic reproduction ratio}. We want to know when an outbreak will arise which implies that $\dot I_{pop}  >0$ and therefore 
+\begin{equation*}
+    \begin{split}
+        \beta \frac{I_{pop}}{N_{pop}} S_{pop} - \gamma I_{pop} > 0  \\
+        \beta \frac{S_{pop}}{N_{pop}} > \gamma \\
+        \frac{S_{pop}}{N_{pop}}>\frac{1}{R_0}
+    \end{split}
+\end{equation*}
+which tells us that when the proportion of susceptible people is larger than the reciprocal of the reproduction rate, an outbreak will occur. If $R_0$ is very large, and therefore very transmissible, it is very easy to have an outbreak. To do any further analysis, let us non-dimensionalize using 
+\begin{equation*}
+    S= \frac{S_{pop}}{N_{pop}} \twen I=\frac{I_{pop}}{N_{pop}} \twen R= \frac{R_{pop}}{N_{pop}}
+\end{equation*}
+This leads to 
+\begin{equation*}
+    \dot S= \od{}{t} \left( \frac{S_{pop}}{N_{pop}} \right) = \frac{1}{N_{pop}} \left( -\beta \frac{I_{pop}}{N_{pop}} S_{pop} \right)= -\beta IS
+\end{equation*}
+so therefore our full system of differential equations is 
+\begin{equation*}
+    \begin{split}
+        \dot S &= -\beta IS \\
+        \dot I &= \beta I S - \gamma I \\
+        \dot R &= \gamma I
+    \end{split}
+\end{equation*}
+We clearly see there is a fixed point at $I=0$ but we have no notions of what $S$ and $R$ are at this fixed point. If we look at the time series, we expect that 
+\begin{equation*}
+    \lim_{t \rightarrow \infty} S = 1- \lim_{t\rightarrow \infty} R
+\end{equation*}
+We can't solve things analytically but we can abuse the Leibniz notation 
+\begin{equation*}
+    \od{S}{R} = \frac{\od{S}{t}}{\od{R}{t}} = \frac{\dot S}{\dot R} = \frac{-\beta I S}{\gamma I} = -R_0 S
+\end{equation*}
+which therefore we get the solution to be 
+\begin{equation*}
+    S(R) = Ae^{-R_0 R(t)}
+\end{equation*}
+where $A = S(R=0) = S(t=0) \sim 1$. We therefore have 
+\begin{equation*}
+    \dot R = \gamma I = \gamma (1-S-R) = \gamma (1 -e^{-R_0 R} -R)
+\end{equation*}
+As we let $t\rightarrow \infty$, $R$ should go to some constant $C$ so $\dot R=0$ and therefore $R=1-e^{-R_0R}$. We also note that system is two dimensional since $S+I+R=1 \to \dot S+\dot I+\dot R =0$ and so we can always rewrite one variable in terms of the other two. We find the nullclines to be $S=0,I=0$ for the $S$-nullclines and $I=0, S=\frac{1}{R_0}$ for the $I$-nullclines.
+\subsubsection{SIRS-Waning Immunity}
+We can adjust the model by implementing waning immunity which is conveyed via some constant $\alpha$.
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.5\linewidth]{SIRSmodel.png}
+    \caption{SIR model with waning immunity}
+    \label{fig:SIRSmodel}
+\end{figure}
+In this case, our system of differential equations is 
+\begin{equation*}
+    \begin{split}
+        \dot S &= \alpha R- \beta IS \\
+        \dot I &= \beta IS -\gamma I \\
+        \dot R &= \gamma I - \alpha R
+    \end{split}
+\end{equation*}
+The system is still closed so we have $S+I+R =1$. If we rewrite $R$ in terms of $S$ and $I$, then we can rewrite the above to find the nullclines
+\begin{equation*}
+    \begin{split}
+        \beta S I &=\alpha -\alpha S -\alpha I \\
+        I(\beta S+\alpha)&=\alpha (1-S) \\
+        I &= \frac{\alpha (1_S)}{\beta S+\alpha}
+    \end{split}
+\end{equation*}
+which passes through the points $(1,0)$ and $(0,1)$ in the $SI$-plane. For the $I$ nullcline, we have $S=\frac{1}{R_0}$. Therefore if we have $\frac{1}{R_0} <1$, we have an \emph{endemic fixed point}. This is where there are non zero infections yet the state of the system isn't changing. When $\frac{1}{R_0}$ becomes larger than 1, then the endemic fixed point disappears and the system undergoes a transcritical bifurcation. What's interesting to note here is that $\alpha$ does not affect if there \emph{exists} an endemic fixed point but it does affect \emph{how many} people are infected at the fixed point.
+\subsubsection{SIR with Births and Deaths}
+Now let us consider a system in which there is a constant birth rate and death rate per capita. 
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.5\linewidth]{SIRbd.png}
+    \caption{SIR model with births and deaths}
+    \label{fig:SIRbd}
+\end{figure}
+The constant birth rate is fine under large and stable population. We can describe the dynamics with 
+\begin{equation*}
+    \begin{split}
+        \dot S &= \mu -\beta IS-\delta_S S \\
+        \dot I &= \beta IS -\gamma I -\delta_I I \\
+        \dot R &= \gamma I -\delta _RR
+    \end{split}
+\end{equation*}
+It is worth noting that this system is \emph{not} closed and therefore our state variables are fractions of the \emph{initial} population unless the births exactly balances the deaths. In other words, 
+\begin{equation*}
+    \mu = \delta_SS(0) +\delta_II(0)+\delta_R R(0)
+\end{equation*}
+For the $S$-nullcline, we get that $I=\frac{\mu -\delta_S S}{\beta S}$ and for the $I$-nullcline we have $I=0$ or $S= \frac{\gamma+\delta_I}{\beta}$. This also has a transcritical bifurcation if $\frac{\gamma +\delta_I}{\beta}$.
+\subsubsection{SIRD - Deaths Explicitly}
+If we want to be more explicit with how we track the deaths, we can create another compartment. 
+\begin{figure}
+    \centering
+    \includegraphics[width=0.5\linewidth]{SIRDmodel.png}
+    \caption{SIR model with an explicit death compartment}
+    \label{fig:SIRDmodel}
+\end{figure}
+$\rho$ is the probability of recovering instead of dying. This model is also closed. We can write the system as 
+\begin{equation*}
+    \begin{split}
+        \dot S &= -\beta I S+\alpha R \\
+        \dot I &= \beta IS -\gamma I \\
+        \dot R &= \rho \gamma I -\alpha R \\
+        \dot D &= (1-\rho)\gamma I
+    \end{split}
+\end{equation*}
+What we notice is that $\dot D $ can never be less than zero. What we can do is to attempt to minimize $\dot D$ which can be done by increasing $\rho$ (analogous to better treatments), decreasing $\gamma$ (keeping people sick instead of dying), or decreasing $I$ (by reducing the rate of infection such that $\dot I \ll0$). This implies that $\beta IS \ll \gamma I \to S \ll \frac{1}{R_0}$. We can do this by making $S$ small, $\gamma $ large (make duration shorter), or $\beta$ small (reduce transmissibility).
 
+
+\section{Stochastic Processes}
+\subsection{Probability}
+Chance is very important in many systems, especially when numbers are low. In higher populations, we can usually average over the probabilities. Let us start with some definitions. 
+\begin{definition}
+    A \emph{random variable $X$} is an observation of a random process.
+\end{definition}
+\begin{definition}
+    A \emph{random process} is a well defined process with an uncertain outcome.
+\end{definition}
+\begin{definition}
+    A \emph{sample space} $S$ is the set of all possible outcomes for that process.
+\end{definition}
+\begin{definition}
+    An event is a subset of outcomes defined in some way.
+\end{definition}
+The probability of an event $A$ is denoted $\p (A)$. It is bounded on $[0,1]$ and $\displaystyle{\sum_{A\in S} \p(A)}=1$. The probability of events that aren't $A$ is $\p ($ not $A) = \p (A^c)=1-\p(A)$. The \emph{joint probability} of two events $A$ and $B$ is $\p (A,B):= \p(A) \cap \p(B)$. The \emph{conditional probability} of $A$ given $B$ is defined as $\p(A|B) =\frac{\p(A\cap B)}{\p(B)}$. We can say that $\p(A,B) = \p(B)\p(A|B) =\p(A)\p(B|A)$ which we can then derive Bayes' Theorem.
+\begin{theorem}[Bayes' Theorem]
+    \begin{equation*}
+        \p(A|B)  = \frac{\p(A)}{\p(B)} \p(B|A)
+    \end{equation*}
+\end{theorem}
+One example is a pregnancy test where $\p (-|XY)$ is high whereas $\p(XY|-)$ is not high. For other medical tests, we can use Bayes' Theorem to state 
+\begin{equation*}
+    \p(\text{sick}|+) = \frac{\p(\text{sick})}{\p(+)}\p(+|\text{sick})
+\end{equation*}
+The first term is known as the positive predictive value (in Bayesian terms, the posterior probability of being sick) and is how likely you are really sick given a positive test. This is generally what you or the doctor care about when you take a medical test. $\p ($sick) is the prevalence (and prior belief of being sick) and the $\p(+|$sick) term is the sensitivity. In other words, if you're really sick, how likely is it to be accurate. This is the value that is put on the information pamphlet. 
+\begin{definition}
+    A \emph{probability distribution} is a function that gives the probability for all potential outcomes of a specific random process.
+\end{definition}
+In other words, there exists a functional form with parameters that dictate the probability for all outcomes (although the parameters may not be known to us). If $f(x)$ is a probability distribution, then $0\leq f(x)\leq 1 \,\,\, \forall x$. We also have that $\displaystyle{\sum_x}f(x)=1$ if $f(x)$ is discrete or $\displaystyle{\int f(x)dx}$ if $f(x)$ is continuous.
+\subsubsection{Binomial Distribution}
+The binomial distribution describes the probability of $m$ success in $n$ iid Bernoulli trials. 
+\begin{definition}
+    An \emph{iid} trial is one that is independent and identically distributed relative to other trials.
+\end{definition}
+\begin{definition}
+    A \emph{Bernoulli} trial is a random process with binary outcomes.
+\end{definition}
+We denote that a random variable $X$ is distributed as a Bernoulli distribution with probability of success $p$ as $X \sim $Ber($p)$. The binomial distribution has two parameters: $n$ being the number of trials and $p$ being the probability of success for every trial. The random variable $m \sim $Bin$(n,p)$. Therefore we must have that 
+\begin{equation*}
+    \p(m;n,p) = \p(m \text{ success})\p(n-m\text{ failures})(\text{number of permutations of }m\text{ successes and }n-m \text{ failures})
+\end{equation*}
+For $m$ successes, that is equivalent as $p^m$ and  for $n-m$ failures, that is $(1-p)^{n-m}$. The number of distinguishable permutations is given by $_nC_m = \frac{n!}{m!(n-m)!} = \binom{n}{m}$. Then $m\sim $Bin$(n,p) \to \p(m;n,p) = \frac{n!}{m!(n-m)!}p^m(1-p)^{n-m}$. If we want the cumulative probability of say at least $m$ successes, then we sum up all the probabilities for each $x\geq m$
+\begin{equation*}
+    \p(X>m) = \sum^n_{k=m}\binom{n}{k} p^k(1-p)^{n-k}
+\end{equation*}
+We now introduce the \emph{Method of Moments}. The method of moments allows to generate all the moments of a probability distribution which we can use to uniquely identify an unknown distribution.
+\begin{definition}
+    The \emph{first moment} is the expected value denoted as $E(X)$ or $\langle X\rangle$. We can write it as 
+    \begin{equation*}
+        E(X) := \sum_{x\in S}x\p(x) \text{ or }\int_S xf(x)dx 
+    \end{equation*}
+\end{definition}
+The expected value is also known as the population mean and it may not be an actual event in the sample space. 
+\begin{definition}
+    The \emph{second moment} is the variance and is defined as 
+    \begin{equation*}
+        \text{Var}(x) := E((x-E(x)^2)=E(x^2)-(E(x))^2 =\int_S (x-E(x))^2f(x)dx
+    \end{equation*}
+\end{definition}
+The $n^{th}$ moment is defined as $E((x-E(x))^n)$. The third and fourth moments are known as the skew and kurtosis respectively. The skew measures how ``lopsided" a distribution is whereas kurtosis measures how ``pointy" a distribution is. To use the method of moments to find likely parameters to a function, we want to compare a moment with the sample value. For example, 
+\begin{equation*}
+    \widehat{E(x)} = \bar x
+\end{equation*}
+where the hat denotes it being an estimate of the expected value/population and the bar on the RHS denotes the sample mean. Since the binomial distribution has two parameters, we got the second moment 
+\begin{equation*}
+    \widehat{\text{Var}(x)} = \frac{1}{n-1}\sum^n_{i=1}(x_i-\bar x)^2
+\end{equation*}
+\subsection{Poisson Process}
+Suppose we have many trials $N\to \infty$ but each trial has a low probability of success. Considering dividing the $N$ trials into $n$ subsets small enough such that they contain at most one success. Then the probability of $\p($success) $=p$. Each interval is effectively Bernoulli trial. We write $p=\frac{\lambda}{n}$. The total number of success as $m\sim $Bin$(n,p)=$Bin$(n,\frac{\lambda}{n})$. We want the limit $n\to \infty$ and so we have 
+\begin{equation*}
+    \begin{split}
+        \lim_{n\to \infty} \binom{n}{m} p^m (1-p)^{n-m} &= \lim_{n\to \infty} \frac{n(n-1)\ldots (n-m)\ldots}{m!(n-m)(n-m-1)\ldots} \left( \frac{\lambda}{n} \right)^m \left(1-\frac{\lambda}{n} \right)^{n-m} \\
+        &= \lim_{n\to \infty} \frac{n(n-1)(n-2)\ldots(n-m+1)}{m!}\left(1-\frac{\lambda}{n} \right)^{n-m} \\
+        &= \frac{\lambda^m}{m!}\lim_{n\to \infty}\left(1-\frac{\lambda}{n} \right)^n\left(1-\frac{\lambda}{n}\right)^{-m} \\
+        &= \frac{\lambda^m}{m!}\lim_{n\to \infty}\left(1-\frac{\lambda}{n}\right)^n \\
+        &= \frac{\lambda^m}{m!}e^{-\lambda}
+    \end{split}
+\end{equation*}
+Where $\frac{\lambda}{n}$ is very small so as $n\to \infty$, it goes to zero. We have now derived the Poisson Distribution which only depends on the parameter $\lambda$. One special thing about the Poisson distribution is that the mean and variance are the same.
 \end{document}
