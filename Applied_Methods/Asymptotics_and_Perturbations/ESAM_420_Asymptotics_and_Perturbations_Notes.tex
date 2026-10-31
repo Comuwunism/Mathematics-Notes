@@ -715,5 +715,34 @@ Therefore integrating twice gives us
 \begin{equation*}
     Y_0=C\int^\eta_0e^{-2\eta'^{3/2}/3}d\eta'
 \end{equation*}
+\subsection{Van Dyke Method}
+If we want to consider a two term expansion, we have to be a little more careful. Let us consider the equation 
+\begin{equation*}
+    \varepsilon y'' + y' = x \twen y(1) =1 \twen y(0)=0
+\end{equation*}
+The boundary layer is on the left and skipping some steps, we get that 
+\begin{equation*}
+    y_{\text{out}} (x) = \frac{1}{2}(1+x^2)+\varepsilon(1-x)+o (\varepsilon)
+\end{equation*}
+and the inner solution to be 
+\begin{equation*}
+    Y_{\text{inner}}(\eta) = C_0(1-e^{-\eta})+\varepsilon C_1 (1-e^{-\eta}) +o(\varepsilon)
+\end{equation*}
+with our change of variables $\eta = \frac{x}{\varepsilon}$ (since $\alpha = 1$). We rewrite one of the solutions in terms of the other variable. In this case, we rewrite the outer solution in terms of the inner variable to get 
+\begin{equation*}
+    \begin{split}
+        y_{\text{out}} (\varepsilon\eta) &= \frac{1}{2}(1+\varepsilon^2 \eta^2)+\varepsilon(1-\varepsilon \eta) \\
+        &=\frac{1}{2} +\varepsilon +\mathcal {O}(\varepsilon^2)
+    \end{split}
+\end{equation*}
+and now we let $\varepsilon \rightarrow 0$ which we then get that $C_0 = \frac{1}{2}$ and $C_1 = 1$. We now find the uniform solution as 
+\begin{equation*}
+    y(x) = y_{\text{out}}(x) + Y_{\text{in}} \left(\frac{x}{\varepsilon}\right) -\text{matching}
+\end{equation*}
+and therefore 
+\begin{equation*}
+    y(x) = \frac{1+x^2}{2} + \varepsilon(1-x)-\left( \frac{1}{2}+\varepsilon\right) e^{-x/\varepsilon}
+\end{equation*}
 
 \end{document}
+
