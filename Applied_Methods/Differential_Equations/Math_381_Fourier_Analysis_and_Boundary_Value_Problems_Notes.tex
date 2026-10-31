@@ -26,6 +26,7 @@
 \newcommand{\odt}[2]{\frac{d^2 #1}{d #2 ^2}}
 \newcommand{\twen}{\hspace{20pt}}
 \newcommand{\ip}[2]{\left\langle #1,#2\right\rangle}
+\newcommand{\lap}{\nabla ^2}
 
 \newtheorem{theorem}{Theorem}[section]
 \newtheorem{lemma}[theorem]{Lemma}
@@ -331,7 +332,7 @@ and therefore
 \begin{equation*}
     \phi (x)=\frac{1}{\sqrt{4\pi kt}}\int^\infty_{-\infty} \phi(y)e^{-\frac{(x-y)^2}{4kt}}dy
 \end{equation*}
-\section{Separation of Variables}
+\subsection{Separation of Variables}
 Let us suppose we are given the equation 
 \begin{equation*}
     u_t=ku_{xx} \twen x\in [0,l] \twen t\geq 0
@@ -499,13 +500,111 @@ These results are under the assumption that $f(x)$ is square integrable. We can 
 \end{theorem}
 \begin{theorem}[Dirichlet's Theorem]
     For classical Fourier series, consider the function periodic function $f:\R \mapsto \R$. Suppose the partial sums are described by 
-    \begin{equation}
+    \begin{equation*}
         S_N(x) = \frac{A_0}{2} + \sum^N_{n=1}(A_n\cos(nx)+B_n\sin (nx))
-    \end{equation}
+    \end{equation*}
     If $f$ and $f'$ are piecewise continuous functions, then $\displaystyle{\lim_{N\to \infty}S_N(x)}$ converges pointwise for all $x$ and at the discontinuities, we have that 
     \begin{equation*}
         \lim_{N\to\infty}S_N(x)=\frac{1}{2}(f(x_-)+f(x_+))
     \end{equation*}
 \end{theorem}
+\section{More Boundary Value Problems}
+\subsection{Non-Homogeneous Boundary Conditions}
+Consider the boundary value problem 
+\begin{equation*}
+    u_t=ku_{xx} \twen x\in [0,l] \twen t\geq 0
+\end{equation*}
+with initial and boundary conditions as 
+\begin{equation*}
+    u(0,x)=0 \twen u(t,0)=h(t) \twen u(l,t)=j(t)
+\end{equation*}
+Separation of variables is bad here since there doesn't seem to be a good way to deal with the boundary conditions. Let us consider the ansatz 
+\begin{equation*}
+    u(t,x) = \sum^\infty_{n=1}u_n(t) \sin \frac{n\pi x}{l}
+\end{equation*}
+where effectively we want to find the Fourier series of the heat distribution for every snapshot of $t$. The wrong approach is plug this directly into the heat equation and get 
+\begin{equation*}
+    \sum^\infty_{n=1} u'_n(t)\sin \frac{n\pi x}{l} = -k\sum^\infty_{n=1}\left( \frac{n\pi}{l}\right)^2u_n(t)\sin \frac{n\pi x}{l}
+\end{equation*}
+This is wrong because there are no notions of the boundary conditions and also differentiation is inherently a dangerous operation which may lead to blowing up for large $n$ or divergence from the true function for all $x$. What we want to do is to subtract a function with the same boundary conditions to get homogeneous boundary conditions. Let $\mathcal{U}(t,x) = \left(1-\frac{x}{l}\right) h(t) + \frac{x}{l}j(t)$ such that we have $v(t,x)=u(t,x)-\mathcal{U}(t,x)$. By the chain rule, we have that $u_t = v_t =\mathcal{U}_t$, $u_{xx}=v_{xx}+\mathcal{U}_{xx}$ but $\mathcal{U}_{xx} = 0$ since it is linear. As such, our new function $v(t,x)$ satisfies 
+\begin{equation*}
+    v_t = kv_{xx}-\mathcal{U}_t
+\end{equation*}
+We now want to a $v(t,x)$ of the form 
+\begin{equation*}
+    v(t,x)=\sum^\infty_{n=1}v_n(t)\sin\frac{n\pi x}{l}
+\end{equation*}
+and wo our derivatives are 
+\begin{equation*}
+    \begin{split}
+        v_t &= \sum^\infty_{n=1}v'_n(t)\sin \frac{n\pi x}{l} \\
+        v_{xx} &= -\left( \frac{n\pi}{x} \right)^2 \sum^\infty_{n=1}v_n(t)\sin \frac{n\pi x}{l}
+    \end{split}
+\end{equation*}
+We can say this because suppose it wasn't of this form but rather 
+\begin{equation*}
+    v_{xx}=\sum^\infty_{n=1}w_n(t)\sin \frac{n\pi x}{l}
+\end{equation*}
+Then we must have 
+\begin{equation*}
+    w_n(t) = \frac{2}{l}\int^l_0v_{xx}\sin \frac{n\pi x}{l}dx
+\end{equation*}
+and due to symmetric boundary conditions, we have that 
+\begin{equation*}
+    \ip{v_xx}{\sin\frac{n\pi x}{l}} = \ip{v}{-\left( \frac{n\pi}{l}\right)^2\sin \frac{n\pi x}{l}}
+\end{equation*}
+and so thus 
+\begin{equation*}
+    w_n(t) = -\left( \frac{n\pi}{l}\right)^2v_n(t)
+\end{equation*}
+If we plug this into the heat equation, along with the ansatz 
+\begin{equation*}
+    \mathcal{U}_t (t,x) = \sum ^\infty_{n=1} \mathcal{U}_n(t) \sin \frac{n\pi x}{l}
+\end{equation*}
+we get 
+\begin{equation*}
+    \begin{split}
+        \sum^\infty_{n=1}v'_n(t) \sin \frac{n\pi x}{l} &=  \sum^\infty_{n=1} \left( - \left( \frac{n\pi }{l}\right)^2 k v_n(t)- \mathcal{U}_n(t) \right) \sin \frac{n\pi x}{l} \\
+        v_n'(t) &= -\left( \frac{n\pi }{l} \right)^2kv_n(t)- \mathcal{U}_n(t) \\
+        v_n(t)&= C_ne^{(\frac{n\pi}{l})^2kt } - \int^t_0e^{-(\frac{n \pi}{l})^2k(t-s)} \mathcal{U}_n(s)ds
+    \end{split}
+\end{equation*}
+Once we figure out the $v_n$'s, we can therefore reconstruct 
+\begin{equation*}
+    v(t,x) = \sum^\infty_{n=1}v_n(t) \sin \frac{n\pi x}{l}
+\end{equation*}
+and we can find the coefficients using the initial conditions such that 
+\begin{equation*}
+    v(0,x)=-\mathcal{U}(0,x) = \sum^\infty_{n=1}C_n \sin \frac{n\pi x}{l}
+\end{equation*}
+and then reconstruct the original solution using $u(t,x)=v(t,x)+\mathcal{U}(t,x)$.
+
+\subsection{Heat and Wave Equation in $\R^2,\R^3$}
+Let us consider a region $D \subset \R^2, \R^3$ and we want to solve either the heat equation 
+\begin{equation*}
+    u_t = k -\lap u \text{ or } u_{tt}=c^2\lap u
+\end{equation*}
+Let us consider the example wave equation in $\R^2$ with homogeneous Dirichlet conditions. If we separate variables using the ansatz $u(t,x,y) = X(x)Y(y)T(t)$, then this would be very inconvenient to deal with irregularly shaped boundaries. That is why the correct ansatz is $u(t,x,y) = X(x,y)T(t)$. We now separate as normal 
+\begin{equation*}
+    \begin{split}
+        XT'' &= \lap XT \\
+        \frac{T''}{T}=&\frac{\lap X}{X} =-\lambda \\
+        \lap  X+\lambda X =& 0 \twen T''+\lambda T=0
+    \end{split}
+\end{equation*}
+We assume that $X: D \mapsto \R$ and satisfies homogeneous Dirichlet conditions. We can now apply our results from Sturm-Liouville Theory with an inner product of 
+\begin{equation*}
+    \ip{f}{g} =\int \!\!\!\int_D fg dA
+\end{equation*}
+If it is symmetric, then we expect $\ip{\lap f}{g} = \ip{f}{\lap g}$. For the temporal function, we get that 
+\begin{equation*}
+    T_n = A_n \cos \left(\sqrt{\lambda_n} t\right) +B_n \sin \left( \sqrt{\lambda_n} t\right)
+\end{equation*}
+and therefore our solution is 
+\begin{equation*}
+    u(t,x,y) = \sum^\infty_{n=1} \left( A_n \cos \left(\sqrt{\lambda_n t} \right) +B_n \sin \left(\sqrt{\lambda_n} t\right) \right) X_n
+\end{equation*}
+We can consider these equations to physically describe say a drumhead of shape $D$ which vibrates at the frequencies $\frac{\sqrt{\lambda_n}}{2\pi}$ where $\lambda_n$ are the eigenvalues of the 2D Laplacian on $D$. One famous question is whether you can ``Hear the Shape of a Drum." In other words, can you determine $D$ from the eigenvalues of the Laplacian over $D$. In general, the answer is no as one can construct two shapes of equal perimeter and area out of triangles that have the same eigenvalues. However, the question about whether there exists a counterexample smooth boundaries is still an open problem. \\\\
+Let us now look at the eigenfunctions that obey homogeneous Neumann boundary conditions on a square. The region $D$ is define as $D := [0,\pi] \times [0,\pi ]$ with $\lap u +\lambda u =0$ on $D$ and $\partial_{\vec{\bold{n} }} u=0$ on $\partial D$. 
 
 \end{document}
