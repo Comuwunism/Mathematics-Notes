@@ -393,7 +393,7 @@ We start by just computing it using the $L^2$ inner product
     \begin{split}
         \ip{Af}{g}&=\int^b_a -\odt{}{x}fgdx \\
         &=-\od{f}{x}g\Bigg|^b_a +\int^b_a \od{f}{x}\od{g}{x}dx \\
-        &=-\od{f}{x}g\Bigg|^b_a +f\od{g}{x} -\int^b_af \odt{}{x}gdx \\
+        &=-\od{f}{x}g\Bigg|^b_a +f\od{g}{x}\Bigg|^b_a -\int^b_af \odt{}{x}gdx \\
         &=\ip{f}{Ag} + \left[-f'(b)g(b)+f(b)g'(b)+f'(a)g(a)-f(a)g'(a) \right]
     \end{split}
 \end{equation*}
