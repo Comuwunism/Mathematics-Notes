@@ -694,5 +694,55 @@ For every coset, $|aH| = |H|$ since multiplying by $a$ is a bijection. Since $G=
     The number of distinct cosets of $H$ in $G$ is called the index of $H$ in $G$ and denoted as $(G:H)$. 
 \end{definition}
 When $G$ is finite, then $(G:H) = \frac{|G|}{|H|}$.
-
+\begin{proposition}
+    $aH = bH$ if and only if $b^{-1}a \in H$
+\end{proposition}
+\begin{proof}
+    ($\Rightarrow$) Suppose $aH = bH$. Since $a \in aH$, that means $a=bh$ for some $h\in H$ and then we have $b^{-1}a=h$. \\\\
+    ($\Leftarrow$) Suppose $b^{-1}a\in H$. For every $ah \in aH$, then we have that $ah = bb^{-1}ah \in bH$ since $b^{-1}a$ and $h$ are both in $h$ and therefore $aH \subseteq bH$. Because cosets must be disjoint or equivalent, $aH=bH$.
+\end{proof}
+We can effectively define an equivalence relation $\sim$ by $a\sim b$ if $b^{-1}a \in H$. The equivalence classes of this relation are the left cosets of $H$ in $G$. We can also have the equivalence condition for right cosets defined as 
+\begin{equation*}
+    H_a = \{ ha : h \in H\}
+\end{equation*}
+to be $ab^{-1} \in H$. 
+\begin{definition}
+    A subgroup $H \in G$ is called \emph{normal} if $\forall g \in G$ and $h\in H$, $ghg^{-1}\in H$ or $gHg^{-1} \subseteq H\,\,\, \forall g\in G$. We denote it
+    \begin{equation*}
+        H\lhd G
+    \end{equation*}
+\end{definition}
+Trivially, every subgroup of an Abelian group is normal. We call $ghg^{-1}$ the \emph{conjugation} of $h$ by $g$. 
+\begin{theorem}
+    For a subgroup $H$ of $G$, the following are equivalent: 
+    \begin{enumerate}
+        \item $H \lhd G$ 
+        \item $aH = Ha \,\,\, \forall a \in G$
+        \item Every left coset of $H$ in $G$ is a right coset and conversely
+        \item $\forall a,b\in G$ and $h_1, h_2 \in H$, $ah_1bh_2 \in abH$
+    \end{enumerate}
+\end{theorem}
+\begin{proof}
+    Suppose $H \lhd G$. For every $h\in H$, $ah =aha^{-1}a \in H$ and we can show the same for the other inclusion or use that cosets must be disjoint or equivalent. Two implies three is trivial. For the three implies two, suppose that $aH = Hb$ for some $b$. We have that $a\in aH$ an by our assumption, $a = h_1b$ for some $b$. Simlarly, $b\in Hb$ so $b=ah_2$ for some $h_2 \in H$. Suppose $h'b \in Hb \,\,\, \forall h' \in H$, then $h' b = h'h_1^{-1}a \in Ha$ and therefore $Hb \cap Ha \neq \emptyset$ and therefore they must be the same. For two implies four, we have that $ah_1 bh_2 = abb^{-1}h_1bh_2$ where $b^{-1}h_1b \in H$ by $bH = Hb \to bh_1=h'b \to bh_1b^{-1}=h'$ and therefore $ah_1bh_2 \in abH$. Finally, we show that four implies one since $aha^{-1} = aha^{-1}e \in aa^{-1}H$ 
+\end{proof}
+Now suppose that $N \lhd G$. Let $G/N$ (said as ``$G$ mod $N$") be the set of left cosets of $N$ in $G$ and define an operation on this bet $(aN)(bN)=abN$. We should note that whenever we are working with equivalence classes, we require that functions on them must be \emph{well defined} which means it does not depend on the choice of the representative of the equivalence class. Let us take fractions for example. If we define $f(\frac{m}{n}) =m^2$ we see that it is not well defined because $f(\frac{1}{2}) \neq f(\frac{2}{4})$. If instead we had $f(\frac{m}{n})=\frac{m^2}{n^2}$, this would be well defined.
+\begin{theorem}
+    $G/N$ is a group defined as $G/N := \{aN:a\in G\}$ with its group operation being $(aN)(bN)=abN$. This is known as the quotient group of $G$ mod $N$.
+\end{theorem}
+\begin{proof}
+    We first need to show that the operation is well defined. If $aN = cN$ and $bN =dN$, we need that $abN = cdN$. If $aN = cN$, therefore $a^{-1}c\in N$ and if $bN = dN$ then $b^{-1}d \in N$. Then we can say $c=an_1$ and $d=bn_2$ for some $n_1,n_2 \in N$ and hence $cd= an_1bn_2 \in abN$ since $N$ is normal. Since $cdN\cap abN \neq \emptyset$, $cdN =abN$. We now check group axioms. For associativity, we have $(aNbN)cN = abNcN = abcN=a(bc)N = aN(bNcN)$. For the identity, we have $N$ since $aNN = aN =N(aN)$. For inverses, we have that $(aN)^{-1} = a^{-1}N$ since $aNa^{-1}N = N$.
+\end{proof}
+We can say that $\Z/3\Z$ is generated $1+n\Z$ and is isomorphic to $Z_n$. 
+\begin{proposition}
+    For a homomorphism $\varphi:G \to H$, then $\ker \varphi \lhd G$
+\end{proposition}
+\begin{proof}
+    Take some $k\in \ker \varphi$ and $g\in G$. Then $\varphi(gkg^{-1}) = \varphi(g)\varphi(k)\varphi(g^{-1}) = \varphi(g)e_{H} \varphi(g)^{-1} = e_H$. Therefore $gkg^{-1} \in \ker \varphi$.
+\end{proof}
+\begin{theorem}[First Isomorphism Theorem]
+    If $\varphi: G\mapsto H$ is any homomorphism, then $\im \varphi \cong G/\ker \varphi$.
+\end{theorem}
+\begin{proof}
+    Define $\Phi: G/\ker \varphi \mapsto \im \varphi$ by $\Phi (a\ker \varphi) = \varphi(a)$. We first need to show that $\Phi$ is well defined, a homomorphism, and is bijective. First, if $a\ker \varphi = b \ker \varphi$ then $a^{-1}b \in \ker \varphi$. We then have that $b=ak$ for some $k \in \ker \varphi$. So $\Phi (b\ker \varphi ) = \varphi(b) = \varphi(ak) = \varphi(a)\varphi(k) = \Phi(a\ker \varphi)$. To show it is a homomorphism, we have that $\Phi((a\ker \varphi) (b\ker \varphi)) = \Phi(ab\ker \varphi) = \varphi(ab)=\varphi(a)\varphi(b) = \Phi(a\ker \varphi)\Phi(b\ker \varphi) = \Phi((a\ker \varphi)(b\ker \varphi))$. $\Phi$ is surjective because for any $y \in \im \varphi$, $y=\varphi(x)$ for some $x\in G$ so $y=\Phi(x\ker \varphi)$. $\Phi$ is injective since $\Phi (a\ker \varphi) =1 \to \varphi(a)=1\therefore a\in \ker \varphi$. Therefore $a\ker \varphi = \ker \varphi$ and $a=e$.
+\end{proof}
 \end{document}
