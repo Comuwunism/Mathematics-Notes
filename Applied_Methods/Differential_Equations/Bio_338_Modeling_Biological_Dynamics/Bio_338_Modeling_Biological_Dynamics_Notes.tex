@@ -117,7 +117,14 @@ The initial hypothesis was that there wold be rapid viral growth and then the im
 \begin{equation*}
     \dot V=Q_i-Q_oV
 \end{equation*}
-We especially care about the steady state condition which is when $\dot V=0$. This leads to $V=\frac{Q_i}{Q_o}$ which effectively showed that the volume at steady state is dependent on the \emph{ratio} and not the magnitudes of $Q_i$ and $Q_o$. We could therefore have a faucet with high mass flow rate but also a really efficient drain or a dripping faucet and inefficient drain. We can't tell by solely looking at the amount of water in the drain. This extremely basic model already gives the insight that the virus is replicating extremely quickly, but the immune system is also clearing them quickly too. If we solve for $V(t)$ generally, we get 
+We especially care about the steady state condition which is when $\dot V=0$. This leads to $V=\frac{Q_i}{Q_o}$ which effectively showed that the volume at steady state is dependent on the \emph{ratio} and not the magnitudes of $Q_i$ and $Q_o$. We could therefore have a faucet with high
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.5\linewidth]{HIVModel.png}
+    \caption{Compartment diagram of a model similar to Perelson's}
+    \label{fig:HIVModel}
+\end{figure}
+mass flow rate but also a really efficient drain or a dripping faucet and inefficient drain. We can't tell by solely looking at the amount of water in the drain. This extremely basic model already gives the insight that the virus is replicating extremely quickly, but the immune system is also clearing them quickly too. If we solve for $V(t)$ generally, we get 
 \begin{equation*}
     \begin{split}
         \dot V&=Q_i-Q_oV \\
@@ -125,13 +132,7 @@ We especially care about the steady state condition which is when $\dot V=0$. Th
         V(t)&=\frac{Q_i}{Q_o}+Ce^{-Q_ot}
     \end{split}
 \end{equation*}
-If we apply the initial condition that $V(t=0)=V_0$, then we find the constant to be $C=V_0-\frac{Q_i}{Q_o}$. If $Q_i$ and $Q_o$ are small, we should expect small exponential decay and vice versa. This effectively explains the dramatic difference the antiretrovirals made. Let us now consider a more sophisticated model. 
-\begin{figure}[htbp]
-    \centering
-    \includegraphics[width=0.5\linewidth]{HIVModel.png}
-    \caption{Compartment diagram of a model similar to Perelson's}
-    \label{fig:HIVModel}
-\end{figure}
+If we apply the initial condition that $V(t=0)=V_0$, then we find the constant to be $C=V_0-\frac{Q_i}{Q_o}$. If $Q_i$ and $Q_o$ are small, we should expect small exponential decay and vice versa. This effectively explains the dramatic difference the antiretrovirals made. Let us now consider a more sophisticated model. \\\\
 One thing to note is that the line from $N_v$ implies that the rate of infection is dependent on the number of virus particles. There is also a negligible consumption of $N_v$ in this process. Shedding also depends on $N_i$ but doesn't change $N_i$. We can then write these as a set of differential equations 
 \begin{equation*}
     \begin{split}
@@ -509,7 +510,7 @@ Chance is very important in many systems, especially when numbers are low. In hi
 \begin{definition}
     An event is a subset of outcomes defined in some way.
 \end{definition}
-The probability of an event $A$ is denoted $\p (A)$. It is bounded on $[0,1]$ and $\displaystyle{\sum_{A\in S} \p(A)}=1$. The probability of events that aren't $A$ is $\p ($ not $A) = \p (A^c)=1-\p(A)$. The \emph{joint probability} of two events $A$ and $B$ is $\p (A,B):= \p(A) \cap \p(B)$. The \emph{conditional probability} of $A$ given $B$ is defined as $\p(A|B) =\frac{\p(A\cap B)}{\p(B)}$. We can say that $\p(A,B) = \p(B)\p(A|B) =\p(A)\p(B|A)$ which we can then derive Bayes' Theorem.
+The probability of an event $A$ is denoted $\p (A)$. It is bounded on $[0,1]$ and $\displaystyle{\sum_{A\in S} \p(A)}=1$. The probability of events that aren't $A$ is $\p ($ not $A) = \p (A^c)=1-\p(A)$. The \emph{joint probability} of two events $A$ and $B$ is $\p (A,B):= \p(A) \cap \p(B)$. The \emph{conditional probability} of $A$ given $B$ is defined as $\p(A|B) =\frac{\p(A\cap B)}{\p(B)}$. If events $A$ and $B$ are independent, we denote it $A\perp B$. If $A \perp B$, then $\p(A|B) = \p(A)$. In this case then $\p (A\cap B) = \p (A)\p(B)$. If we want the probability of $A$ or $B$, then we have $\p(A\cup B) = \p (A) + \p(B) -\p(A\cap B)$ since we double counted the intersection region. We can say generally that $\p(A,B) = \p(B)\p(A|B) =\p(A)\p(B|A)$ which we can then derive Bayes' Theorem.
 \begin{theorem}[Bayes' Theorem]
     \begin{equation*}
         \p(A|B)  = \frac{\p(A)}{\p(B)} \p(B|A)
@@ -573,5 +574,179 @@ Suppose we have many trials $N\to \infty$ but each trial has a low probability o
         &= \frac{\lambda^m}{m!}e^{-\lambda}
     \end{split}
 \end{equation*}
-Where $\frac{\lambda}{n}$ is very small so as $n\to \infty$, it goes to zero. We have now derived the Poisson Distribution which only depends on the parameter $\lambda$. One special thing about the Poisson distribution is that the mean and variance are the same.
+Where $\frac{\lambda}{n}$ is very small so as $n\to \infty$, it goes to zero. We have now derived the Poisson Distribution which only depends on the parameter $\lambda$. One special thing about the Poisson distribution is that the mean and variance are the same. Let us derive this fact.
+\begin{equation*}
+    \begin{split}
+        E(m) &= \sum^\infty_{m=0} m\frac{\lambda^m}{m!} e^{-\lambda} \\
+        &= \lambda e^{-\lambda} \sum^\infty_{m=1} \frac{\lambda^{m-1}}{(m-1)!} \\
+        &= \lambda e^{-\lambda}\sum^\infty_{k=0} \frac{\lambda^k}{k!} \\
+        &= \lambda e^{-\lambda}e^{\lambda} \\
+        &= \lambda
+    \end{split}
+\end{equation*}
+For the variance, it is a little bit more involved and hence omitted but it just falls from using the definition and some manipulations
+\begin{equation*}
+    \operatorname{Var(m)} = \sum^\infty_{m=0} (m-\lambda)^2 \frac{\lambda^m}{m!} e^{-\lambda} =\lambda
+\end{equation*}
+\subsubsection{Evolution}
+In the early 20$^{th}$ century, there was a big question of how do evolutionary adaptations occur and get passed down? The first was the Lamarkian view which effectively stated that mutations arise as an active adaptation to a challenge which then get encoded and passed down. The Darwinian view was that mutations happen constantly and conditions filter out the fit ones. In 1943, Luria and Delbr\"uck conducted an experiment where they took multiple plates of E. Coli cultures and let them grow for a certain amount of generations. Then, they introduced a challenge (T1 Phage) and counted the survivors from each plate and plotted a histogram. What they noticed was a left skewed distribution an where many of the plates had small amounts of survivors. However, there were a few plates with a large amount of survivors. The key insight here is that the Lamarkian and Darwinian views represented different random processes and should thus generate different distributions. \\\\
+The Lamarkian view was that mutations happen in a generation $g$ when the challenge is introduced. Since there are many E. Coli with many trials but a low chance of success, this is a Poisson process. \\\\
+In the Darwinian model, mutations happen all the time but are filtered out by the conditions. Since a beneficial mutation can happen earlier than generation $g$ (when the challenge is introduced), a significant portion of the later bacteria (the offspring of the bacteria that had a beneficial mutation) will survive. This is a ``filtered Poisson" process and this has a higher variance. This filtered Poisson process is exactly what Luria and Delbr\"uck  saw. Evolutionary adaptation is usually Darwinian (with the exception of epigenetics). 
+\subsubsection{Waiting Times}
+Instead of counting say the number of accidents in a week, but rather let us consider the waiting time between events. For a Poisson process, we have 
+\begin{equation*}
+    \p(k) = \frac{\lambda^ke^{-\lambda}}{k!}
+\end{equation*}
+It is worth knowing the time until the next event happens is the same as the time with no events occurring. 
+\begin{equation*}
+    \begin{split}
+        \p(\text{no events in one time unit}) &=\p(k=0) = e^{-\lambda} \\
+        \p(\text{no events in }t\text{ time units})&= e^{-\lambda t} \\
+        \p(\text{wait time } \tau > t)=t\text{ time units})&= e^{-\lambda t}
+    \end{split}
+\end{equation*}
+Let us consider that 
+\begin{equation*}
+    \p(\tau > t) =1-\p(\tau \leq t) = 1-e^{-\lambda t}
+\end{equation*}
+Let us note that the cumulative density function $F(x)$ is defined as
+\begin{equation*}
+    F(x) =\p(X\leq x)= \int^x_{-\infty}f(y) dy
+\end{equation*}
+and so 
+\begin{equation*}
+    f(t) = \od{}{x}F(t) = \lambda e^{-\lambda t}
+\end{equation*}
+which is an exponential distribution. Poisson processes are memory-less distributions which means that the probability you wait another $b$ time units is not dependent on how long you've already waited. Let us show this 
+\begin{equation*}
+    \begin{split}
+        \p (\tau >a+b | \tau > a) &= \frac{\p (\tau > a+b \cap \tau >a)}{\p(\tau >a)} \\
+        &= \frac{\p(\tau > a+b)}{\p(\tau>a)}\\
+        &=\frac{\lambda e^{-\lambda (a+b)}}{\lambda e^{-\lambda a}} \\
+        &= e^{-b\lambda}\\
+        &= \p (\tau > b)
+    \end{split}
+\end{equation*}
+\subsection{More Probability}
+If $X$ is a random variable and why is $Y=aX$, then $E(Y) =aE(X)$ and Var($Y$) = $a^2$Var$(X)$. If we define $Z = \frac{X-b}{a}$ where $a,b$ are constants, then $E(Z) = \frac{E(x)-b)}{a}$ and Var$(Z) = \frac{1}{a^2}$Var$(X)$.\\\\
+Perhaps we want to know how two random variables $X$ and $Y$ vary together. Then we measure the covariance. We define the covariance to be Cov$(X,Y)=E[(X-E(X))(Y-E(Y))]$. The covariance of random variable with itself is just the variance of it. Covariance is annoying to deal (unbounded and the units are the units of $X$ times the units of $Y$) with so we'd rather compute the correlation. 
+\begin{equation*}
+    \operatorname{Cor}(X,Y) = \frac{\operatorname{Cov}(X,Y)}{\sqrt{\operatorname{Var}(X)\operatorname{Var}(Y)}}
+\end{equation*}
+which is bounded between $[-1,1]$. Correlation effectively represents how well a linear relationship works between $X$ and $Y$ but is not infallible. If $X$ and $Y$ are both random variables, then $E(aX+bY) = aE(X)+bE(Y)$ and Var$(aX+bY) = a^2 \operatorname{Var}(X)+b^2 \operatorname{Var}(Y) -2\operatorname{Cov}(X,Y) $. If $A\perp B$, then their covariance is zero. Functions of a random variable are random variables and they have distributions. $\bar x$ is a random variable and it has its own distribution as seen later. 
+\begin{equation*}
+    \begin{split}
+        E(\bar X) &= E\left( \frac{1}{n}\sum^n_{i=1} X_i\right) = \frac{1}{n}E(X_i) = E(X) \\
+        \operatorname{Var}(\bar X) &= \operatorname{Var}\left(\frac{1}{n} \sum^n_{i=1}X_i \right) = \frac{1}{n^2} \operatorname{Var}\left( \sum^n_{i=1}X_i \right) = \frac{1}{n}\operatorname{Var}(X)
+    \end{split}
+\end{equation*}
+This last term is known  as the \emph{standard error of the mean} (SEM).  
+\subsection{Normal Distribution}
+The normal distribution is a continuous distribution for a random variable $x\in \mathbb{R}$. It accepts two parameters, the mean $\mu$ and the variance $\sigma^2$. The probability density function of it is 
+\begin{equation*}
+    f(x) = \frac{1}{\sqrt{2\pi \sigma^2}} e^{-\frac{(x-\mu)^2}{2\sigma^2}}
+\end{equation*}
+We note that it is symmetric about the mean. If we want to standardize $x$, then we let $Z= \frac{x-\mu}{\sigma}$ where using the properties we noted above,  $E(Z) = 0$ and Var($Z)=1$. Therefore $Z \sim N(0,1)$. \\\\Let us introduce some notions to help prove the Central Limit Theorem. We want to start with moments. The moments listed above are known as the \emph{central} moments because it centers the moments around the expected value of the random variable. We can also use non-central moments where we don't subtract anything or subtract a value that isn't the expected value. Recall from before that if we know all of the moments of a distribution, then we know exactly its identity. To do this, it would be tedious to generate all the moments so we want to find a moment generating function. The moment generating function for a random variable $X$ is 
+\begin{equation*}
+    M_x(t) = \langle e^{tx}\rangle
+\end{equation*}
+We can expand using a Taylor Series and use the property that the expected value is a linear operator to get
+\begin{equation*}
+    \begin{split}
+        M_x(t)& =\left \langle 1+tx+\frac{t^2x^2}{2!} \ldots \right\rangle \\
+        &= 1 + t\langle x\rangle + \frac{t^2}{2!} \langle x^2 \rangle + \ldots
+    \end{split}
+\end{equation*}
+We find the $k^{th}$ moment via the $k^{th}$ derivative
+\begin{equation*}
+    \frac{d^k}{dt^k}M_x \Bigg|_{t=0} = \langle x^k\rangle
+\end{equation*}
+Therefore, if two moment generating functions are the same and are well defined and finite, then $X$ and $Y$ have identical distributions. 
+\begin{definition}
+    Let $Z_1,Z_2,\ldots,Z_n$ be a sequence of random variables. We let $Y$ be a random variable with a moment generating function $M_y(t)$. If 
+    \begin{equation*}
+        \lim_{n\rightarrow \infty} M_{Z_n} (t) = M_Y(t)
+    \end{equation*}
+    then we say $Z_n$ \emph{converges in distribution} to $Y$ and we denote it as 
+    \begin{equation*}
+        Z_n \overset{d}{\longrightarrow}Y
+    \end{equation*}
+\end{definition}
+\begin{theorem}[Central Limit Theorem]
+    Let $X_1,X_2,\ldots, X_n$ be $n$ iid observations of a random variable $X$ with $\langle X_i\rangle =\mu$ and Var$(X_i) =\sigma^2$ such that $0<\sigma^2<\infty$. Then 
+    \begin{equation*}
+        Z_n = \frac{\bar X-\mu}{\sigma/n} \overset{d}{\longrightarrow} N(0,1)
+    \end{equation*}
+\end{theorem}
+\begin{proof}
+    Let us find the moment generating function for $Z\sim N(0,1)$. We know that its probability density function is 
+    \begin{equation*}
+        f(x) = \frac{1}{\sqrt{2\pi}}e^{-x^2/2}
+    \end{equation*}
+    Since $Z\sim N(0,1)$, its moment generating function is 
+    \begin{equation*}
+        \begin{split}
+            M_Z(t) &= \langle e^{tz}\rangle \\
+            &= \int^\infty_{-\infty}e^{tz}\frac{1}{\sqrt{2\pi}}e^{-z^2/2}dz \\
+            &= \frac{1}{\sqrt{2\pi}} \int^\infty_{-\infty} e^{-\frac{1}{2}(z^2-2tz)}dz \\
+            &=\frac{1}{\sqrt{2\pi}} \int^\infty_{-\infty} e^{-\frac{1}{2}((z-t)^2-t^2)} dz \\
+            &=e^{\frac{1}{2}t^2} \frac{1}{\sqrt{2\pi}}\int^\infty_{-\infty} e^{-\frac{(z-t)^2}{2}}dz\\
+            &= e^{\frac{t^2}{2}}
+        \end{split}
+    \end{equation*}
+    We now define 
+    \begin{equation*}
+        Z_n =\frac{\bar X_n - \mu}{\sigma/\sqrt{n}} = \frac{\sum^n_{i=1}z_i}{\sqrt{n}} \twen z_i = \frac{X_i -\mu}{\sigma}
+    \end{equation*}
+    Let us find the moment generating function of the sum of $z_i$'s and see 
+    \begin{equation*}
+        \begin{split}
+            M_{\sum z_i}(t) &= \langle e^{t\sum ^n_{n=1}z_i}\rangle \\ &= \left\langle \prod^n_{n=1} e^{tz_i} \right\rangle \\
+            &= \prod^n_{n=1} \langle e^{tz_i} \rangle \\
+            &= \prod^n_{n=1} M_{z_i}(t) \\
+            &= \left[ M_{z_1}(t)\right]^n
+        \end{split}
+    \end{equation*}
+    since each trial is independent and identically distributed. We can now use this to find the moment generating function of $Z_n$
+    \begin{equation*}
+        \begin{split}
+            M_{Z_n}(t) &= M_{\frac{1}{\sqrt{n}}\sum^n_{n=1} z_i}(t) \\
+            &= M_{\sum^n_{n=1}z_i}\left(\frac{t}{\sqrt{n}}\right)\\
+            &= \left( M_{z_1} \left(\frac{t}{\sqrt{n}} \right) \right)^n
+        \end{split}
+    \end{equation*}
+    We now want to Taylor expand the moment generating function for $z_1$ and use Taylor's Theorem to get 
+    \begin{equation*}
+        \begin{split}
+            M_{z_1}(t) &= M_{z_1}(0) + M'_{z_1}(0)t+M''_{z_1}(\xi) \frac{t^2}{2} \twen 0<\xi <t \\ M_{z_1}(0)&= \langle e^{0z_1}\rangle = 1 \\
+            M'_{z_1}(0)&= \langle z_1 e^{0z_1}\rangle = \langle z_1 \rangle = 0 \text{ since } \langle z_1 \rangle = \langle x_i \rangle -\mu =0 \\
+            \Rightarrow M_{z_1}(t)&= 1+M''_{z_1}(\xi) \frac{t^2}{2}
+        \end{split}
+    \end{equation*}
+    Therefore our moment generating function for $Z_n$ is 
+    \begin{equation*}
+        M_{Z_n}(t) = \left[ 1+ M''_{z_1}(\xi) \frac{t^2}{2n}\right]^n
+    \end{equation*}
+    As we take the limit as $n\to \infty$, since $0 < \xi  <\frac{t}{\sqrt n}$, $\xi \to 0$. Therefore we evaluate the second moment which is $\langle z_1^2\rangle = \operatorname{Var}\left(\frac{X_i-\mu}{\sigma^2} \right) = 1$ and we get 
+    \begin{equation*}
+        \lim_{n\to \infty}\left[ 1+ M''_{z_1}(\xi) \frac{t^2}{2n}\right]^n = \lim_{n\to \infty} \left[ 1+\frac{t^2}{2n} \right]^n = e^{\frac{t^2}{2}}
+    \end{equation*}
+    Since 
+    \begin{equation*}
+        \lim_{n\to \infty}M_{Z_n}(t) = M_Z(t)
+    \end{equation*}
+    then 
+    \begin{equation*}
+        Z_n \overset{d}{\longrightarrow}N(0,1)
+    \end{equation*}
+\end{proof}
+We can also approximate the binomial distribution using a normal. If $Y\sim \operatorname{Bin}(n,p)$ where $X=1$ if it is a success, then $Y = \displaystyle{\sum^n_{n=1}X_i}$ where $X_i \sim \operatorname{Ber}(p)$ and $\p (X=1) =p$. Therefore the expected value of $X$ is $E(X) = \displaystyle{\sum_{X\in S}}X\p (x) = p$ and the variance is $\operatorname{Var}(X) = \displaystyle{\sum_{X\in S}}(X-E(X))^2\p (X) = (1-p)^2p + p^2(1-p) =p(1-p)$. By the central limit theorem, the average of $n$ Bernoulli trials $X_i \sim \operatorname{Ber}(p)$ is distributed as 
+\begin{equation*}
+    \bar X \sim N \left( p , \frac{p(1-p)}{n}\right)
+\end{equation*}
+and therefore
+\begin{equation*}
+    Y \sim N(np, np(1-p))
+\end{equation*}
+for large $n$ (though usually converges by $n\approx 50$) and $p$ is not close to $0$ or $1$.
 \end{document}
