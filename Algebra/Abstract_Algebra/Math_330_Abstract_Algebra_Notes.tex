@@ -621,6 +621,8 @@ The sign of a permutation, denoted by $\operatorname{sign}(\sigma)$, is
     Fix any transposition $\tau \in S_n$. Consider the map {even permutations}$\mapsto ${odd permutations} given by $\sigma \mapsto \tau \sigma$. We claim that this is a bijection. If $\tau \sigma = \tau \sigma ' \to \sigma = \sigma'$ and therefore it is one to one. For any odd permutation $\rho$, then there exists $\tau (\tau \rho)$ where $\tau \rho$ is an even permutation. Therefore it is also onto. 
 \end{proof}
 We note that the set of even permutations in $S_n$ is a subgroup. It is known as the alternating group on $n$ letters and we denote it as $A_n$. $|A_n| = \frac{n!}{2}$. For $n\geq 4$, $A_n$ is non abelian. 
+
+\section{Structure of Groups}
 \begin{definition}
     An element of a group $G$ is said to have order $n$ if $g^n=1$ and $g^k \neq k$ for every $k$ such that $0<k<n$. If $g^n\neq 1$ for any $n$, then $g$ has infinite order. The order of $g$ is also the order $\langle g \rangle$. 
 \end{definition}
@@ -661,6 +663,7 @@ We can show that $\Z \times \Z \not\cong \Z$. Suppose there exists $(a,b)$ such 
 \begin{corollary}
     Every finite abelian group is isomorphic to $\Z_{p_1^{k_1}} \times\Z_{p_2^{k_2}} \times \ldots \times Z_{p_n^{k_n}}$
 \end{corollary}
+\subsection{Cosets}
 \begin{definition}
     If $G$ is a group and $H\leq G$ then for $a\in G$, we define the \emph{left coset} of $H$ in $G$ and we represent it to be 
     \begin{equation*}
@@ -706,6 +709,7 @@ We can effectively define an equivalence relation $\sim$ by $a\sim b$ if $b^{-1}
     H_a = \{ ha : h \in H\}
 \end{equation*}
 to be $ab^{-1} \in H$. 
+\subsection{Types of Subgroups}
 \begin{definition}
     A subgroup $H \in G$ is called \emph{normal} if $\forall g \in G$ and $h\in H$, $ghg^{-1}\in H$ or $gHg^{-1} \subseteq H\,\,\, \forall g\in G$. We denote it
     \begin{equation*}
@@ -745,4 +749,61 @@ We can say that $\Z/3\Z$ is generated $1+n\Z$ and is isomorphic to $Z_n$.
 \begin{proof}
     Define $\Phi: G/\ker \varphi \mapsto \im \varphi$ by $\Phi (a\ker \varphi) = \varphi(a)$. We first need to show that $\Phi$ is well defined, a homomorphism, and is bijective. First, if $a\ker \varphi = b \ker \varphi$ then $a^{-1}b \in \ker \varphi$. We then have that $b=ak$ for some $k \in \ker \varphi$. So $\Phi (b\ker \varphi ) = \varphi(b) = \varphi(ak) = \varphi(a)\varphi(k) = \Phi(a\ker \varphi)$. To show it is a homomorphism, we have that $\Phi((a\ker \varphi) (b\ker \varphi)) = \Phi(ab\ker \varphi) = \varphi(ab)=\varphi(a)\varphi(b) = \Phi(a\ker \varphi)\Phi(b\ker \varphi) = \Phi((a\ker \varphi)(b\ker \varphi))$. $\Phi$ is surjective because for any $y \in \im \varphi$, $y=\varphi(x)$ for some $x\in G$ so $y=\Phi(x\ker \varphi)$. $\Phi$ is injective since $\Phi (a\ker \varphi) =1 \to \varphi(a)=1\therefore a\in \ker \varphi$. Therefore $a\ker \varphi = \ker \varphi$ and $a=e$.
 \end{proof}
+\begin{definition}
+    A \emph{fiber} of a map $f:X\to Y$ is an equivalence class on $X$ for having the same image in $Y$ under $f$. If $y$ is the image, then we can define this equivalence class to be $f^{-1}(y) := \{ x\in X:f(x)=y\}$.
+\end{definition}
+What the First Isomorphism Theorem is saying is to take the fibers of $\varphi$ on $H$ and collapse them all to one point that represents each equivalence class.
+\begin{proposition}
+    $\R/\Z \cong S^1$ where $S^1$ is the unit circle defined as $S^1 := \{ (x,y) \in \R^2 :x^2+y^2=1\}$.
+\end{proposition}
+\begin{proof}
+    In polar form, we can define the unit circle as $\{ e^{i\theta}: \theta \in [0,2\pi ) \}$. Let us suppose the homomorphism $\varphi : \R \to S^1$ by $\varphi(x) = e^{2\pi ix}$. This is trivially a homomorphism. The kernel is just $\Z$ and the image is all of $S^1$. Therefore by the First Isomorphism Theorem, $G/\Z \cong S^1$.
+\end{proof}
+\begin{example}
+    If we define the homomorphism $\varphi: \Z \times \Z \to \Z$ by the map $\varphi(a,b) = a+b$, then the kernel is $\ker \varphi = \{(a,-a):a\in \Z\} = \langle (1,-1)\rangle$. The image is just the integers so $\Z \times \Z / \langle(1,-1)\rangle \cong \Z$.
+\end{example}
+\begin{definition}
+    The \emph{center} of $G$ is defined to be 
+    \begin{equation*}
+        Z(G) := \{ g\in G: ag=ga \,\,\, \forall a\in G\}
+    \end{equation*}
+\end{definition}
+\begin{proposition}
+    \begin{equation*}
+        Z(D_n) = \begin{cases}
+            \{1,\rho^{\frac{n}{2}}\} &n \text{ even} \\
+            \{1\} & \text{otherwise}
+        \end{cases}
+    \end{equation*}
+\end{proposition}
+\begin{proof}
+    Assume $n =2k$. We use the fact that $\mu \rho^k=\rho^{-k}\mu \Rightarrow \mu \rho^k = \rho^k \mu$ if $n=2k$. This means that $\rho$ commutes with $\mu$. $\rho^k$ also commutes with any $\rho^l$ for $l=0,1,\ldots,n-1$ just by commutativity of addition. $\rho^k$ also commutes with $\mu \rho^l$ due to the above facts and therefore $\{1,\rho^k \} \subseteq Z(D_{2k})$. We note that $\rho^l$ for any $l\neq 0,k$ cannot commute since $\mu \rho^l = \rho^{-l}\mu = \rho^{n-l}\mu$ and $\rho (\mu \rho^l) = \mu \rho^{l-1}$ whereas $\mu\rho^l \rho = \mu\rho^{l+1}$ and so we've exhausted all other possibilities and hence the center is just $Z(D_{2k}) = \{ 1, \rho^{\frac{n}{2}}\}$. For odd, we apply the same logic above and so the center is just the trivial element $Z(D_{2k+1}) = \{1\}$.
+\end{proof}
+\begin{definition}
+    The commutator subgroup of $G$ is defined to be 
+    \begin{equation*}
+        G' := \langle \{ aba^{-1}b^{-1}:a,b\in G\} \rangle
+    \end{equation*}
+\end{definition}
+\begin{proposition}
+    \begin{enumerate}
+        \item $G' \lhd G$
+        \item $G/G'$ is Abelian 
+        \item For $N \lhd G$, $G/N$ is abelian if and only if $G' \subseteq N$.
+    \end{enumerate}
+\end{proposition}
+\begin{proof}
+    \begin{enumerate}
+        \item $g(aba^{-1}b^{-1})g = (gag^{-1})(gbg^{-1})(ga^{-1}g^{-1}) (gb^{-1}g^{-1}) =xyx^{-1}y^{-1}\in G'$ where $x=gag^{-1}$ and $y=gbg^{-1}$. This is true for every $g\in G$ and every generator $aba^{-1}b^{-1}$ of $G'$ and hence $G' \lhd G$.
+        \item Take $aG',bG' \in G/G'$, then $aG'bG' =abG' =abb^{-1}a^{-1}baG' = baG' =bG'aG'$ since $b^{-1}a^{-1}ba \in G'$ as it is a commutator. Alternatively we can say that $abG' = baG' \Leftrightarrow (ba)^{-1}ab = a^{-1}b^{-1}ab \in G'$. 
+        \item Suppose $G' \subseteq N$, then $G/N$ is abelian. $aNbN = abN = baN = bNaN$ where commutativity comes from the fact that $(ba)^{-1}ab \in G' \subseteq N$. Now we suppose that $G/N$ is abelian, then $(ba)^{-1}ab \in N \,\,\, \forall b,a \in G$ so $G' \subseteq N$ since $abN =baN \to N=(ba)^{-1}abN$.
+    \end{enumerate}
+\end{proof}
+\begin{definition}
+    A group is \emph{simple} if it has no proper nontrivial normal subgroups. 
+\end{definition}
+\begin{theorem}
+    $A_n$ is simple for all $n\geq 5$.
+\end{theorem}
+
 \end{document}
