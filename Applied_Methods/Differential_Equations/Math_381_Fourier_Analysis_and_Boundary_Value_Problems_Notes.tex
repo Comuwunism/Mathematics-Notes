@@ -393,7 +393,7 @@ We start by just computing it using the $L^2$ inner product
     \begin{split}
         \ip{Af}{g}&=\int^b_a -\odt{}{x}fgdx \\
         &=-\od{f}{x}g\Bigg|^b_a +\int^b_a \od{f}{x}\od{g}{x}dx \\
-        &=-\od{f}{x}g\Bigg|^b_a +f\od{g}{x}\Bigg|^b_a -\int^b_af \odt{}{x}gdx \\
+        &=-\od{f}{x}g\Bigg|^b_a +f\od{g}{x} -\int^b_af \odt{}{x}gdx \\
         &=\ip{f}{Ag} + \left[-f'(b)g(b)+f(b)g'(b)+f'(a)g(a)-f(a)g'(a) \right]
     \end{split}
 \end{equation*}
@@ -482,7 +482,7 @@ There are three important consequences from this calculation:
 \begin{enumerate}
     \item Bessel's Inequality
     \begin{equation*}
-        \sum^\infty_{n=1} \ip{f}{X_n}^2 \leq ||f||^2
+        \sum^N_{n=1} \ip{f}{X_n}^2 \leq ||f||^2
     \end{equation*}
     which effecitvely says this series will always converge since it is bounded above.
     \item Parseval's Equality which states that $S_N(x)$ converges to $f(x)$ in $L^2$ if and only 
@@ -604,7 +604,154 @@ and therefore our solution is
 \begin{equation*}
     u(t,x,y) = \sum^\infty_{n=1} \left( A_n \cos \left(\sqrt{\lambda_n t} \right) +B_n \sin \left(\sqrt{\lambda_n} t\right) \right) X_n
 \end{equation*}
-We can consider these equations to physically describe say a drumhead of shape $D$ which vibrates at the frequencies $\frac{\sqrt{\lambda_n}}{2\pi}$ where $\lambda_n$ are the eigenvalues of the 2D Laplacian on $D$. One famous question is whether you can ``Hear the Shape of a Drum." In other words, can you determine $D$ from the eigenvalues of the Laplacian over $D$. In general, the answer is no as one can construct two shapes of equal perimeter and area out of triangles that have the same eigenvalues. However, the question about whether there exists a counterexample smooth boundaries is still an open problem. \\\\
-Let us now look at the eigenfunctions that obey homogeneous Neumann boundary conditions on a square. The region $D$ is define as $D := [0,\pi] \times [0,\pi ]$ with $\lap u +\lambda u =0$ on $D$ and $\partial_{\vec{\bold{n} }} u=0$ on $\partial D$. 
+We can consider these equations to physically describe say a drumhead of shape $D$ which vibrates at the frequencies $\frac{\sqrt{\lambda_n}}{2\pi}$ where $\lambda_n$ are the eigenvalues of the 2D Laplacian on $D$. One famous question is whether you can ``Hear the Shape of a Drum." In other words, can you determine $D$ from the eigenvalues of the Laplacian over $D$. In general, the answer is no as one can construct two shapes of equal perimeter and area out of triangles that have the same eigenvalues. However, the question about whether there exists a counterexample smooth boundaries is still an open problem. 
+\subsection{Laplace's Equation}
+Laplace's Equation is given by 
+\begin{equation*}
+    \lap u = 0
+\end{equation*}
+where $\lap$ denotes the Laplacian. Functions that satisfy Laplace's equation are deemed \emph{harmonic}. The inhomogeneous Laplace's equation, $-\lap u=f$, is known as the Poisson equation and is one of the most important equations in physics. One interesting application is with Brownian motion. Consider a particle moving in a container $D$ randomly until it hits a side. Let us divide the boundary $\partial D$ into two sections, $C_1$ and $C_2$. Let $u(x,y,z)$ be the probability density function that if a particles starts at $(x,y,z)$, it will hit $C_1$ first. Then we can say that $u$ is harmonic in $D$ and has the boundary conditions $u=1$ on $C_1$ and $u=0$ on $C_2$. We can also state a maximum principle for Laplace's equation. Suppose $\lap u=0$ on a connected domain $D$ such that $u$ extends continuously to $\partial D$. Then the maximum and minimum of $u$ must occur on the boundary. \\\\
+Let us consider $\lap u=0$ on the rectangle $[0,a]\times [0,b]$ in $\R^2$ with initial and boundary conditions $u(x,b)=0,u_y(x,0)=0, u(0,y)=0,u_x(a,y)=j(y)$. We want a separated solution $u(x,y)=X(x)Y(y)$ and therefore 
+\begin{equation*}
+    \frac{X''}{X} = - \frac{Y''}{Y} =\lambda
+\end{equation*}
+and so our associated eigenvalue problems are $X'' = \lambda X $ and $Y''=-\lambda Y$. Our boundary values implie that $x(0)=y(b)=y'(0)=0$ while the $u_x(a,y)=j(y)$ boundary condition is useless. Solving the $Y$ equation, we have 
+\begin{equation*}
+    Y_{2n+1}(y) = \cos \left(\frac{(2n+1)\pi y}{2b}\right)
+\end{equation*}
+where our eigenvalues are $\lambda_n = \left(\frac{n\pi}{2b} \right)^2$. Therefore the $X$ eigenfunctions are 
+\begin{equation*}
+    X_n(x) = A_n \cosh \left(\sqrt{\lambda_n}x\right)+B_n\sinh \left( \sqrt{\lambda_n}x\right)
+\end{equation*}
+The $X_n(0)$ boundary conditions imply that $A=0$. Therefore our combined eigenfunctions are 
+\begin{equation*}
+    u_{2n+1}(x,y)= \sinh \left( \frac{(2n+1)\pi x}{2b}\right) \cos \left( \frac{(2n+1)\pi y}{2b} \right)
+\end{equation*}
+and so the fully summed up solution is 
+\begin{equation*}
+    u(x,y) = \sum^\infty_{n=0} B_n\sinh \left( \frac{(2n+1)\pi x}{2b} \right) \cos\left( \frac{(2n+1)\pi y}{2b} \right)
+\end{equation*}
+We now use the final condition such that 
+\begin{equation*}
+    \begin{split}
+        u_x(x,y) &= \sum^\infty_{n=0} B_n \left(\frac{(2n+1)\pi}{2b} \right) \cosh \left( \frac{(2n+1)\pi x}{2b} \right) \cos\left( \frac{(2n+1)\pi y}{2b} \right) \\
+        j(y)=u_x(a,y)&=\sum^\infty_{n=0} B_n \left(\frac{(2n+1)\pi}{2b} \right) \cosh \left( \frac{(2n+1)\pi a}{2b} \right) \cos\left( \frac{(2n+1)\pi y}{2b} \right) 
+    \end{split}
+\end{equation*}
+We can calculate the combined Fourier coefficient as 
+\begin{equation*}
+    \tilde{B_n} = B_n\left( \frac{n\pi}{2b} \right) \cosh \left( \frac{(2n+1)\pi a}{2b} \right) = \frac{\left\langle j(y),\cos \left( \frac{n\pi y}{2b} \right) \right\rangle }{\left\langle cos \left( \frac{n\pi y}{2b} \right),\cos \left( \frac{n\pi y}{2b} \right) \right\rangle}
+\end{equation*}
+\subsubsection{Poisson Integral Formula}
+Let us solve Laplace's equation $\lap u=0$ on the disk of radius $a$ $D_a \subset \R^2$. $u$ on $\partial D_a = h(\theta)$ for $\theta \in [0,2\pi]$. We also apply a $2\pi$-periodic condition to the $\theta$ part. In polar coordinates, $D_a$ becomes a rectangle. We split $u(r,\theta) = R(r) \Theta (\theta)$. The Laplacian in polar coordinates is $\lap u=u_{rr} + \frac{1}{r}u_r+\frac{1}{r^2} u_{\theta \theta}$ so our equation becomes 
+\begin{equation*}
+    \begin{split}
+        R'' \Theta + \frac{1}{r}R'\Theta + \frac{1}{r^2} R\Theta '' = 0\\ 
+        \frac{r^2R''}{R} + \frac{rR'}{R} +\frac{\Theta ''}{\theta} =0 \\
+        \frac{r^2R''+R'}{R} = -\frac{\Theta ''}{\Theta}=\lambda
+    \end{split}
+\end{equation*}
+We then get that $\Theta'' = -\lambda \theta$ with periodic boundary conditions and so our eigenfunctions are 
+\begin{equation*}
+    \Theta _n(\theta) =A_n\cos (n\theta) +B\sin (n\theta)
+\end{equation*}
+The $R$ equation is $r^2 R''+rR' -\lambda R=0$ which is an Euler Equation and we have the ansatz that $R(r) = r^\alpha$. We then get that 
+\begin{equation*}
+    \begin{split}
+        \alpha(\alpha-1)+\alpha - n^2 =0 \\
+        \alpha ^2 -n^2=0 \\
+        \alpha = \pm n
+    \end{split} 
+\end{equation*}
+For $|n|>0$, then $R(r) = Cr^n+Dr^{-n}$. If $n=0$, then $R(r) = C+D\ln r$. We need to be careful because at $r=0$, the function loses injectivity and so we impose the condition that $R(r)$ is bounded as $r\to 0$. Because of this, $D =0$ for both cases. For $n=0$, then $u(r,\theta) =A_0$ and for $n>0$, we have $u(r, \theta) = r^n(C\cos (n\theta)+D\sin(n\theta))$ and so our general solution is 
+\begin{equation*}
+    u(r,\theta) = \frac{1}{2}A_0 +\sum^\infty_{n=1}r^n(A_n\cos(n\theta) + B_n \sin (n\theta))
+\end{equation*}
+We now impose the boundary condition at $r=a$.
+\begin{equation*}
+    h(\theta) = \frac{1}{2}A_0 + \sum^\infty_{n=1} a^n ( A_n\cos (n\theta) +B_n \sin (n\theta))
+\end{equation*}
+Through some clever identities, we can write this as 
+\begin{equation*}
+    u(r,\theta) = \frac{a^2-r^2}{2\pi } \int^{2\pi}_0 \frac{h(\phi)}{a^2 +r^2 -2ar\cos ( \theta - \phi)}d\phi
+\end{equation*}
+This is known as the \emph{Poisson Integral Formula}.
+\subsubsection{Wave Equation on a Disk}
+Consider the wave equation 
+\begin{equation*}
+    u_{tt} = c^2 \lap u \twen D_a \subset \R^2
+\end{equation*}
+with the boundary conditions $u=0$ on $\partial D_a$ where $D_a$ is the disk in $\R^2$ of radius $a$. Assume there exist initial conditions for $u$ and $u_t$. What we are effectively trying to do is solve the eigenvalue problem 
+\begin{equation*}
+    \lap u + \lambda u =0
+\end{equation*}
+with the previous boundary conditions. We can try solving separating this in terms of polar coordinates $u(r,\theta) = R(r) \Theta(\theta)$ such that we get 
+\begin{equation*}
+    \frac{r^2R'' +rR + \lambda r^2R}{R} + \frac{\Theta ''}{\Theta} = 0
+\end{equation*}
+We can imagine that the $\Theta$ term is equivalent to some constant $-\gamma$ which forces the $R$ term to evaluate to $\gamma$. We therefore have the eigenvalue problem $\Theta''+\gamma \Theta =0$ which we know has the general form $\Theta ( \theta ) = A\cos(n\theta) +B\sin (n\theta)$ and hence $\gamma = n^2$. The $R$ equation is then 
+\begin{equation*}
+    R'' + \frac{1}{r}R'+ \left( \lambda - \frac{\gamma}{r^2}\right)R = 0
+\end{equation*}
+We require (as before) that $R(r)$ be bounded as $r\to 0$ and $R(a)=0$. If we make the change of variables $\rho = \sqrt{\lambda}r$ and this changes it to 
+\begin{equation*}
+    R_{\rho \rho} + \frac{1}{\rho}R_\rho + \left( 1 - \frac{n^2}{\rho^2} \right) R = 0
+\end{equation*}
+which is known as Bessel's Equation of order $n$. The solutions to this are found via the Frobenius Method and yield Bessel Functions of the First and Second Kind 
+\begin{equation*}
+    \begin{split}
+        J_n(\rho) &= \sum^\infty_{m=0} \frac{(-1)^m}{m! \Gamma (m+n+1)} \left( \frac{\rho}{2} \right)^{2m+n} \text{ Bessel Function of the First Kind} 
+    \end{split}
+\end{equation*}
+For non-integer $n$, the Bessel Function of the second kind is of the form 
+\begin{equation*}
+    Y_n(\rho)=\frac{J_n(\rho)\cos(n\pi)-J_{-n}(\rho)}{\sin(n\pi)}
+\end{equation*}
+but for integer values of $n$, it is 
+\begin{equation*}
+    \begin{split}
+        Y_n(\rho) =& - \frac{(\rho/2)^{-n}}{\pi} \sum^{n-1}_{k=0} \frac{(n-k-1)!}{k!} \left( \frac{\rho^2}{4} \right)^k + \frac{2}{\pi} J_n(\rho) \ln \frac{\rho}{2} \\&- \frac{(\rho/2)^n}{\pi} \sum^\infty_{k=0} (\psi (k+1)+\psi (n+k+1)) \frac{(-z^2/4)^k}{k!(n+k)!}
+    \end{split}
+\end{equation*}
+where $\psi(x)$ is the digamma defined as
+\begin{equation*}
+    \psi (z) = \od{}{z}\ln \Gamma (z) = \frac{\Gamma '(z)}{\Gamma(z)}
+\end{equation*}
+\section{Fourier Transforms}
+\subseciton{Distributions}
+\begin{definition}
+    A \emph{test function} on $\R$ is a smooth function $\phi: \R \to \R$which vanishes outside a finite interval.
+\end{definition}
+Let $\mathcal{D}$ denote the space of all test functions. 
+\begin{definition}
+    A distribution on $\R$ is a continuos linear map $f:\mathcal{D} \to \R$ via some combination $\phi \mapsto (f,\phi)$.
+\end{definition}
+$f:\mathcal{D}\to \R$ is continuous if the following holds: $\phi_k, \phi \in \mathcal{D}$ all vanish outside of the same interval and all derivatives $\phi_k^{(i)} \to \phi^{(i)}$ converge uniformly. Then $(f,\phi_k) \to (f,\phi)$ converges uniformly as $k\to \infty$. What's important to note is that distributions are \emph{generalized functions} and cannot be defined in the traditional sense. The rigorous way to denote the use of a distribution is pairing the distribution with a test function which then outputs a number. In other words, it is \emph{functional} which maps from a function space (in this case, the space of all test functions on our interval of choice) to a field (in this case, $\R$). Let us look at some examples 
+\begin{example}
+    \begin{enumerate}
+        \item The Dirac Delta distribution $\delta(x)$ is defined by $(\delta, \phi) = \phi (0) \,\,\, \forall \phi \in \mathcal{D}$.
+        \item $f:\phi \mapsto \phi''(0)$
+        \item $\displaystyle{f:\phi \mapsto \int^\infty_{-\infty}f(x)\phi(x)dx}$ for a fixed $f$ that has a finite integral.
+    \end{enumerate}
+\end{example}
+This last example is sometimes how we write $(f,\phi)$ (as physicists prefer this because they like to abuse notation) even though $f$ is not a well defined function. If we use this last interpretation and treat $f$ as if it were some smooth function, we can find the derivative of a distribution $f$. We have to define how $(f',\phi)$ maps an arbitrary test function $\phi$ to determine what $f'$ is. We do this via the integral interpretation 
+\begin{equation*}
+    (f,\phi) = \int^\infty_{-\infty}f'(x)\phi(x)dx = -\int^\infty_{-\infty} f(x) \phi'(x)dx = -(f,\phi)
+\end{equation*}
+Let us use this to determine the derivative of the Heaviside step function.
+\begin{example}
+    $H(x)$ is defined by 
+    \begin{equation*}
+        H(x) = \begin{cases}
+            0 & x \leq 0 \\ 1 & x>0
+        \end{cases}
+    \end{equation*}
+    Let us use the definition of the derivative of a distribution 
+    \begin{equation*}
+        (H',\phi) = -(H,\phi') = -\int^\infty_{-\infty} H(x)\phi'(x)dx = -\int^\infty_0 \phi'(x)dx = \phi(0)
+    \end{equation*}
+    which is the definition of the Dirac Delta. We can also find the derivative of the Delta function. $(\delta ',\phi) = -(\delta, \phi') =-\phi'(0)$ and so we can show by induction that the $n^{th}$ derivative of the Delta function is defined by $(\delta^{(n)},\phi) = (-1)^n\phi^{(n)}(0)$.
+\end{example}
+If $f_n$ is a sequence of distributions then $f_n$ weakly converges to a distribution $f$ is $(f_n,\phi)\to (f,\phi)$ as $n\to \infty\,\,\,\forall \phi \in \mathcal{D}$.
 
 \end{document}
