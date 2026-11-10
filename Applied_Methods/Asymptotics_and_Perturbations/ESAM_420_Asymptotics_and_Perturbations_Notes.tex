@@ -744,5 +744,51 @@ and therefore
     y(x) = \frac{1+x^2}{2} + \varepsilon(1-x)-\left( \frac{1}{2}+\varepsilon\right) e^{-x/\varepsilon}
 \end{equation*}
 
+\subsection{Exotic Boundary Layers}
+If the coefficient of the first derivative term changes sign over the interval, then there exists a turning point at some value $x_0$. We let this coefficient $p(x)$ be equal to some $\alpha (x-x_0)$ where $\alpha$ is some constant. If we just take $x_0=0$ on some interval $[-1,1]$, then $p\sim \alpha x$. If $\alpha >0$ and $x<0$, then $p(x)<0$ implies there's a boundary layer on the right. If $x>0$, then $p(x)>0$ which implies there's a boundary layer on the left and so hence there is an internal boundary layer at $x_0$. When $\alpha <0$, then we have that $x<0\to p(x)>0$ which implies a boundary layer on the left. For $x>0$, $p(x)<0$ which implies a boundary on the right. Hence, there are two boundary layers. Dealing with these boundary layers is same as the procedure above but we have to match the two outer solutions with the inner for an internal and the one outer with both inner solutions for double boundary layers. \\\\There is another case where one might have nested boundary layers. This occurs when there exist multiple dominant balances. Another sign of a nested boundary layer is when you cannot match the inner and outer solutions. One has to be careful that the inner boundary layer is the thinnest one. As such, we must create some intermediate solution with say some sort of new variable $\xi$ and function $Z(\xi)$. Then the matching should be that $\displaystyle{\lim_{\eta \to \infty}Y = \lim_{\xi \to 0}Z}$ and $\displaystyle{\lim_{\xi \to \infty} Z = \lim_{x\to 0} y}$ as an example. 
+\section{Secular Terms}
+If we consider the Duffing equation given by 
+\begin{equation*}
+    \ddot{x} +x+\varepsilon x^3 =0 \twen x(0)=1 \twen x'(0)=0
+\end{equation*}
+we cannot just do a regular perturbation since the leading order approximation yields 
+\begin{equation*}
+    \mathcal{O}(1) : \ddot x_0 + x_0 = 0\to x_0=\cos t
+\end{equation*}
+and the first order correction gives rise to a secular term 
+\begin{equation*}
+    \begin{split}
+        \mathcal{O}(\varepsilon) : \ddot x_1 + x_1 = -x_0^3 \to x_1 = \frac{1}{32}\left(\cos 3t -\cos t-12 t \sin t \right) \\
+        \Rightarrow x(t) = \cos t + \frac{\varepsilon}{32}\left(\cos 3t -\cos t-12 t \sin t \right)
+    \end{split}
+\end{equation*}
+This approximation starts breaking down around when $t\approx \frac{1}{\varepsilon}$ since that is when the secular term becomes non-negligible. To resolve this, we want to expand the period in orders of $\varepsilon$. 
+\subsection{Method of Strained Coordinates}
+We start with the ansatz that $\omega = \omega_0 + \varepsilon \omega_1 +\ldots$ and $\tau =\omega t$. Then we have $x(t) \to X(\tau)$. Therefore $\od{X}{t} = \od{X}{\tau}\od{\tau}{t} = \omega \od{X}{\tau}$. The Duffing Equation now becomes 
+\begin{equation*}
+    \omega^2 \odt{X}{\tau} + X +\varepsilon X^3 =0 \twen X(0)=1 \twen \omega \od{X}{\tau} (0)=0
+\end{equation*}
+The leading order equation is the same as before and $x_0=\cos t$. The first correction, after expanding $\omega$ and $X$, we get that 
+\begin{equation*}
+    \ddot X_1 + 2\omega \ddot X_0 + X_1 +X_0^3 =0
+\end{equation*}
+and hence we are left with 
+\begin{equation*}
+    \ddot X_1 + X_1 = -X_0^3-2\omega_1 \ddot X_0 
+\end{equation*}
+Expanding the right hand side and using the identity $\cos^3 t= \frac{1}{4}\cos 3t+ \frac{3}{4}\cos t$, we get 
+\begin{equation*}
+    -X_0^3-2\omega_1 \ddot X_0  = \left( 2\omega_1 -\frac{3}{4}\right) \cos \tau -\frac{1}{4}\cos 3\tau
+\end{equation*}
+and we want $2\omega_1 -\frac{3}{4}=0$ as the natural frequency of the oscillator on the left hand side is $\omega = 1$. Therefore we want to eliminate any term with the same frequency as the natural frequency of the oscillator to prevent resonance. Therefore $\omega = \frac{3}{8}$. And therefore the first correction is given by 
+\begin{equation*}
+    x_1(\tau) = \frac{1}{32}(\cos 3\tau - \cos tau)
+\end{equation*}
+and the leading order plus first oder approximation is 
+\begin{equation*}
+    x(t) = \cos\left( \left( 1+ \frac{3}{8}\varepsilon\right)t \right) + \frac{\varepsilon}{32} \left[ \cos
+\left( 3\left( 1+ \frac{3}{8}\varepsilon\right)t \right)+\cos \left( \left( 1+ \frac{3}{8}\varepsilon\right)t \right) \right]
+\end{equation*}
+
 \end{document}
 
