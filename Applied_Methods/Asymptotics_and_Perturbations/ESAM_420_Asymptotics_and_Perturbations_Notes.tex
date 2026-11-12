@@ -746,7 +746,7 @@ and therefore
 
 \subsection{Exotic Boundary Layers}
 If the coefficient of the first derivative term changes sign over the interval, then there exists a turning point at some value $x_0$. We let this coefficient $p(x)$ be equal to some $\alpha (x-x_0)$ where $\alpha$ is some constant. If we just take $x_0=0$ on some interval $[-1,1]$, then $p\sim \alpha x$. If $\alpha >0$ and $x<0$, then $p(x)<0$ implies there's a boundary layer on the right. If $x>0$, then $p(x)>0$ which implies there's a boundary layer on the left and so hence there is an internal boundary layer at $x_0$. When $\alpha <0$, then we have that $x<0\to p(x)>0$ which implies a boundary layer on the left. For $x>0$, $p(x)<0$ which implies a boundary on the right. Hence, there are two boundary layers. Dealing with these boundary layers is same as the procedure above but we have to match the two outer solutions with the inner for an internal and the one outer with both inner solutions for double boundary layers. \\\\There is another case where one might have nested boundary layers. This occurs when there exist multiple dominant balances. Another sign of a nested boundary layer is when you cannot match the inner and outer solutions. One has to be careful that the inner boundary layer is the thinnest one. As such, we must create some intermediate solution with say some sort of new variable $\xi$ and function $Z(\xi)$. Then the matching should be that $\displaystyle{\lim_{\eta \to \infty}Y = \lim_{\xi \to 0}Z}$ and $\displaystyle{\lim_{\xi \to \infty} Z = \lim_{x\to 0} y}$ as an example. 
-\section{Secular Terms}
+\section{Multiple Scales}
 If we consider the Duffing equation given by 
 \begin{equation*}
     \ddot{x} +x+\varepsilon x^3 =0 \twen x(0)=1 \twen x'(0)=0
@@ -784,11 +784,91 @@ and we want $2\omega_1 -\frac{3}{4}=0$ as the natural frequency of the oscillato
 \begin{equation*}
     x_1(\tau) = \frac{1}{32}(\cos 3\tau - \cos tau)
 \end{equation*}
-and the leading order plus first oder approximation is 
+and the leading order plus first order approximation is 
 \begin{equation*}
     x(t) = \cos\left( \left( 1+ \frac{3}{8}\varepsilon\right)t \right) + \frac{\varepsilon}{32} \left[ \cos
 \left( 3\left( 1+ \frac{3}{8}\varepsilon\right)t \right)+\cos \left( \left( 1+ \frac{3}{8}\varepsilon\right)t \right) \right]
 \end{equation*}
-
+The reason why our approximations breakdown, let us expand our $\cos t $ into $\frac{1}{2}(e^{it}-e^{-it})$ and we can do this for all orders of $\varepsilon$ to get 
+\begin{equation*}
+    x(t) =\sum^\infty_{n=0} \varepsilon^nA_nt^ne^{it} + \sum^\infty_{n=0} \varepsilon^n A^*_n t^n e^{-it}
+\end{equation*}
+where for the Duffing Equation, $A_n =\frac{1}{2}\frac{1}{n!}\left( \frac{3i}{8} \right)^n$ which then allows us to do the following 
+\begin{equation*}
+    \begin{split}
+        x(t) &= \frac{1}{2}e^{it} \sum^\infty_{n=0} \frac{1}{n!}\left(\frac{3i}{8}\varepsilon t\right)^n  +\frac{1}{2}e^{-it} \sum^\infty_{n=0} \frac{1}{n!}\left(-\frac{3i}{8}\varepsilon t\right)^n   \\
+        &= \frac{1}{2} \left( e^{i( 1 + \frac{3}{8})t} \right) +\frac{1}{2} \left( e^{-i( 1 + \frac{3}{8})t} \right)  \\
+        &= \cos \left( \left( 1+ \frac{3}{8}\varepsilon \right)t\right)
+    \end{split}
+\end{equation*}
+As such, the secularity comes directly from the finite truncation of the infinite series and is not a statement about the nature of the equation. 
+\subsection{Two Time Scales}
+Let us look at an equation with linear damping.
+\begin{equation*}
+    y'' + \varepsilon y' + y =0 \twen y(0)=0 \twen y'(0)=1
+\end{equation*}
+The unperturbed equation is 
+\begin{equation*}
+    y_0''+y_0 =0\to y_0 = \sin t
+\end{equation*}
+The total energy of the system is conserved and is described by 
+\begin{equation*}
+    E = \frac{1}{2}\dot y_0^2 + \frac{1}{2}y_0^2 = \frac{1}{2}
+\end{equation*}
+The next order of $\varepsilon$ yields that 
+\begin{equation*}
+    \begin{split}
+        y'' + \varepsilon y'+y=0 \\
+        y'y''+\varepsilon(y')^2+y'y=0 \\
+        \od{}{t} \left( \frac{1}{2} (y')^2+\frac{1}{2}y^2\right) + \varepsilon(y')^2=0 \\
+        E(t) = E(0) - \int^t_0 \varepsilon(y')^2dt
+    \end{split}
+\end{equation*}
+We can see that the energy is always dissipating out of the system. To tackle this problem, we have to use two time scales where one corresponds to the period and the other corresponds to the decay of the amplitude. Therefore we introduce the variables $T=t$ and $\tau =\varepsilon t$. Therefore 
+\begin{equation*}
+    \begin{split}
+        \od{y}{t} &= \pd{y}{T} + \varepsilon \pd{y}{\tau} \\
+        \odt{y}{t} &= \pdt{y}{T} + 2\varepsilon \pd{^2y}{T\partial\tau} + \varepsilon^2 \pdt{y}{\tau}
+    \end{split}
+\end{equation*}
+We can now perturb the solution to get 
+\begin{equation*}
+    \begin{split}
+        \mathcal{O}(1): & \twen\pdt{y_0}{T} + y_0 =0 \\
+        \mathcal{O}(\varepsilon):&\twen \pdt{y_1}{T} +y _1 = -\left( 2 \pd{^2 y_0}{T\partial \tau} + \pd{y_0}{T} \right)
+    \end{split}
+\end{equation*}
+The boundary conditions for the $y_0$ are $y_0(0) = y_0(0,0)+\varepsilon y_1(0,0)$ and $y'(0) = 1 = \pd{y}{T} + \varepsilon \left( \pd{y_1}{T} + \pd{y_0}{\tau} \right) $. The result of this is generally 
+\begin{equation*}
+    y_0 (T) = A_0(\tau) \cos T + B_0(\tau) \sin T
+\end{equation*}
+with the initial conditions $A_0(0)=0$ and $B_0(0)=0$. The order $\varepsilon$ equation turns into 
+\begin{equation*}
+    \pdt{y_1}{T} +y _1 = \left( 2 \od{A_0}{\tau} + A_0\right) \sin T - \left( 2\od{B_0}{\tau} + B_0 \right) \cos T
+\end{equation*}
+and to remove secularity terms, we require that 
+\begin{equation*}
+    2A_0'+A_0 =0 \twen 2B_0' +B_0 =0 
+\end{equation*}
+and applying the initial conditions we found previously, we have that $A_0(\tau ) =0$ and $B_0(\tau) =e^{-\tau/2}$ and so the leading order solution is 
+\begin{equation*}
+    y_0(t) = e^{-\varepsilon t/2}\sin t
+\end{equation*}
+If we look at the Mathieu Equation given by 
+\begin{equation*}
+    y''+(\delta +\varepsilon cos(2t))y = 0
+\end{equation*}
+Physically this represents a pendulum with variable length. This demonstrates something known as parametric resonance where depending on the values of $\delta$ and $\varepsilon$, solutions will be unbounded. In this case, we want our solution to be $2\pi$-periodic. Let us perturb both $y$ and $\delta$. The order $1$ equation gives us 
+\begin{equation*}
+    y_0'' + \delta y_0 =0
+\end{equation*}
+If we set $\delta_0=1$ (in practice, we can give any first order and then determine the values of the corrections later) then the $\varepsilon$ order equation becomes 
+\begin{equation*}
+    \begin{split}
+        y_1 ''+y_1 &= -(\delta_1 + \cos (2t))y_0 \\
+        &= c_1\left(-\delta - \frac{1}{2}\right)\cos t+c_2 \left( \delta_1 +\frac{1}{2} \right) \sin t
+    \end{split}
+\end{equation*}
+We now have a branch where we choose that $c_1=0\to \delta_1 = \frac{1}{2}$ or $c_2 =0 \to \delta = \frac{1}{2}$.
 \end{document}
 
