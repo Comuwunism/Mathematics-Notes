@@ -14,1016 +14,833 @@
 \usepackage{xpatch}
 \usepackage{xr}
 \usepackage{enumitem}
-\usepackage{subcaption}
-\usepackage[american,siunitx]{circuitikz}
-\usepackage{tikz}
-\usetikzlibrary{arrows.meta, positioning}
 
 \setlength{\parindent}{0pt}
-\title{Bio 338 Modeling Biological Dynamics Notes}
+\title{Math 330 Abstract Algebra Notes}
 \author{Kyle Wang}
 \date{September 2026}
 
-\newcommand{\pd}[2]{\frac{\partial #1}{\partial #2}}
-\newcommand{\od}[2]{\frac{d #1}{d #2}}
-\newcommand{\p}{\mathbb{P}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\C}{\mathbb{C}}
 \newcommand{\twen}{\hspace{20pt}}
 
-\newtheorem{definition}{Definition}[section]
-\newtheorem{theorem}[definition]{Theorem}
+\DeclareMathOperator{\im}{im}
+\DeclareMathOperator{\id}{id}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{proposition}[theorem]{Proposition}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
 
 \begin{document}
-
 \maketitle
 \tableofcontents
-\section{Basic Modeling with ODEs}
-\subsection{Introduction}
-State: numbers that describe variables (state variables) of interest \\
-State variables: Things we care about and measure\\
-State space: space of allowable values of a state variable \\ 
-\begin{figure}[htbp]
-    \centering
-    \includegraphics[width=0.5\linewidth]{linearGrowth.png}
-    \caption{Compartment diagram of linear growth}
-    \label{fig:linearGrowth}
-\end{figure}
-One thing to note is that units can affect the state space. For example, the state space for allowable temperatures in Celsius is $C\in[-273.15,+\infty)$ whereas the allowable temperatures in Kelvin is $K \in [0,+\infty)$. \\
-We can express differential equations as compartment diagrams. 
-
-This diagram represents linear growth and is isomorphic to the equation 
-\begin{equation*}
-    \dot x=b
-\end{equation*}
-For these examples, let us use $x$ to describe the rabbit population. In this case, the population is increasing by $b$ rabbits per time unit (we shall say month for the example).
-\begin{figure}[hbtp]
-    \centering
-    \includegraphics[width=0.5\linewidth]{perCapitaBirth.png}
-    \caption{Compartment diagram of per capita growth}
-    \label{fig:perCapitaGrowth}
-\end{figure}
-Figure \ref{fig:perCapitaGrowth} is the compartment diagram for the equation 
-\begin{equation*}
-    \dot x=bx
-\end{equation*}
-This effectively represents that more rabbits means more offspring which physically makes sense. We can adjust this model further by adding a death rate $d$. We can then draw the compartment diagram as seen in Figure \ref{fig:perCapitaBirthDeath}.
- The isomorphic differential equation for this is 
- \begin{equation*}
-     \dot x=bx-dx = (b-d)x
- \end{equation*}
-which has the solution 
-\begin{equation*}
-    x(t)=x_0e^{rt} \hspace{20pt} r =b-d
-\end{equation*}
-
-If $r>0$, then the birth rate ``out competes" the death rate which leads to exponential growth. On the other hand, if $r<0$, the death rate overrides the birth and hence the rabbit population disappears. We can make it more realistic by adding carrying capacity that only allows $k$ rabbits in our system. This system is described by the \emph{Euler-Lotka} Model 
-\begin{equation*}
-    \dot x = r\left(1-\frac{x}{k}\right)x
-\end{equation*}
-
-where $r$ is once again the sum of the birth and death rates. The second term effectively scales the birth and death based off of how close the population is to the carrying capacity. We must have that $r>0$ or else we see that the amount of deaths slows down as we approach the carrying capacity which is unphysical.
-\begin{figure}[hbtp]
-    \centering
-    \includegraphics[width=0.5\linewidth]{perCapitaBirthDeath.png}
-    \caption{Compartment diagram of per capita growth and death}
-    \label{fig:perCapitaBirthDeath}
-\end{figure}
-If we think about when $r<0$, we also see that if $x>k$, we have unbounded growth since $r$ and $\left( 1-\frac{x}{k}\right)$ is also negative leading to $\dot x>0$ and hence unbounded growth. Even if it hypothetically did work, we wouldn't really care since $r<0$ should force everything to zero and so $k$ doesn't have any impact on our model. Checking the behavior when $r>0$, we find that if $0<x<k$, we should expect growth and indeed $\dot x>0$. When the number of rabbits is above the carrying capacity, we should expect the population to decline and indeed that occurs as $\dot x <0$.\\\\
-It is also worth noting that this model assumes the number of rabbits is a continuous variable which implies fractional (or irrational) number of rabbits which is clearly not reality. We disregard this concern for large populations because the difference between 1000.5 and 1001 rabbits is trivial; however, for small populations, we would need to enforce a discrete model since the difference of one rabbit is more significant on that scale.
-\subsection{Predation}
-Suppose that foxes ($y$) eat rabbits ($x$). Also suppose that the rate of foxes is dependent on the food supply. We can then write the differential equation describing the number of foxes as 
-\begin{equation*}
-    \dot y =b[\text{food}]y-Dy
-\end{equation*}
-We can define the food supply as the probability of a single predation event as $p$ multiplied by the number of rabbits there are $x$. We can then multiply the food supply available by the number of wolves to feed this which hence leads to 
-\begin{equation*}
-    \dot y=bpxy -Dy
-\end{equation*}
-where $D$ is the death rate per capita for wolves. Before, we described the rabbits as just $\dot x=rx$. Now we have to factor in the deaths due to foxes which is once again the food supply multiplied by the number of foxes. We now have the set of differential equations 
-\begin{equation*}
-    \begin{split}
-        \dot x&=rx-pxy\\
-        \dot y&=bpxy-Dy
-    \end{split}
-\end{equation*}
-And if we let all the coefficients equal 1, we get the \emph{Lotka-Volterra Model}.
-\begin{equation*}
-    \begin{split}
-        \dot x&=x-xy\\
-        \dot y&=xy-y
-    \end{split}
-\end{equation*}
-\subsection{HIV}
-What perplexed people about HIV was the timeline of the disease. The viral load would initially spike and decline within the first 8 weeks of infection. It would then stay at a low viral load for years (in what is deemed its latent phase) before slowly increasing and leading to AIDS. There were two main questions:
+\section{Introduction to Group Theory}
+\subsection{Modular Arithmetic}
+\begin{definition}
+    Take $n>0$ and $n\in \Z $. We say that $a,b\in \Z$ are \textit{congruent modulo n} ($a\equiv b \mod{n}$) if $n$ divides $a-b$ ($n|a-b$) or if the remainder of $n/a$ equals the remainder of $n/b$.
+\end{definition}
+Here are some properties:
 \begin{enumerate}
-    \item What causes the initial spike and decline?
-    \item What causes the sudden climb in viral load leading to AIDS?
+    \item if $a\equiv b \mod n$ and $c\equiv d \mod n$, then $a+c\equiv b+d \mod n$.
+    \begin{proof}
+        $a\equiv b \mod n$ implies that $n|a-b$ which implies that $\exists q \in \Z$ such that $a-b=nq$. The same can be said for $a\equiv b \mod n$ for some $q' \in \Z$ such that $c-d=nq'$. Adding these equations together we have that $a-b+c-d = (a+c)-(b+d) = n(q+q')$. Since the integers are closed under addition, $q+q'$ is an integer and therefore $n|(a+c)-(b+d)$ and as a result, $a+c\equiv b+d \mod n$.
+    \end{proof}
+    \item if $a\equiv b \mod n$ and $c\equiv d \mod n$, then $ac\equiv bd \mod n$
+    \begin{proof}
+        $a\equiv b \mod n$ implies that $n|a-b$ which implies that $\exists q \in \Z$ such that $a-b=nq$. The same can be said for $a\equiv b \mod n$ for some $q' \in \Z$ such that $c-d=nq'$. We can write $ac$ as
+        \begin{equation*}
+            \begin{split}
+                ac &=(b+nq)(d+nq') \\
+                &=bd+bnq'+dnq+n^2qq' \\
+                \Rightarrow ac-bd&=n(bq'+dq+nqq') 
+            \end{split}
+        \end{equation*}
+        and since everything in the parentheses are integers and the integers are closed under multiplication and addition, their result is an integer and therefore $n|ac-bd$ and $ac\equiv bd \mod n$.
+    \end{proof}
+    \item Congruence $\!\!\!\!\mod n$ is an equivalence relation
+    \begin{proof}
+        An equivalence relation is reflexive, symmetric, and transitive. To prove reflexiveness, we show $a\equiv a \mod n \rightarrow n|a-a\rightarrow n|0$ which is always true. To prove symmetry, we have that $a\equiv b \mod n $ implies $(a-b)=nq$ which we can extract a negative sign such that $(b-a)=n(-q)$ and since $-q$ is also an integer, $n|b-a$ and therefore $b\equiv a\mod n$. To prove transitiveness, we say that $a\equiv b \mod n$ implies $a-b=nq$ and $b\equiv c\mod n$ implies $b-c=nr$. We now find that $a-c=b+nq+nr-b =n(q+r)$. Since the integers are closed under addition, $q+r\in \Z$ and therefore $n|a-c$ and $a\equiv c \mod n$.
+    \end{proof}
 \end{enumerate}
-The initial hypothesis was that there wold be rapid viral growth and then the immune system would respond (leading to increase and decline in viral load) before replicating slowly in the background. In 1994, the first antiretroviral drugs were in clinical trials. These vaccines worked by stopping viral replication rather than directly killing existing viral particles. According to the previous hypothesis, these drugs shouldn't make a significant impact since the viruses are only replicating slowly. What they noticed was an exponential decay in viral load as time progress after the treatment. \\\\In 1996, Alan Perelson publishes \textit{HIV-1 Dynamics in Vivo: Virion Clearance Rate, Infected Cell Life-Span, and Viral Generation Time} to explain what was observed. Let us consider a basic bathtub with a faucet and a drain. The inflow is described as $Q_i$ and the outflow is described as $Q_o$ and is dependent on the volume in the bathtub. We can therefore describe the amount of volume in the bathtub, $V$ as the following differential equation 
-\begin{equation*}
-    \dot V=Q_i-Q_oV
-\end{equation*}
-We especially care about the steady state condition which is when $\dot V=0$. This leads to $V=\frac{Q_i}{Q_o}$ which effectively showed that the volume at steady state is dependent on the \emph{ratio} and not the magnitudes of $Q_i$ and $Q_o$. We could therefore have a faucet with high
-\begin{figure}[htbp]
-    \centering
-    \includegraphics[width=0.5\linewidth]{HIVModel.png}
-    \caption{Compartment diagram of a model similar to Perelson's}
-    \label{fig:HIVModel}
-\end{figure}
-mass flow rate but also a really efficient drain or a dripping faucet and inefficient drain. We can't tell by solely looking at the amount of water in the drain. This extremely basic model already gives the insight that the virus is replicating extremely quickly, but the immune system is also clearing them quickly too. If we solve for $V(t)$ generally, we get 
-\begin{equation*}
-    \begin{split}
-        \dot V&=Q_i-Q_oV \\
-        \int\frac{1}{Q_i-Q_oV}dV &= t+c \\
-        V(t)&=\frac{Q_i}{Q_o}+Ce^{-Q_ot}
-    \end{split}
-\end{equation*}
-If we apply the initial condition that $V(t=0)=V_0$, then we find the constant to be $C=V_0-\frac{Q_i}{Q_o}$. If $Q_i$ and $Q_o$ are small, we should expect small exponential decay and vice versa. This effectively explains the dramatic difference the antiretrovirals made. Let us now consider a more sophisticated model. \\\\
-One thing to note is that the line from $N_v$ implies that the rate of infection is dependent on the number of virus particles. There is also a negligible consumption of $N_v$ in this process. Shedding also depends on $N_i$ but doesn't change $N_i$. We can then write these as a set of differential equations 
-\begin{equation*}
-    \begin{split}
-        \dot N_u &= B_u-D_uN_u-B_iN_vN_u\\
-        \dot N_i &=B_iN_vN_u-D_iN_i\\
-        \dot N_v &= B_vN_i-D_vN_v
-    \end{split}
-\end{equation*}
-These equations are annoying to solve analytically but we can solve it numerically. We can then graph as seen in Figure \ref{fig:HIVPlot}.
-\begin{figure}[htbp]
-    \centering
-    \includegraphics[width=0.5\linewidth]{HIVPlot.png}
-    \caption{Plot of the amount of HIV in the blood over time with the parameters using McClain's model: $B_u=0.272, B_i=0.00027, B_v=100, D_u=0.00136, D_i=0.33, D_v=2$}
-    \label{fig:HIVPlot}
-\end{figure}
-We can further adjust the model to include latent infected cells: that is, cells that are infected but do not shed viruses. Let us say that 10\% of cells become latently infected. Let us assume the death rate of latent cells is the same as uninfected ($D_l=D_u$). Let us also say that the latent cells become active (and begin shedding) at a rate $B_a$. Our set of differential equations is now 
-\begin{equation*}
-    \begin{split}
-        \dot N_u &= B_u-D_uN_u-B_iN_vN_u \\
-        \dot N_i &= .9B_iN_vN_u + B_aN_l -D_iN_i \\
-        \dot N_l &= .1B_iN_vN_u - B_aN_l-D_uN_l \\
-        \dot N_v &= B_vN_i - N_vD_v
-    \end{split}
-\end{equation*}
-\begin{figure}[htbp]
-    \centering
-    \includegraphics[width=0.5\linewidth]{McClain Latent.png}
-    \caption{McClain's model including latently infected cells}
-    \label{fig:McClainLatent}
-\end{figure}
-\subsection{Tangent Spaces}
-\begin{definition}[Tangent Space]
-    The tangent space of a \emph{manifold} is a vector space that contains all possible directions tangent to the manifold at that point.
-\end{definition}
-\begin{definition}[Manifold]
-    An $n$-dimensional manifold is a topological space with the property that each point has a neighborhood that is homeomorphic to an open subset of $n$-dimensional Euclidean space.
-\end{definition}
-We can effectively think of the a state space as a manifold and each point on that manifold corresponds to a specific state in that state space. We can then think of the tangent spaces as all possible changes that can be made to a certain state in that state space. I wish I knew more about differential geometry but maybe G\'abor Sz\'ekelyhidi can teach me about it. 
-\begin{definition}[Vector Field]
-    A vector is a function $f:$ points in the state space $(\mathbb{R}^n)\mapsto$ points in the tangent space $(\mathbb{R}^n)$. 
-\end{definition}
-Let us look at the example $x\in[0,\infty)$ to be our state space and $\dot x=2x$ as our manifold. The state space is the positive half line and so vectors in this tangent space can point in either direction. So $-5$ or $2$ may be allowable vectors in this tangent space. However, the \emph{vector field} is strictly enforced by $\dot x=2x$ which is a \emph{subset} of the tangent space. We can also look at the vector field for the logistic model where $x\in [0,\infty)$ and $\dot x=rx\left(1-\frac{x}{k}\right),\,\,\, r>0$. We now note for $x<k$, the vector field points in the $+\hat x$ whereas if $x>k$, the vector field points in the $-\hat x$ direction. That is because there exists a fixed point at $k$.
-\begin{theorem}[Banach Fixed Point Theorem]
-    Let $(X,d)$ be a \emph{complete} metric space with a contraction mapping $T:X\mapsto X$. Then $T$ admits a unique fixed point $x^* \in X$ meaning $T(x^*)=x^*$. Furthermore, $X^*$ can be found as follows: start with an arbitrary element $x_0\in X$ and define $x_n = T(x_{n-1})$ for $n\in \mathbb{N}$. Then, $\lim_{x\rightarrow \infty} x_n=x^*$
-\end{theorem}
-Let us look at some vector fields in $\mathbb{R}^2$. Consider the Romeo and Juliet system of differential equations which models Romeo's love $y$ and Juliet's love $x$ as 
-\begin{equation*}
-    \begin{split}
-        \dot y &=-x\\
-        \dot x&=y
-    \end{split}
-\end{equation*}
-\begin{figure}[htbp]
-    \centering
-    \includegraphics[width=0.5\linewidth]{RomeoJuliet.png}
-    \caption{Vector field of the Romeo and Juliet set of differential equations}
-    \label{fig:RJ}
-\end{figure}
-We can also take a look at the Lotka-Volterra model which describes predator-prey dynamics and is described by the equations 
-\begin{equation*}
-    \begin{split}
-        \dot x&= x-kxy \\
-        \dot y&=kxy-y
-    \end{split}
-\end{equation*}
-We can see that in Figure \ref{fig:LV}, there exists a fixed point at the origin (no predators and no prey so no dynamics) and another one somewhere in the positive plane which suggests the existence of a steady state.
-\begin{figure}[htbp]
-    \centering
-    \includegraphics[width=0.5\linewidth]{LotkaVolterra.png}
-    \caption{Vector field of the Lotka-Volterra model}
-    \label{fig:LV}
-\end{figure}
-\begin{definition}
-    \emph{Trajectories} are solutions to ODEs that exist and are unique (assuming the conditions of the Picard-Lindel\"of Theorem are satisfied) and are \emph{curves} in the state space that follow the vector field.
-\end{definition}
-We can describe a vector field $V$ to be a function $V: \mathbb{R}^n\mapsto T_pM$ where $T_pM$ denotes the tangent space at a point $p$ along the state space manifold $M$. It is worth noting that two trajectories can \emph{never} cross since that would require the vector field to be multi valued which is not possible over $\mathbb{R}$. One way to approximate solution curves to ODEs is via Euler's method which is as follows 
-\begin{equation*}
-    x(t+\Delta t) = x(t)+x'(t)\Delta t
-\end{equation*}
-Other numerical methods improve on Euler's method like Runge-Kutta but Euler's method is the most clear to see. Some numerical integrators can have adaptive time steps that are based on the magnitude of the local vector field. This is because small time steps offer better accuracy at the expense of compute time. Large time steps are faster to calculate but may not converge to the true solution and are prone to deviations. 
-\subsection{Fixed Points and Stability}
-\begin{definition}
-    A \emph{fixed point} $\bold{x}$ is a point in the state space such that $\dot{\bold{x}} =0$. 
-\end{definition}
-The vector field at a fixed point is the zero vector. We can classify the stability of a fixed point into a few categories: 
-\begin{enumerate}[label=(\roman*)]
-    \item A system is \emph{stable} if it returns to its fixed point when given a slight perturbation from it 
-    \item A system is \emph{unstable} if it leaves its fixed point when given a slight perturbation
-    \item A system is \emph{quasi-stable} or \emph{semi-stable} if one direction is stable while the direction is unstable (saddle point). We generally consider this to be unstable since there is only an infinitesimally small line of stability and the rest of the space unstable.
-\end{enumerate}
-It is worth noting that there are different notions of stability. We shall state two.
-\begin{definition}
-    Consider an autonomous nonlinear dynamical system 
-    \begin{equation*}
-        \dot x =f(x(t)) \hspace{20pt} x(0)=x_0
-    \end{equation*}
-    where $x(t)\in \mathcal{D}\subseteq \mathbb{R}^n$ denotes the system state vector, $\mathcal{D}$ denotes an open set containing the origin, and $f:\mathcal{D} \mapsto \mathbb{R}^n$ is a continous vector field on $\mathcal D$. Suppose $f$ has an equilibrium at $x_e$ such that $f(x_e)=0$. Then:
-    \begin{enumerate}[label=(\roman*)]
-        \item The fixed point is said to be \emph{Lyapunov stable} if for every $\epsilon>0\,\,\, \exists\delta >0$ such that $||x(0)-x_e||<\delta $ then for every $t\geq0$ we have that $||x(t)-x_e|| \leq \epsilon$.
-        \item The fixed point is said to be \emph{asymptotically stable} if it is Lyapunov stable and there exists a $\delta>0$ such that if $||x(0)-x_e||<\delta $ then $\lim_{t\rightarrow \infty}||x(t)-x_e||=0$
+\subsection{Introduction to Groups}
+\begin{definition}[Group]
+    A group is a set of elements $G$ with a binary operation $*$ that assigns to every pair $(g,h)$ of elements of $G$ another element in $G$ denoted $g*h$. Groups follow the group axioms:
+    \begin{enumerate}
+        \item Associativity
+        \begin{equation*}
+            (g_1*g_2)*g_3 = g_1*(g_2*g_3)
+        \end{equation*}
+        \item There exists an element $e\in G$ that is the identity such that 
+        \begin{equation*}
+            e*g_1=g_1*e=g_1
+        \end{equation*}
+        \item Every element has an inverse element denoted $g^{-1}$ such that 
+        \begin{equation*}
+            g*g^{-1} = g^{-1}*g = e
+        \end{equation*}
+        \item The set of elements is closed under the group operation (although this is implied in the definition).
     \end{enumerate}
 \end{definition}
-In essence, a \emph{Lyapunov stable} system just needs to stay within an $\epsilon$ distance from the fixed point given it starts $\delta$ away. An \emph{asymptotically stable} system implies that close enough starting conditions will lead to convergence to the fixed. This means something that just orbits the fixed point can be consider Lyapunov stable but not asymptotically stable.
+\begin{example}
+    Let us look at some examples
+    \begin{enumerate}
+        \item The set $(\Z,+)$. Addition is associative, the identity is 0, the inverse of each element $g$ is $-g$. 
+        \item The set $(\R_{>0}, \cdot)$ where $\cdot$ denotes regular multiplication. Regular multiplication is associative, the identity is $1$, the inverse element is $\frac{1}{g}$
+        \item The set $(\{-2,-1,0,1,2\},+)$. This fails due since it is not closed (take $1+2=3 \notin $ the set
+        \item The set $\left(\left\{ \frac{1}{2^n} \right\}, \cdot \right)$. This fails since there is no inverse.
+        \item Fix a positive integer $n$. Take the set $\left( \{0,1,2,\ldots,n-1\}, +\mod n\right)$. The identity is 0, addition is associative. The inverse of an element $0\leq a\leq n-1$ is $n-a$ since $(n-a)+a \mod n = n\mod n = 0$. This group is denoted by Fraleigh as $\Z_n$ but more generally denoted as $\Z/n\Z$.
+        \item Fix an $n\in \N$. We denote the group GL$_n(\R)$ as the set of invertible $n\times n$ matrices with real entries with the operation of matrix multiplication. Matrix multiplication is associative, the identity is the $n\times n$ identity matrix $I_n$. The inverse of every element $A$ is the inverse matrix of $A$. This group is also known as the \textit{General Linear Group}.
+    \end{enumerate}
+\end{example}
+\subsection{Properties of Groups}
 \begin{definition}
-    A \emph{nullcline} is a curve in the tangent space where the vector field is 0 in a particular direction.
-\end{definition}
-In a two dimensional state space, the location where two nullclines meet is a fixed point provided the nullcines are of \emph{different} state variables. If we look at the Lotka-Volterra models and add in competition or communicable disease, we have 
-\begin{equation*}
-    \begin{split}
-        \dot x&=Ax-Bxy-x^2 \\
-        \dot y&= Cy-Dxy-y^2
-    \end{split}
-\end{equation*}
-We can solve for nullclines by setting $\dot x=\dot y=0$ and solving a system of equations. If we ignore the trivial nullclines, we get that nontrivial fixed point of this model is 
-\begin{equation*}
-    x=\frac{A-BC}{1-BD} \hspace{20pt} y=C-D\left(\frac{A-BC}{1-BD} \right)
-\end{equation*}
-When $\frac{A}{B}>C$, this fixed point is stable but when $\frac{A}{B}<C$, this fixed point is now unstable.
-\begin{definition}
-    An \emph{attactor} of a dynamical system is a set of states to which the system tends to evolve for a large number of starting states. We define ``a large number" to be a set that isn't of measure $0$.
-\end{definition}
-An attractor can be a stable fixed point or a limit cycle. It cannot be an unstable fixed point nor a saddle (which is a set of starting states that leads to a fixed point of measure 0). The \emph{Basin of Attraction} is the set of states that will evolve to a particular attractor over time. Let us consider a logistic model with the allee effect which states that a population needs to be above some minimum value to reproduce. It is described by the following model: 
-\begin{equation*}
-    \dot x =rx\left(1-\frac{x}{k}\right)\left(\frac{x}{a}-1\right) \hspace{20pt} 0<a<k
-\end{equation*}
-We see that there are fixed points at $x=0,a,k$. If we take derivatives of the time deriavtives with respect to $x$ we can classify their stabilities 
-\begin{equation*}
-    \pd{\dot x}{x} = r\left(1-\frac{x}{k}\right)\left(\frac{x}{a}-1\right)-\frac{r}{k}x\left(\frac{x}{a}-1\right) +\frac{r}{a}x\left(1-\frac{x}{k}\right)
-\end{equation*}
-At $x=a$, we have 
-\begin{equation*}
-    \pd{\dot x}{x} \Bigg|_{x=a} =r\left(1-\frac{a}{k}\right) >0 
-\end{equation*}
-which therefore makes this point unstable. At $x=k$, we have 
-\begin{equation*}
-    \pd{\dot x}{x} \Bigg|_{x=k} = r\left(\frac{k}{a}-1\right) <0
-\end{equation*}
-and is hence stable. At $x=0$, the derivative evaluates to $-r<0$ and is also stable. We therefore have two basis of attraction: one that goes towards $x=0$ and one towards $x=k$. The set $[0,a)$ leads to the fixed point $x^*=0$ and the set $(a,+\infty)$ leads to $x^*=k$. An attractor is an element of its basin. The boundary between basis is known as the \emph{separatrix}. In one dimension, it is an unstable fixed point. In two dimensions, its a curve. For higher dimensions, the separatrix is always a hyperplane.
-\subsection{Bifurcations}
-Recall in the competitive Lotka-Volterra model that depending on whether $\frac{A}{B}>C$ determined the stability of the fixed point. This transition due to a change in parameters is known as a \emph{bifurcation}. Let us look at an example in one dimension. E. coli can consume lactose but importing lactose is an energy expensive process. As such, there is a switch that causes the E. coli to import lactose or not. Let us define $x$ to be the intracellular lactose level. The change in it $\dot x$ is equal to the production minus the degradation.  The production is modeled by 
-\begin{equation*}
-    \text{production}=\frac{a+x^n}{1+x^n}
-\end{equation*}
-and the degradation is per capita degradation and therefore modeled as $rx$. As such, 
-\begin{equation*}
-    \dot x=\frac{a+x^n}{1+x^n}-rx
-\end{equation*}
-We can plot the production and degradation terms separately to get Figure \ref{fig:prodDegrad}
-\begin{figure}[htbp]
-    \centering
-    \includegraphics[width=0.5\linewidth]{prodDegrad.png}
-    \caption{Production and degradation terms plotted separately via the over-under method}
-    \label{fig:prodDegrad}
-\end{figure}
-Regions where the red line (degradation) is greater than the purple sigmoid (production) is net negative change in lactose levels and vice versa. For a small $r$, the red line in Figure \ref{fig:prodDegrad} is very shallow and intersects the production term at one large $x^*$. As $r$ increases, eventually we eventually hit a bifurcation as now the degradation intersects the production term at a lower $x^*$ which then splits into a middle unstable fixed point and a lower stable fixed point. As $r$ increases even more, the top two fixed points collide and annihilate each other and all that remains is the lower fixed point. These two bifurcations are known as a "saddle node" bifurcation. \\\\
-In 1 dimension, we always require an unstable fixed point between two stable fixed points. This is easy to see because if we have some sort of smooth function $\gamma$ that describes the value of $\dot x$ and in so the middle region $[x^*_-,x^*_+]$, we require $\gamma >0$ or $\gamma <0$ and it must remain that value within that interval by the Intermediate Value Theorem. We can generalize this to higher dimensions by requiring a separatrix. \\\\
-Let us look at a two gene toggle which can be represented by 
-\begin{figure}[htbp]
-    \centering
-    \includegraphics[width=0.5\linewidth]{twoGeneToggle.png}
-    \caption{Diagram to describe the relationship of this two gene toggle}
-    \label{fig:twoGeneToggle}
-\end{figure}
-$x$ inhibits the production production of $y$ and vice versa. In other words, they mutually inhibit one another. Repression of either gene requires binding of the repressor to the other genes operon. If, for example, we take $\p(y$ binds operon $x)$, we can express the dynamics of this probability as 
-\begin{equation*}
-    \begin{split}
-        \dot \p (\text{bound}) =(\text{binding rate})\p(\text{unbound})-(\text{unbinding rate})\p(\text{bound})\\
-        =k_{\text{on}}C(1-\p(\text{bound}))-\beta_{\text{off}}\p(\text{bound})
-    \end{split}
-\end{equation*}
-where $k_{\text{on}}$ is the binding rate per repressor (mM), $C$ is the concentration of repressor (mM), and $\beta_{\text{off}}$ is the dissociation rate. In steady state, we have that $\dot \p ($bound)$=0$. In that case, we have 
-\begin{equation*}
-    \begin{split}
-        k_{\text{on}}C(1-\p(\text{bound})) = \beta_{\text{off}}\p(\text{bound}) \\
-        \P(\text{bound}) = \frac{k_{\text{on}}C}{\beta_\text{off}+k_\text{on}C}
-    \end{split}
-\end{equation*}
-which is the location of this fixed point. Doing some more algebraic manipulation, we get that 
-\begin{equation*}
-    \begin{split}
-        \p(\text{bound}) &= \left(1+\frac{\beta_\text{off}}{k_\text{on}C}\right)^{-1} \\
-        &= \frac{1}{1+\frac{K_d}{C}}
-    \end{split}
-\end{equation*}
-where $K_d$ is the equilibrium dissociation constant and described by $\frac{\beta_\text{off}}{k_\text{on}}$. Since the cumulative probability of the repressor being bound and unbound is $1$, we can write that 
-\begin{equation*}
-    \begin{split}
-        \p(\text{unbound} ) &= 1-\frac{1}{1+\frac{K_d}{C}} \\
-        &=\frac{1}{\frac{C}{K_d}+1}
-    \end{split}
-\end{equation*}
-Sometimes we want to incorporate some sort of cooperativity where we require multiple repressors to bind to an operon. $n$ can be non-integer values because sometimes one can get away with repression with different amounts of repressors. If we let RNA production rate be a function of the repressor concentration $c$, we have that 
-\begin{equation*}
-    f(c)=\p (\text{unbound})\Gamma
-\end{equation*}
-where $\Gamma$ is the maximum production rate. If we add in a per capita clearance rate, we can describe this two switch gene toggle as 
-\begin{equation*}
-    \begin{split}
-        \dot x = \frac{\Gamma_x}{\left(\frac{y}{K_{d,y}}\right)^n+1}-k_xx \\
-        \dot y =\frac{\Gamma_y}{\left(\frac{x}{K_{d,x}}\right)^n+1}-k_yy 
-    \end{split}
-\end{equation*} 
-\subsection{Oscillations}
-Historically, we thought that we need an external driving force for self sustaining oscillations. This isn't true. Instead, autonomous oscillations require some form of negative feedback. This is a necessary but not a sufficient condition for oscillations. The following cannot have oscillations since both feedback are positive. 
-\begin{figure}[htbp]
-    \centering
-    \includegraphics[width=0.5\linewidth]{twoGenePositive.png}
-    \caption{Both are positive and so no oscillations}
-    \label{fig:twoGenePositive}
-\end{figure}
-The configuration in Figure \ref{fig:twoGeneToggle} is also incapable of support oscillations since a negative times a negative is positive and hence no oscillations. If $x$ promotes $y$ but $y$ antagonizes $x$, oscillations are possible. However, there also needs to be a delay for oscillations to occur. There are two types of oscillations: transient and limit cycle. Transient oscillations settle down to a fixed point. Limit cycles are sustained oscillations that don't settle down towards a fixed point. Limit cycles can be described as Lyapunov stable attractors and transient oscillations are most specifically described as asymptotically stable attractors. If we recall the Romeo and Juliet model, $\forall r\in \mathbb{R}$ where $r=\sqrt{x^2+y^2}$, there exists a stable limit cycle where the amplitude is $r$ which is dependent on the initial conditions. In the Lotka-Volterra model, the period and amplitude of the oscillations are also dependent on the initial conditions. These are undesirable behaviors when we want to regulate these oscillations. Three element oscillators help overcome these limitations. \\\\
-Let us take a look at this model that describes hormonal cycles. 
-\begin{figure}
-    \centering
-    \includegraphics[width=0.5\linewidth]{PGHmodel.png}
-    \caption{Model of hormonal cycles due to the pituitary gland, hypothalamus, and the ovaries}
-    \label{fig:PGHmodel}
-\end{figure}
-The hypothalamus secretes gonadotropin-releasing hormone (GnRH) which promotes the pituitary gland to secrete luteinizing hormone (LH) and folice stimulating hormone (FSH) which then promotes the ovaries to secrete estrogen and progesterone which downregulates GnRH production. This is a negative feedback system since we have two positive terms and one negative. Downregulation can either be increased degradation or decreased production. In this case, the ovaries decrease the production of GnRH by the hypothalamus. If we use the double suppressor function to decsribe $G$'s effect on $H$ and let $\Gamma =1$ and $K_d=1$, we get 
-\begin{equation*}
-    \begin{split}
-        \dot H &= \frac{1}{1+G^n} -k_H H \\
-        \dot P &= H-k_PP\\
-        \dot G &= P-k_GG
-    \end{split}
-\end{equation*}
-For simplicity, we shall take the one constant approach which is $k_H=k_P=k_G=k$ for some random constant $k$. We can modify this model further by having a constant production term like 
-\begin{equation*}
-    \dot G = P-kG+q
-\end{equation*}
-In general, we require either strong feedback with shorter time delay or weaker feedback with a longer time delay or some sort of combination in between. In general, there exists some separatrix that separates non-oscillatory and oscillatory behavior. Crossing this separatrix is a bifurcation. One of the most common types of these bifurcation is the \emph{Hopf} bifurcation where a fixed point loses/gains stability that leads to a loss/gain of a limit cycle.
-
-\subsection{SIR Model}
-In around 1916, Ronald Ross classified three different types of disease dynamics: 
-\begin{itemize}
-    \item Endemic: low steady prevalence (tuberculosis, leprosy) 
-    \item Epidemic: intense outbreaks before disappearing (plague, cholera) 
-    \item Outbreaks: constantly present with regular flareups (measles, dysentery)
-\end{itemize}
-The question is then why are there these different dynamics? In 1927, Karmac and Kundric publish the SIR model.  
-\begin{figure}[htbp]
-    \centering
-    \includegraphics[width=0.5\linewidth]{SIRmodel.png}
-    \caption{Compartment diagram of the SIR model}
-    \label{fig:SIRmodel}
-\end{figure}
-The constants $\beta$ and $\gamma$ are the transmission coefficient and recovery rates respectively. The model makes a few assumptions. The first is that once you are infected, you have complete immunity. Additionally, these dynamics are happening much quicker than the birth or death rates. Finally, everyone is equally susceptible and nobody is actually dying. We can express this in terms of differential equations as 
-\begin{equation*}
-    \begin{split}
-        \dot S_{pop} &= -\beta \frac{I_{pop}}{N_{pop}} S_{pop}  \\ 
-        \dot I_{pop} &= \beta\frac{I_{pop}}{N_{pop}} S_{pop} - \gamma I_{pop} \\
-        \dot R_{pop}&= \gamma I_{pop}
-    \end{split}
-\end{equation*}
-with initial conditions $I_{pop}(0) >0, R_{pop}(0)=0, S_{pop}(0)=N_{pop}-I_{pop}(0)$
-where $N_{pop}$ is the total population and $\frac{I_{pop}}{N_{pop}}$ is effectively the probability of encountering an infected person. The units of $\gamma$ is reciprocal time and therefore $\frac{1}{\gamma}$ is effectively how long the infection lasts. $\beta$ can be represented as $\displaystyle{\frac{\text{ \# new infections}}{(\text{\# infected})(\text{time})}}$ and so therefore the ratio $R_0=\frac{\beta}{\gamma} = \displaystyle{\frac{\text{\# new infections}}{\text{\# infected}}} $ and effectively represents the number of people a single infected person will infect. This is known as the \emph{basic reproduction ratio}. We want to know when an outbreak will arise which implies that $\dot I_{pop}  >0$ and therefore 
-\begin{equation*}
-    \begin{split}
-        \beta \frac{I_{pop}}{N_{pop}} S_{pop} - \gamma I_{pop} > 0  \\
-        \beta \frac{S_{pop}}{N_{pop}} > \gamma \\
-        \frac{S_{pop}}{N_{pop}}>\frac{1}{R_0}
-    \end{split}
-\end{equation*}
-which tells us that when the proportion of susceptible people is larger than the reciprocal of the reproduction rate, an outbreak will occur. If $R_0$ is very large, and therefore very transmissible, it is very easy to have an outbreak. To do any further analysis, let us non-dimensionalize using 
-\begin{equation*}
-    S= \frac{S_{pop}}{N_{pop}} \twen I=\frac{I_{pop}}{N_{pop}} \twen R= \frac{R_{pop}}{N_{pop}}
-\end{equation*}
-This leads to 
-\begin{equation*}
-    \dot S= \od{}{t} \left( \frac{S_{pop}}{N_{pop}} \right) = \frac{1}{N_{pop}} \left( -\beta \frac{I_{pop}}{N_{pop}} S_{pop} \right)= -\beta IS
-\end{equation*}
-so therefore our full system of differential equations is 
-\begin{equation*}
-    \begin{split}
-        \dot S &= -\beta IS \\
-        \dot I &= \beta I S - \gamma I \\
-        \dot R &= \gamma I
-    \end{split}
-\end{equation*}
-We clearly see there is a fixed point at $I=0$ but we have no notions of what $S$ and $R$ are at this fixed point. If we look at the time series, we expect that 
-\begin{equation*}
-    \lim_{t \rightarrow \infty} S = 1- \lim_{t\rightarrow \infty} R
-\end{equation*}
-We can't solve things analytically but we can abuse the Leibniz notation 
-\begin{equation*}
-    \od{S}{R} = \frac{\od{S}{t}}{\od{R}{t}} = \frac{\dot S}{\dot R} = \frac{-\beta I S}{\gamma I} = -R_0 S
-\end{equation*}
-which therefore we get the solution to be 
-\begin{equation*}
-    S(R) = Ae^{-R_0 R(t)}
-\end{equation*}
-where $A = S(R=0) = S(t=0) \sim 1$. We therefore have 
-\begin{equation*}
-    \dot R = \gamma I = \gamma (1-S-R) = \gamma (1 -e^{-R_0 R} -R)
-\end{equation*}
-As we let $t\rightarrow \infty$, $R$ should go to some constant $C$ so $\dot R=0$ and therefore $R=1-e^{-R_0R}$. We also note that system is two dimensional since $S+I+R=1 \to \dot S+\dot I+\dot R =0$ and so we can always rewrite one variable in terms of the other two. We find the nullclines to be $S=0,I=0$ for the $S$-nullclines and $I=0, S=\frac{1}{R_0}$ for the $I$-nullclines.
-\subsubsection{SIRS-Waning Immunity}
-We can adjust the model by implementing waning immunity which is conveyed via some constant $\alpha$.
-\begin{figure}[htbp]
-    \centering
-    \includegraphics[width=0.5\linewidth]{SIRSmodel.png}
-    \caption{SIR model with waning immunity}
-    \label{fig:SIRSmodel}
-\end{figure}
-In this case, our system of differential equations is 
-\begin{equation*}
-    \begin{split}
-        \dot S &= \alpha R- \beta IS \\
-        \dot I &= \beta IS -\gamma I \\
-        \dot R &= \gamma I - \alpha R
-    \end{split}
-\end{equation*}
-The system is still closed so we have $S+I+R =1$. If we rewrite $R$ in terms of $S$ and $I$, then we can rewrite the above to find the nullclines
-\begin{equation*}
-    \begin{split}
-        \beta S I &=\alpha -\alpha S -\alpha I \\
-        I(\beta S+\alpha)&=\alpha (1-S) \\
-        I &= \frac{\alpha (1_S)}{\beta S+\alpha}
-    \end{split}
-\end{equation*}
-which passes through the points $(1,0)$ and $(0,1)$ in the $SI$-plane. For the $I$ nullcline, we have $S=\frac{1}{R_0}$. Therefore if we have $\frac{1}{R_0} <1$, we have an \emph{endemic fixed point}. This is where there are non zero infections yet the state of the system isn't changing. When $\frac{1}{R_0}$ becomes larger than 1, then the endemic fixed point disappears and the system undergoes a transcritical bifurcation. What's interesting to note here is that $\alpha$ does not affect if there \emph{exists} an endemic fixed point but it does affect \emph{how many} people are infected at the fixed point.
-\subsubsection{SIR with Births and Deaths}
-Now let us consider a system in which there is a constant birth rate and death rate per capita. 
-\begin{figure}[htbp]
-    \centering
-    \includegraphics[width=0.5\linewidth]{SIRbd.png}
-    \caption{SIR model with births and deaths}
-    \label{fig:SIRbd}
-\end{figure}
-The constant birth rate is fine under large and stable population. We can describe the dynamics with 
-\begin{equation*}
-    \begin{split}
-        \dot S &= \mu -\beta IS-\delta_S S \\
-        \dot I &= \beta IS -\gamma I -\delta_I I \\
-        \dot R &= \gamma I -\delta _RR
-    \end{split}
-\end{equation*}
-It is worth noting that this system is \emph{not} closed and therefore our state variables are fractions of the \emph{initial} population unless the births exactly balances the deaths. In other words, 
-\begin{equation*}
-    \mu = \delta_SS(0) +\delta_II(0)+\delta_R R(0)
-\end{equation*}
-For the $S$-nullcline, we get that $I=\frac{\mu -\delta_S S}{\beta S}$ and for the $I$-nullcline we have $I=0$ or $S= \frac{\gamma+\delta_I}{\beta}$. This also has a transcritical bifurcation if $\frac{\gamma +\delta_I}{\beta}$.
-\subsubsection{SIRD - Deaths Explicitly}
-If we want to be more explicit with how we track the deaths, we can create another compartment. 
-\begin{figure}
-    \centering
-    \includegraphics[width=0.5\linewidth]{SIRDmodel.png}
-    \caption{SIR model with an explicit death compartment}
-    \label{fig:SIRDmodel}
-\end{figure}
-$\rho$ is the probability of recovering instead of dying. This model is also closed. We can write the system as 
-\begin{equation*}
-    \begin{split}
-        \dot S &= -\beta I S+\alpha R \\
-        \dot I &= \beta IS -\gamma I \\
-        \dot R &= \rho \gamma I -\alpha R \\
-        \dot D &= (1-\rho)\gamma I
-    \end{split}
-\end{equation*}
-What we notice is that $\dot D $ can never be less than zero. What we can do is to attempt to minimize $\dot D$ which can be done by increasing $\rho$ (analogous to better treatments), decreasing $\gamma$ (keeping people sick instead of dying), or decreasing $I$ (by reducing the rate of infection such that $\dot I \ll0$). This implies that $\beta IS \ll \gamma I \to S \ll \frac{1}{R_0}$. We can do this by making $S$ small, $\gamma $ large (make duration shorter), or $\beta$ small (reduce transmissibility).
-
-
-\section{Stochastic Processes}
-\subsection{Probability}
-Chance is very important in many systems, especially when numbers are low. In higher populations, we can usually average over the probabilities. Let us start with some definitions. 
-\begin{definition}
-    A \emph{random variable $X$} is an observation of a random process.
+    The \emph{order} of a group $G$, denoted $|G|$,is the cardinality of the group/set. If $G$ is finite, then $|G|<\infty$.
 \end{definition}
 \begin{definition}
-    A \emph{random process} is a well defined process with an uncertain outcome.
+    If the group operation $*$ is commutative, then the group is \emph{Abelian}.
 \end{definition}
-\begin{definition}
-    A \emph{sample space} $S$ is the set of all possible outcomes for that process.
-\end{definition}
-\begin{definition}
-    An event is a subset of outcomes defined in some way.
-\end{definition}
-The probability of an event $A$ is denoted $\p (A)$. It is bounded on $[0,1]$ and $\displaystyle{\sum_{A\in S} \p(A)}=1$. The probability of events that aren't $A$ is $\p ($ not $A) = \p (A^c)=1-\p(A)$. The \emph{joint probability} of two events $A$ and $B$ is $\p (A,B):= \p(A) \cap \p(B)$. The \emph{conditional probability} of $A$ given $B$ is defined as $\p(A|B) =\frac{\p(A\cap B)}{\p(B)}$. If events $A$ and $B$ are independent, we denote it $A\perp B$. If $A \perp B$, then $\p(A|B) = \p(A)$. In this case then $\p (A\cap B) = \p (A)\p(B)$. If we want the probability of $A$ or $B$, then we have $\p(A\cup B) = \p (A) + \p(B) -\p(A\cap B)$ since we double counted the intersection region. We can say generally that $\p(A,B) = \p(B)\p(A|B) =\p(A)\p(B|A)$ which we can then derive Bayes' Theorem.
-\begin{theorem}[Bayes' Theorem]
-    \begin{equation*}
-        \p(A|B)  = \frac{\p(A)}{\p(B)} \p(B|A)
-    \end{equation*}
-\end{theorem}
-One example is a pregnancy test where $\p (-|XY)$ is high whereas $\p(XY|-)$ is not high. For other medical tests, we can use Bayes' Theorem to state 
-\begin{equation*}
-    \p(\text{sick}|+) = \frac{\p(\text{sick})}{\p(+)}\p(+|\text{sick})
-\end{equation*}
-The first term is known as the positive predictive value (in Bayesian terms, the posterior probability of being sick) and is how likely you are really sick given a positive test. This is generally what you or the doctor care about when you take a medical test. $\p ($sick) is the prevalence (and prior belief of being sick) and the $\p(+|$sick) term is the sensitivity. In other words, if you're really sick, how likely is it to be accurate. This is the value that is put on the information pamphlet. 
-\begin{definition}
-    A \emph{probability distribution} is a function that gives the probability for all potential outcomes of a specific random process.
-\end{definition}
-In other words, there exists a functional form with parameters that dictate the probability for all outcomes (although the parameters may not be known to us). If $f(x)$ is a probability distribution, then $0\leq f(x)\leq 1 \,\,\, \forall x$. We also have that $\displaystyle{\sum_x}f(x)=1$ if $f(x)$ is discrete or $\displaystyle{\int f(x)dx}$ if $f(x)$ is continuous.
-\subsubsection{Binomial Distribution}
-The binomial distribution describes the probability of $m$ success in $n$ iid Bernoulli trials. 
-\begin{definition}
-    An \emph{iid} trial is one that is independent and identically distributed relative to other trials.
-\end{definition}
-\begin{definition}
-    A \emph{Bernoulli} trial is a random process with binary outcomes.
-\end{definition}
-We denote that a random variable $X$ is distributed as a Bernoulli distribution with probability of success $p$ as $X \sim $Ber($p)$. The binomial distribution has two parameters: $n$ being the number of trials and $p$ being the probability of success for every trial. The random variable $m \sim $Bin$(n,p)$. Therefore we must have that 
-\begin{equation*}
-    \p(m;n,p) = \p(m \text{ success})\p(n-m\text{ failures})(\text{number of permutations of }m\text{ successes and }n-m \text{ failures})
-\end{equation*}
-For $m$ successes, that is equivalent as $p^m$ and  for $n-m$ failures, that is $(1-p)^{n-m}$. The number of distinguishable permutations is given by $_nC_m = \frac{n!}{m!(n-m)!} = \binom{n}{m}$. Then $m\sim $Bin$(n,p) \to \p(m;n,p) = \frac{n!}{m!(n-m)!}p^m(1-p)^{n-m}$. If we want the cumulative probability of say at least $m$ successes, then we sum up all the probabilities for each $x\geq m$
-\begin{equation*}
-    \p(X>m) = \sum^n_{k=m}\binom{n}{k} p^k(1-p)^{n-k}
-\end{equation*}
-We now introduce the \emph{Method of Moments}. The method of moments allows to generate all the moments of a probability distribution which we can use to uniquely identify an unknown distribution.
-\begin{definition}
-    The \emph{first moment} is the expected value denoted as $E(X)$ or $\langle X\rangle$. We can write it as 
-    \begin{equation*}
-        E(X) := \sum_{x\in S}x\p(x) \text{ or }\int_S xf(x)dx 
-    \end{equation*}
-\end{definition}
-The expected value is also known as the population mean and it may not be an actual event in the sample space. 
-\begin{definition}
-    The \emph{second moment} is the variance and is defined as 
-    \begin{equation*}
-        \text{Var}(x) := E((x-E(x)^2)=E(x^2)-(E(x))^2 =\int_S (x-E(x))^2f(x)dx
-    \end{equation*}
-\end{definition}
-The $n^{th}$ moment is defined as $E((x-E(x))^n)$. The third and fourth moments are known as the skew and kurtosis respectively. The skew measures how ``lopsided" a distribution is whereas kurtosis measures how ``pointy" a distribution is. To use the method of moments to find likely parameters to a function, we want to compare a moment with the sample value. For example, 
-\begin{equation*}
-    \widehat{E(x)} = \bar x
-\end{equation*}
-where the hat denotes it being an estimate of the expected value/population and the bar on the RHS denotes the sample mean. Since the binomial distribution has two parameters, we got the second moment 
-\begin{equation*}
-    \widehat{\text{Var}(x)} = \frac{1}{n-1}\sum^n_{i=1}(x_i-\bar x)^2
-\end{equation*}
-\subsection{Poisson Process}
-Suppose we have many trials $N\to \infty$ but each trial has a low probability of success. Considering dividing the $N$ trials into $n$ subsets small enough such that they contain at most one success. Then the probability of $\p($success) $=p$. Each interval is effectively Bernoulli trial. We write $p=\frac{\lambda}{n}$. The total number of success as $m\sim $Bin$(n,p)=$Bin$(n,\frac{\lambda}{n})$. We want the limit $n\to \infty$ and so we have 
-\begin{equation*}
-    \begin{split}
-        \lim_{n\to \infty} \binom{n}{m} p^m (1-p)^{n-m} &= \lim_{n\to \infty} \frac{n(n-1)\ldots (n-m)\ldots}{m!(n-m)(n-m-1)\ldots} \left( \frac{\lambda}{n} \right)^m \left(1-\frac{\lambda}{n} \right)^{n-m} \\
-        &= \lim_{n\to \infty} \frac{n(n-1)(n-2)\ldots(n-m+1)}{m!}\left(1-\frac{\lambda}{n} \right)^{n-m} \\
-        &= \frac{\lambda^m}{m!}\lim_{n\to \infty}\left(1-\frac{\lambda}{n} \right)^n\left(1-\frac{\lambda}{n}\right)^{-m} \\
-        &= \frac{\lambda^m}{m!}\lim_{n\to \infty}\left(1-\frac{\lambda}{n}\right)^n \\
-        &= \frac{\lambda^m}{m!}e^{-\lambda}
-    \end{split}
-\end{equation*}
-Where $\frac{\lambda}{n}$ is very small so as $n\to \infty$, it goes to zero. We have now derived the Poisson Distribution which only depends on the parameter $\lambda$. One special thing about the Poisson distribution is that the mean and variance are the same. Let us derive this fact.
-\begin{equation*}
-    \begin{split}
-        E(m) &= \sum^\infty_{m=0} m\frac{\lambda^m}{m!} e^{-\lambda} \\
-        &= \lambda e^{-\lambda} \sum^\infty_{m=1} \frac{\lambda^{m-1}}{(m-1)!} \\
-        &= \lambda e^{-\lambda}\sum^\infty_{k=0} \frac{\lambda^k}{k!} \\
-        &= \lambda e^{-\lambda}e^{\lambda} \\
-        &= \lambda
-    \end{split}
-\end{equation*}
-For the variance, it is a little bit more involved and hence omitted but it just falls from using the definition and some manipulations
-\begin{equation*}
-    \operatorname{Var(m)} = \sum^\infty_{m=0} (m-\lambda)^2 \frac{\lambda^m}{m!} e^{-\lambda} =\lambda
-\end{equation*}
-\subsubsection{Evolution}
-In the early 20$^{th}$ century, there was a big question of how do evolutionary adaptations occur and get passed down? The first was the Lamarkian view which effectively stated that mutations arise as an active adaptation to a challenge which then get encoded and passed down. The Darwinian view was that mutations happen constantly and conditions filter out the fit ones. In 1943, Luria and Delbr\"uck conducted an experiment where they took multiple plates of E. Coli cultures and let them grow for a certain amount of generations. Then, they introduced a challenge (T1 Phage) and counted the survivors from each plate and plotted a histogram. What they noticed was a left skewed distribution an where many of the plates had small amounts of survivors. However, there were a few plates with a large amount of survivors. The key insight here is that the Lamarkian and Darwinian views represented different random processes and should thus generate different distributions. \\\\
-The Lamarkian view was that mutations happen in a generation $g$ when the challenge is introduced. Since there are many E. Coli with many trials but a low chance of success, this is a Poisson process. \\\\
-In the Darwinian model, mutations happen all the time but are filtered out by the conditions. Since a beneficial mutation can happen earlier than generation $g$ (when the challenge is introduced), a significant portion of the later bacteria (the offspring of the bacteria that had a beneficial mutation) will survive. This is a ``filtered Poisson" process and this has a higher variance. This filtered Poisson process is exactly what Luria and Delbr\"uck  saw. Evolutionary adaptation is usually Darwinian (with the exception of epigenetics). 
-\subsubsection{Waiting Times}
-Instead of counting say the number of accidents in a week, but rather let us consider the waiting time between events. For a Poisson process, we have 
-\begin{equation*}
-    \p(k) = \frac{\lambda^ke^{-\lambda}}{k!}
-\end{equation*}
-It is worth knowing the time until the next event happens is the same as the time with no events occurring. 
-\begin{equation*}
-    \begin{split}
-        \p(\text{no events in one time unit}) &=\p(k=0) = e^{-\lambda} \\
-        \p(\text{no events in }t\text{ time units})&= e^{-\lambda t} \\
-        \p(\text{wait time } \tau > t)=t\text{ time units})&= e^{-\lambda t}
-    \end{split}
-\end{equation*}
-Let us consider that 
-\begin{equation*}
-    \p(\tau > t) =1-\p(\tau \leq t) = 1-e^{-\lambda t}
-\end{equation*}
-Let us note that the cumulative density function $F(x)$ is defined as
-\begin{equation*}
-    F(x) =\p(X\leq x)= \int^x_{-\infty}f(y) dy
-\end{equation*}
-and so 
-\begin{equation*}
-    f(t) = \od{}{x}F(t) = \lambda e^{-\lambda t}
-\end{equation*}
-which is an exponential distribution. Poisson processes are memory-less distributions which means that the probability you wait another $b$ time units is not dependent on how long you've already waited. Let us show this 
-\begin{equation*}
-    \begin{split}
-        \p (\tau >a+b | \tau > a) &= \frac{\p (\tau > a+b \cap \tau >a)}{\p(\tau >a)} \\
-        &= \frac{\p(\tau > a+b)}{\p(\tau>a)}\\
-        &=\frac{\lambda e^{-\lambda (a+b)}}{\lambda e^{-\lambda a}} \\
-        &= e^{-b\lambda}\\
-        &= \p (\tau > b)
-    \end{split}
-\end{equation*}
-\subsection{More Probability}
-If $X$ is a random variable and why is $Y=aX$, then $E(Y) =aE(X)$ and Var($Y$) = $a^2$Var$(X)$. If we define $Z = \frac{X-b}{a}$ where $a,b$ are constants, then $E(Z) = \frac{E(x)-b)}{a}$ and Var$(Z) = \frac{1}{a^2}$Var$(X)$.\\\\
-Perhaps we want to know how two random variables $X$ and $Y$ vary together. Then we measure the covariance. We define the covariance to be Cov$(X,Y)=E[(X-E(X))(Y-E(Y))]$. The covariance of random variable with itself is just the variance of it. Covariance is annoying to deal (unbounded and the units are the units of $X$ times the units of $Y$) with so we'd rather compute the correlation. 
-\begin{equation*}
-    \operatorname{Cor}(X,Y) = \frac{\operatorname{Cov}(X,Y)}{\sqrt{\operatorname{Var}(X)\operatorname{Var}(Y)}}
-\end{equation*}
-which is bounded between $[-1,1]$. Correlation effectively represents how well a linear relationship works between $X$ and $Y$ but is not infallible. If $X$ and $Y$ are both random variables, then $E(aX+bY) = aE(X)+bE(Y)$ and Var$(aX+bY) = a^2 \operatorname{Var}(X)+b^2 \operatorname{Var}(Y) -2\operatorname{Cov}(X,Y) $. If $A\perp B$, then their covariance is zero. Functions of a random variable are random variables and they have distributions. $\bar x$ is a random variable and it has its own distribution as seen later. 
-\begin{equation*}
-    \begin{split}
-        E(\bar X) &= E\left( \frac{1}{n}\sum^n_{i=1} X_i\right) = \frac{1}{n}E(X_i) = E(X) \\
-        \operatorname{Var}(\bar X) &= \operatorname{Var}\left(\frac{1}{n} \sum^n_{i=1}X_i \right) = \frac{1}{n^2} \operatorname{Var}\left( \sum^n_{i=1}X_i \right) = \frac{1}{n}\operatorname{Var}(X)
-    \end{split}
-\end{equation*}
-This last term is known  as the \emph{standard error of the mean} (SEM).  
-\subsection{Normal Distribution}
-The normal distribution is a continuous distribution for a random variable $x\in \mathbb{R}$. It accepts two parameters, the mean $\mu$ and the variance $\sigma^2$. The probability density function of it is 
-\begin{equation*}
-    f(x) = \frac{1}{\sqrt{2\pi \sigma^2}} e^{-\frac{(x-\mu)^2}{2\sigma^2}}
-\end{equation*}
-We note that it is symmetric about the mean. If we want to standardize $x$, then we let $Z= \frac{x-\mu}{\sigma}$ where using the properties we noted above,  $E(Z) = 0$ and Var($Z)=1$. Therefore $Z \sim N(0,1)$. \\\\Let us introduce some notions to help prove the Central Limit Theorem. We want to start with moments. The moments listed above are known as the \emph{central} moments because it centers the moments around the expected value of the random variable. We can also use non-central moments where we don't subtract anything or subtract a value that isn't the expected value. Recall from before that if we know all of the moments of a distribution, then we know exactly its identity. To do this, it would be tedious to generate all the moments so we want to find a moment generating function. The moment generating function for a random variable $X$ is 
-\begin{equation*}
-    M_x(t) = \langle e^{tx}\rangle
-\end{equation*}
-We can expand using a Taylor Series and use the property that the expected value is a linear operator to get
-\begin{equation*}
-    \begin{split}
-        M_x(t)& =\left \langle 1+tx+\frac{t^2x^2}{2!} \ldots \right\rangle \\
-        &= 1 + t\langle x\rangle + \frac{t^2}{2!} \langle x^2 \rangle + \ldots
-    \end{split}
-\end{equation*}
-We find the $k^{th}$ moment via the $k^{th}$ derivative
-\begin{equation*}
-    \frac{d^k}{dt^k}M_x \Bigg|_{t=0} = \langle x^k\rangle
-\end{equation*}
-Therefore, if two moment generating functions are the same and are well defined and finite, then $X$ and $Y$ have identical distributions. 
-\begin{definition}
-    Let $Z_1,Z_2,\ldots,Z_n$ be a sequence of random variables. We let $Y$ be a random variable with a moment generating function $M_y(t)$. If 
-    \begin{equation*}
-        \lim_{n\rightarrow \infty} M_{Z_n} (t) = M_Y(t)
-    \end{equation*}
-    then we say $Z_n$ \emph{converges in distribution} to $Y$ and we denote it as 
-    \begin{equation*}
-        Z_n \overset{d}{\longrightarrow}Y
-    \end{equation*}
-\end{definition}
-\begin{theorem}[Central Limit Theorem]
-    Let $X_1,X_2,\ldots, X_n$ be $n$ iid observations of a random variable $X$ with $\langle X_i\rangle =\mu$ and Var$(X_i) =\sigma^2$ such that $0<\sigma^2<\infty$. Then 
-    \begin{equation*}
-        Z_n = \frac{\bar X-\mu}{\sigma/n} \overset{d}{\longrightarrow} N(0,1)
-    \end{equation*}
-\end{theorem}
+Here are some properties:
+\begin{enumerate}
+    \item The identity is unique 
+    \begin{proof}
+        Suppose we have some $f\in G$ such that $f*g=g \,\,\, \forall g\in G$. Then if we compose $f$ with the identity, we should get $f*e =e$. By axiom 2 of the group axioms, we must also have that $f*e=f$ and therefore we have that $f*e=e=f$.
+    \end{proof}
+    \item Each inverse element is unique. 
+    \begin{proof}
+        $(a')'a'=e\rightarrow (a')'a'a=ea\rightarrow (a')'e=a\rightarrow (a')'=a$
+    \end{proof}
+    \item Cancellation, that is if $a*b=c$ for some $a,b,c\in G$, then $b=a^{-1}*c$. 
+    \begin{proof}
+        By group axiom 3, there exists an inverse $a^{-1}$. We can then left multiply by $a^{-1}$ such that $a^{-1}*a*b=a^{-1}*c$ and by associativity, we then have $b=a^{-1}*c$.
+    \end{proof}
+    The consequences of this is that we can make the following observations: $a*b=a*c$ implies that $b=c$ and $b*a=c*a$ implies $b=c$.
+\end{enumerate}
+For finite groups, we can write a group table where we have the left argument along the rows and the right argument of the operation along the columns. Since Abelian groups are commutative, they have a symmetry across the diagonal. An interesting thing to note with these group tables is that every entry appears only once in each row and column.
 \begin{proof}
-    Let us find the moment generating function for $Z\sim N(0,1)$. We know that its probability density function is 
+    If we have a repeated entry in a row, that implies $a*b=a*c$ but by cancellation, we have that $b=c$. For each column, this implies that $b*a=c*a$ which also implies $b=c$.
+\end{proof}
+\begin{example}
+    Let us take a group of cardinality 2. We require that there exists an identity element so the set contains $\{e,a\}$ where $a$ is some arbitrary element. We can immediately fill out the sides adjacent to the header rows by the group axioms (since $e*g=g$) in Table \ref{tab:groupCard2}. Therefore we must have that $a*a=e$ and therefore $a$ is its own inverse. We shall also note if we apply the group operation $n$-times to an element, we can represent it as $a^n=a*a*\ldots*a \,\,\,(n$ times).
+    \begin{table}[htbp]
+        \centering
+        \begin{tabular}{c|c|c}
+             &  e&a\\ \hline
+             e& e&a\\ \hline
+             a&a&e\\
+        \end{tabular}
+        \caption{Group table for a group of cardinality 2.}
+        \label{tab:groupCard2}
+    \end{table}
+    If we take a group of cardinality three, we have that $G=\{e,a,b\}$. We once again can fill out the header adjacent row and column by composition with the identity. In the $a*b$ cell of Table \ref{tab:groupCard3}, we require that be $e$ because otherwise, that would require $a*a$ to be $e$ and therefore $b*a=a$ but $a$ was already in that column and so hence we have a contradiction. Therefore we must have $a*a=b$ and $a*b=e$. From this, we can see that $a^2=b$ and if we multiply $a*b=e$, this implies $a*a^2=a^3=e$. Our group is therefore $G=\{e,a,a^2\}$.
+    \begin{table}[htbp]
+        \centering
+        \begin{tabular}{c|c|c|c}
+             &  e&a&b\\ \hline
+             e&e&a&b\\ \hline
+             a&a&b&e \\ \hline
+             b&b&e&a \\ 
+        \end{tabular}
+        \caption{Group table for a group of cardinality 3}
+        \label{tab:groupCard3}
+    \end{table}
+\end{example}
+\begin{example}
+    Let us look at the Quaternion group. The Quaternion group is the set 
+\begin{equation*}
+    Q_8 = \{ \pm 1, \pm i, \pm j, \pm k\}
+\end{equation*}
+under standard multiplication. 1 is the identity element and $i^2=j^2=k^2=-1$. Quaternion multiplication is defined as 
+\begin{equation*}
+    \begin{split}
+        ij=k \twen jk =i \twen  ki=j \\
+        ji=-k \twen kj=-i \twen ik=-j
+    \end{split}
+\end{equation*}
+This is a group of order 8 and is non-abelian. The inverse of $-1$ is $-1$ and so because of this we can say the inverse $i$ and $-i$ and same for $j$ and $k$. Associativity is also good. This group is the reason why the cross product exists in $\R^3$ and the related Octonion group allows for the existence of the cross product in $\R^7$. 
+\end{example}
+\begin{example}
+    Another important group is the set of complex numbers with norm of 1 under multiplication. In other words, $\{ z\in \C: |z|=1\}$. This is an Abelian group and is of infinite order. This is a group because the norms are all one so multiplication stays within the group ($|z_1||z_2|=|z_1z_2|=1$) and the inverse is also in the group (if $|z_1|=1, \frac{1}{|z_1|} =1$). We can also convert each complex number into its polar form $z=re^{i\theta}\,\,\, r,\theta \in \R$ and since each element has a norm of 1, $r=1$ and we can just take $z_1z_2=e^{i(\theta_1+\theta_2)}$ and since the real numbers are a group under addition, this set of complex numbers also form a group. This group is also used to generate groups which contain the $n^{th}$ primitive roots of unity. To do this, we fix a number $n\in \N$. Then the number 
     \begin{equation*}
-        f(x) = \frac{1}{\sqrt{2\pi}}e^{-x^2/2}
+        e^{\frac{2k\pi}{n}i} \twen k\in\{1,2,\ldots,n-1\}
     \end{equation*}
-    Since $Z\sim N(0,1)$, its moment generating function is 
+    is an $n^{th}$ primitive root of unity. This means that these are roots to the equation $z^n=1$ and the primitive means that $n$ is the smallest power that can satisfy the equation (e.g., no smaller number (let's call $m$) exists such that $z^m=1$). We then say that the set of the $n^{th}$ groups of unity form an Abelian group under multiplication of order $n$. One can see this because multiplication of complex numbers is associative, the identity is 1 ($k=0$ root) 
+\end{example}
+\begin{definition}
+    Suppose $A$ is any set. A permutation is a function $f:A\mapsto A$ that is bijective.
+\end{definition}
+\begin{proposition}
+    The set of all permutations of a set $A$ is a group where the binary operation $*$ is composition and $e$ is the identity permutation.
+\end{proposition}
+\begin{proof}
+    We must first show that the composition of permutations is also a permutation. Let us say that $\sigma,\tau$ are permutations of $A$. We can now prove that $\sigma \tau$ is injective. Suppose
     \begin{equation*}
-        \begin{split}
-            M_Z(t) &= \langle e^{tz}\rangle \\
-            &= \int^\infty_{-\infty}e^{tz}\frac{1}{\sqrt{2\pi}}e^{-z^2/2}dz \\
-            &= \frac{1}{\sqrt{2\pi}} \int^\infty_{-\infty} e^{-\frac{1}{2}(z^2-2tz)}dz \\
-            &=\frac{1}{\sqrt{2\pi}} \int^\infty_{-\infty} e^{-\frac{1}{2}((z-t)^2-t^2)} dz \\
-            &=e^{\frac{1}{2}t^2} \frac{1}{\sqrt{2\pi}}\int^\infty_{-\infty} e^{-\frac{(z-t)^2}{2}}dz\\
-            &= e^{\frac{t^2}{2}}
-        \end{split}
+        (\sigma \tau)(a) = (\sigma\tau )(b) \rightarrow \sigma(\tau(a))=\sigma(\tau(b))
     \end{equation*}
-    We now define 
+    Since $\sigma$ is a permutation, $\sigma$ is injective and therefore 
     \begin{equation*}
-        Z_n =\frac{\bar X_n - \mu}{\sigma/\sqrt{n}} = \frac{\sum^n_{i=1}z_i}{\sqrt{n}} \twen z_i = \frac{X_i -\mu}{\sigma}
+        \tau(a)=\tau(b)
     \end{equation*}
-    Let us find the moment generating function of the sum of $z_i$'s and see 
+    Using that logic again, $\tau$ is a permutation and therefore injective and 
     \begin{equation*}
-        \begin{split}
-            M_{\sum z_i}(t) &= \langle e^{t\sum ^n_{n=1}z_i}\rangle \\ &= \left\langle \prod^n_{n=1} e^{tz_i} \right\rangle \\
-            &= \prod^n_{n=1} \langle e^{tz_i} \rangle \\
-            &= \prod^n_{n=1} M_{z_i}(t) \\
-            &= \left[ M_{z_1}(t)\right]^n
-        \end{split}
+        a=b
     \end{equation*}
-    since each trial is independent and identically distributed. We can now use this to find the moment generating function of $Z_n$
+    To show that this is onto, we have to show that for some $a\in A$, there exists an $x\in A$ such that $a=\sigma\tau (x)$ Since $\sigma$ is onto, there exists a $y\in A$ such that $a=\sigma(y)$. $\tau$ is also surjective and so we can say there exists an $x\in A$ such that $y=\tau(x)$. Putting everything together we have that 
     \begin{equation*}
-        \begin{split}
-            M_{Z_n}(t) &= M_{\frac{1}{\sqrt{n}}\sum^n_{n=1} z_i}(t) \\
-            &= M_{\sum^n_{n=1}z_i}\left(\frac{t}{\sqrt{n}}\right)\\
-            &= \left( M_{z_1} \left(\frac{t}{\sqrt{n}} \right) \right)^n
-        \end{split}
+        a=\sigma(y)=\sigma(\tau(x))=(\sigma\tau)(x)
     \end{equation*}
-    We now want to Taylor expand the moment generating function for $z_1$ and use Taylor's Theorem to get 
+    As such we have shown that $\sigma \tau$ is a permutation. Now we can check the group axioms. The group operation is associative since function is associative
     \begin{equation*}
-        \begin{split}
-            M_{z_1}(t) &= M_{z_1}(0) + M'_{z_1}(0)t+M''_{z_1}(\xi) \frac{t^2}{2} \twen 0<\xi <t \\ M_{z_1}(0)&= \langle e^{0z_1}\rangle = 1 \\
-            M'_{z_1}(0)&= \langle z_1 e^{0z_1}\rangle = \langle z_1 \rangle = 0 \text{ since } \langle z_1 \rangle = \langle x_i \rangle -\mu =0 \\
-            \Rightarrow M_{z_1}(t)&= 1+M''_{z_1}(\xi) \frac{t^2}{2}
-        \end{split}
+        ((\sigma \tau)\rho)(a) =\sigma(\tau(\rho(a)))=\sigma(\tau\rho(a))=(\sigma(\tau \rho))(a) 
     \end{equation*}
-    Therefore our moment generating function for $Z_n$ is 
+    We also denote the identity permutation $\iota $ such that $\iota(a)=a \,\,\, \forall a\in A$. Finally, any permutation is invertible since it surjective and given any $y\in A$, there exists only one $x$ such that $y=\sigma(x)$ since $\sigma$ is bijective. We therefore have that $\sigma^{-1}(y)=x$. We can check that $\sigma^{-1}$ is a permutation by using the fact that $\sigma(\sigma^{-1}(x))=x$. Let us consider $\sigma^{-1}(y)=\sigma^{-1}(x)$ and applying $\sigma$ to both sides we get $x=y$ and hence injectivity. We shall define a $y=\sigma(x)$ and therefore $\sigma^{-1}(y)=\sigma^{-1}(\sigma(x))=x$ for all $y\in A$.
+\end{proof}
+This group is known as the symmetric group and we denote it $S_A$. The most important symmetric group is when $A=\{1,2,\ldots,n\}$. We denote this group as $S_n$ and it has cardinality $|S_n|=n!$.\\\\ From now on, we will write $a*b$ as $ab$ except when working with groups using $\Z,\R,$ etc. with addition as they will be denoted using the usual addition sign. Instead of denoting the identity as $e$, we shall write $1$ under the same condition as the last where there is no confusion is possible.
+\subsection{The Symmetric Group}
+Recall that the Symmetric Group $S_n$ is the defined as the set of all permutations of a set $\{1,2,\ldots,n\}$ where the binary operation is composition. The cardinality of $S_n$ is $|S_n|=n!$. Elements of $S_n$ can be written as 
+\begin{equation*}
+    \begin{pmatrix}
+        1&2&3&4&\ldots&n \\k_1&k_2&k_3&k_4&\ldots &k_n
+    \end{pmatrix} \text{ where } k_1,\ldots,k_n \in \{1,\ldots, n\}
+\end{equation*}
+Since we are using composition, we do the permutation $\tau$ before $\sigma$ in the permutation $\sigma \tau$. Let us look at an example to demonstrate 
+\begin{example}
+    Let us suppose in $S_5$ 
     \begin{equation*}
-        M_{Z_n}(t) = \left[ 1+ M''_{z_1}(\xi) \frac{t^2}{2n}\right]^n
+        \sigma = \begin{pmatrix}
+            1&2&3&4&5 \\5&1&2&3&4
+        \end{pmatrix} \twen \tau=\begin{pmatrix}
+            1&2&3&4&5\\1&3&2&5&4
+        \end{pmatrix}
     \end{equation*}
-    As we take the limit as $n\to \infty$, since $0 < \xi  <\frac{t}{\sqrt n}$, $\xi \to 0$. Therefore we evaluate the second moment which is $\langle z_1^2\rangle = \operatorname{Var}\left(\frac{X_i-\mu}{\sigma^2} \right) = 1$ and we get 
+    The permutation $\sigma\tau$ is then 
     \begin{equation*}
-        \lim_{n\to \infty}\left[ 1+ M''_{z_1}(\xi) \frac{t^2}{2n}\right]^n = \lim_{n\to \infty} \left[ 1+\frac{t^2}{2n} \right]^n = e^{\frac{t^2}{2}}
+        \sigma \tau = \begin{pmatrix}
+            1&2&3&4&5\\5&1&2&4&3
+        \end{pmatrix}
     \end{equation*}
-    Since 
+    We can also find the inverse of a permutation by just going in ``reverse"
     \begin{equation*}
-        \lim_{n\to \infty}M_{Z_n}(t) = M_Z(t)
+        \sigma^{-1} = \begin{pmatrix}
+            1&2&3&4&5 \\3&2&4&5&1
+        \end{pmatrix}
     \end{equation*}
-    then 
+\end{example}
+\begin{proposition}
+    If $n\geq 3$, the group $S_n$ is non-Abelian \label{prop:1.12}
+\end{proposition}
+\begin{proof}
+    Let us first just consider the case $n=3$. Consider the following composition of permutations 
     \begin{equation*}
-        Z_n \overset{d}{\longrightarrow}N(0,1)
+        \begin{pmatrix}
+            1&2&3\\2&3&1
+        \end{pmatrix}
+        \begin{pmatrix}
+            1&2&3\\2&1&3
+        \end{pmatrix} = \begin{pmatrix}
+            1&2&3\\3&2&1
+        \end{pmatrix}\\
+        \begin{pmatrix}
+            1&2&3\\2&1&3
+        \end{pmatrix} \begin{pmatrix}
+            1&2&3\\2&3&1
+        \end{pmatrix}=\begin{pmatrix}
+            1&2&3\\1&3&2
+        \end{pmatrix}
+    \end{equation*}
+    We can prove this for higher $n$ by simply sending everything beyond 3 to their number. For example 
+    \begin{equation*}
+        \begin{pmatrix}
+            1&2&3&4&5&\ldots\\2&3&1&4&5&\ldots
+        \end{pmatrix}
     \end{equation*}
 \end{proof}
-We can also approximate the binomial distribution using a normal. If $Y\sim \operatorname{Bin}(n,p)$ where $X=1$ if it is a success, then $Y = \displaystyle{\sum^n_{n=1}X_i}$ where $X_i \sim \operatorname{Ber}(p)$ and $\p (X=1) =p$. Therefore the expected value of $X$ is $E(X) = \displaystyle{\sum_{X\in S}}X\p (x) = p$ and the variance is $\operatorname{Var}(X) = \displaystyle{\sum_{X\in S}}(X-E(X))^2\p (X) = (1-p)^2p + p^2(1-p) =p(1-p)$. By the central limit theorem, the average of $n$ Bernoulli trials $X_i \sim \operatorname{Ber}(p)$ is distributed as 
+\subsubsection{Cycle Notation}
+We can express the elements of a group in a more streamlined way.
 \begin{equation*}
-    \bar X \sim N \left( p , \frac{p(1-p)}{n}\right)
+    (k_1,k_2,\ldots,k_l) \text{ where } k_1,\ldots,k_l \in \{1,2,\ldots,n\} \text{ and are distinct}
 \end{equation*}
-and therefore
+This notation denotes the following permutation: $k_1\rightarrow k_2\rightarrow\ldots\rightarrow k_{l-1}\rightarrow k_l\rightarrow k_1$. Any numbers not listed in this cycle is assumed to be fixed. In this case we have to specify what symmetric group we are in because the number of fixed entries could be 1 or 2 or 500.
+\begin{example}
+    In $S_6$, the notation $(3,1,5,4)$ represents the permutation
+    \begin{equation*}
+        \begin{pmatrix}
+            1&2&3&4&5&6\\5&2&1&3&4&6
+        \end{pmatrix}
+    \end{equation*}
+    We can also compose them together as normal 
+    \begin{equation*}
+        (3,1,5,4)(1,2,6,5,3) =\begin{pmatrix}
+            1&2&3&4&5&6\\2&6&5&3&1&4
+        \end{pmatrix}
+    \end{equation*}
+\end{example}
+If we want to invert a permutation, we just reverse the order of the terms. For example $\sigma=(k_1,k_2,\ldots,k_l)$ inverts to $\sigma^{-1}=(k_l,k_{l-1},\ldots,k_1)$. Cycles of length 2 are specifically called \emph{transpositions}. We also note that cycles are not unique since we see that the inverse of a cycle $(a,b)$ is $(b,a)$ which is the same as $(a,b)$. There is a fact that if you have 2 cycles are disjoint, that is, they don't have any entries in common, the disjoint cycles commute. Additionally, every permutation can be written as a product of disjoint cycles. 
 \begin{equation*}
-    Y \sim N(np, np(1-p))
+    \begin{pmatrix}
+        1&2&3&4&5&6&7&8\\8&5&3&6&7&4&2&1
+    \end{pmatrix} = (1,8)(2,5,7)(3)(4,6)
 \end{equation*}
-for large $n$ (though usually converges by $n\approx 50$) and $p$ is not close to $0$ or $1$.
+The cycles with just a single element can be excluded.
+\subsection{The Dihedral Group}
+Start with a regular $n$-gon. The dihedral group $D_n$ is the group of all symmetries of this $n$-gon. Let us take a look at the symmetries of a triangle.
+\begin{example}
+We can consider the symmetries of triangle as a clockwise rotation by $120^\circ$ once or twice (which is the same as a counter-clockwise rotation by $120^\circ$) or reflecting along an axis of symmetry that goes through one of the vertices. These are described in Figure \ref{fig:d3}.
+    \begin{figure}[htbp]
+        \centering
+        \includegraphics[width=0.5\linewidth]{d3.png}
+        \caption{Elements of the Dihedral Group $D_3$}
+        \label{fig:d3}
+    \end{figure}
+    We can call one clockwise rotation by $\rho_1$, two clockwise (or again, 1 counter-clockwise rotation) by $\rho_2$, and then we have reflections $\mu_1,\mu_2,\mu_3$ about the vertices $1,2,$ and $3$. We also note that $\rho_1^2=\rho_2=1$ and $\mu_1^2=\mu_2^2=\mu_3^2=1$. We claim that $D_3=\{1,\rho_1,\rho_2,\mu_1,\mu_2,\mu_3\}$ are all the elements of the dihedral group $D_3$. What about products though? We can think of dihedral group as a subset of the symmetric group and so the symmetries of the $n$-gon are just permutations of the vertices. However, we need to preserve the relationships between the vertices (basically, there must exist an edge between 1 and 2 and symmetries that don't respect this edge, aren't part of the dihedral group).
+As such, we can write $\rho_1$ and $\mu_2$ as 
+\begin{equation*}
+    \rho_1=\begin{pmatrix}
+        1&2&3\\2&3&1
+    \end{pmatrix} \twen \mu_2=\begin{pmatrix}
+        1&2&3\\3&2&1
+    \end{pmatrix}
+\end{equation*}
+We can then find the products of these two actions 
+\begin{equation*}
+    \rho_1\mu_2=\begin{pmatrix}
+        1&2&3\\1&3&2
+    \end{pmatrix} =\mu_1 \twen \mu_2\rho_1=\begin{pmatrix}
+        1&2&3\\2&1&3
+    \end{pmatrix} = \mu_3
+\end{equation*}
+We see that the product of any two symmetries is also a symmetry. We also see the $D_n$ is non-Abelian (which makes sense because we established previously in Proposition \ref{prop:1.12}).
+\end{example}
 
-\subsection{Synthesis and Degradation - Stochastic}
-If we consider the deterministic system below.
-% Method B: Floating figure with caption
-\begin{figure}[htbp]
-    \centering
-    \begin{tikzpicture}[
-    box/.style={
-        draw,
-        minimum width=1.5cm,
-        minimum height=1.2cm,
-        align=center,
-        font=\large\bfseries
-    },
-    % Scaled arrowhead definition
-    bigarr/.style={
-        -{Latex[length=3.5mm, width=2.5mm]},
-        line width=1.2pt
-    }
-]
-        \node[box] (X) {x};
-        \draw[bigarr] ([xshift=-2.5cm]X.west) -- (X.west)
-            node[midway, above] {synthesis}
-            node[midway, below] {$\beta$};
-        \draw[bigarr] (X.east) -- ([xshift=2.5cm]X.east)
-            node[midway, above] {degradation}
-            node[midway, below] {$k$};
-    \end{tikzpicture}
-    \caption{Compartment model for some molecule like mRNA or a protein.}
-\end{figure}
-Deterministically, we would get that 
+\begin{proposition}
+    The cardinality of the dihedral group $D_n$ is $|D_n|=2n$.
+\end{proposition}
+\begin{proof}
+    We can express any rotation as sending the vertex $1$ to any vertex $i\in \{1,\ldots,n\}$. Vertex 2 can then only be sent to $i-1$ or $i+1$ (which come about from reflection). Once these two are established, the rest of the vertices are completely determined due to the ``rigid" edge requirement.\\\\
+    Let $\rho$ be a single rotation clockwise by an angle $\frac{2\pi}{n}$, then there are $n$ distinct rotations $\{1,\rho,\rho^2,\ldots,\rho^{n-1}\}$ (where $\rho^n=1$). We can let $\mu$ be a reflection about an axis containing the center and vertex 1. We can then achieve any reflection by rotating a certain amount of times between $0$ and $n-1$and then reflection. Our Dihedral group can then generalized to be $D_n =\{1,\rho,\ldots,\rho^{n-1},\mu,\mu\rho,\ldots,\mu \rho^{n-1}\}$. Since there are $n$ number of rotations and $n$ vertices we can reflect about, we have $2n$ elements in our group. \\\\
+    We must also check that all elements are distinct. Each rotation is distinct since if not, then there exists two numbers $i,j\in \{0,\ldots,n\}$ such that $\rho^i=\rho^j\rightarrow \rho^{i-j}=e$ which isn't true unless $i=n$ and $j=0$ since that is the only way to get back the identity permutation. For the reflection permutations, this would imply $\mu \rho^i=\mu \rho^j \rightarrow \rho^i=\rho^j$ for some $i,j\in \{0,\ldots,n\}$ which we established isn't possible.
+\end{proof}
+\begin{proposition}
+    $\rho\mu = \mu \rho^{-1}$
+\end{proposition}
+\begin{proof}
+    \begin{equation*}
+        \begin{split}
+            \rho&=\begin{pmatrix}
+            1&2&3&\ldots&n-2&n-1&n\\2&3&4&\ldots&n-1&n&1
+        \end{pmatrix}
+        \twen \rho^{-1}=\begin{pmatrix}
+            1&2&3&\ldots &n-2&n-1&n\\n&1&2&\ldots &n-3&n-2&n-1
+        \end{pmatrix}
+        \\\mu_{}&=\begin{pmatrix}
+            1&2&3&\ldots&n-2&n-1&n\\1&n&n-1&\ldots&4&3&2
+        \end{pmatrix}
+        \end{split}
+    \end{equation*}
+    \begin{equation*}
+        \rho \mu=\begin{pmatrix}
+            1&2&3&\ldots &n-2&n-1&n\\2&1&n&\ldots&5&4&3
+        \end{pmatrix} \twen \mu\rho^{-1}=\begin{pmatrix}
+            1&2&3&\ldots&n-2&n-1&n\\ 2&1&n&\ldots & 5&4&3
+        \end{pmatrix}
+    \end{equation*}
+\end{proof}
+\subsection{Subgroups}
+I am making this a subsection because Tate Darin (who can be contacted at tatedarin28@u.northwestern.edu) said it would be funny if subgroups were a subsection.
+\begin{definition}
+    Suppose $G$ is a group. If $H$ is a subset of $G$ which is also a group under the same group operation defined on $G$, then $H$ is a \emph{subgroup} of $G$. We denote this as $H\leq G$.
+\end{definition}
+Being a subgroup implies the following 
+\begin{enumerate}
+    \item 1 (which is the identity in $G$) $\in H$
+    \item The group operation needs to be closed on $H$ 
+    \item Inverse closure is also required
+\end{enumerate}
+Every group $G$ has at least 2 subgroups: the trivial subgroup ($\{ 1\}$) and $G$ itself. If we want a subgroup that is neither of these, we refer to them as \emph{proper, nontrivial} subgroup. 
+\begin{example}
+    If we take $G=\Z$ (if we do not specify which group operation with $\Z$, it is assumed to be addition), then a subgroup would by a group $n\Z$ where $n\Z$ is the set of integers divisible by $n$. In fact, we can state a theorem about the subgroups of $\Z$. However, first we must prove the division algorithm.
+\end{example}
+\begin{theorem}[Division Algorithm]
+    Let $a,b \in \Z$ with $b>0$. Then there exist unique integers $q$ and $r$ such that $a=bq+r$ with $0\leq r<b$.
+\end{theorem}
+\begin{proof}
+    Let $S=\{a-bt: t\in \Z, a-bt \geq 0\}$. If $0\in S$, then $a-bq$ for some $q\in \Z$ and therefore $a=bq+0$. We can also claim that $S\subseteq \N$. We claim that $S$ is nonempty. Let $t=-|a|$, then $a-bt = a+|a|b$. If $a\geq 0$, then $a+|a|b \geq 0$ since $b>0$. If $a<0$ then $a+|a|b=a(1-b)$. Since $a<0$ and $b\geq 1$, we get that $(1-b)\leq 0$ and generally $a(1-b)\geq 0$.\\\\
+    Since $S$ is nonempty we can apply the Well Ordering Principle and so $S$ has a least element we call $r=a-bq$. By definition, $r\geq 0$ and if $r\geq b$, then $0\leq r-b<r$ but also $r-b=a-bq-b=a-b(q+1)$ and therefore $a-b(q+1)$ is a smaller element of $S$ than $r$ which contradicts our choice of $r$. Thus we must have $a=bq+r$ such that $0\leq r<b$.\\\\
+    To prove uniqueness, let us supposed $a=bq_1+r_1=bq_2+r_2$ with $q_i,r_i\in \Z$ and $0\leq r_i<b$. Then $b(q_1-q_2)=r_2-r_1$. Specifically we have $b|q_1-q_2|=|r_2-r_1|$. If $q_1\neq q_2$, then $b|q_1-q_2|\geq b$ but at the same time $0\leq r_1,r_2<b\rightarrow |r_2-r_1|<b$ which is impossible. Therefore $q_1=q_2$ and $r_1=r_2$.
+\end{proof}
+\begin{theorem}
+    Every subgroup of $\Z$ is of the form $n\Z$.
+\end{theorem}
+\begin{proof}
+    Suppose $H \leq \Z$. If $H=\{0\}$, there is nothing show $n\Z$. Otherwise, $H$ contains at least one positive number since if $H$ contains a negative number, we need its inverse which is its negative which is positive. We now say $n$ is the smallest positive number in $H$ by the Well Ordering Principle. Since $n\in H$, $n\Z \subseteq H$ since we require that $n^2,n^3,\ldots$ and so $n\Z$. Let us suppose $a\in H$ and we say that $a=qn+r \,\,\, 0\leq r<n$. Since $a\in H$ and $n$ is also $\in H$, $r=a-qn$ so $r=a-qn \in H$ and $r<n$. But $n$ is the smallest positive number in $H$, we must have that $r=0$ and therefore $n|a\rightarrow a=nq\in n\Z$. Since $a$ is arbitrary, this means that $H=n\Z$.
+\end{proof}
+\begin{proposition}
+    If $H_i \leq G \,\,\, \forall i$, then $\bigcap H_i \leq G$. 
+\end{proposition}
+\begin{proof}
+    $1\in \bigcap H_i$ since $1\in H_i\,\,\, \forall i$. That proves the identity is in the intersection. If $x,y\in \bigcap H_i$, then $x,y\in H_i \,\,\, \forall i$ so $xy\in H_i \,\,\, \forall i$ (by the definition of a subgroup), so $xy\in \bigcap H_i$ which proves closure. Finally, $x\in \bigcap H_i$ so $x\in H_i \,\,\, \forall i$, and by the definition of a subgroup, the inverse $x^{-1} \in H_i \,\,\, \forall i$ so $x^{-1} \in \bigcap H_i$.
+\end{proof}
+\subsection{Generators}
+\begin{definition}
+    Suppose $S$ is a subset of $G$. We define the subgroup \emph{generated} by $S$ (denoted $\langle S\rangle $) to be the smallest subgroup of $G$ that contains $S$. In other words, 
+    \begin{equation*}
+        \langle S\rangle =\bigcap_{\substack{H\leq G \\ S\subseteq H}}H
+    \end{equation*}
+\end{definition}
+\begin{example}
+    In $\Z$, $\langle6,9\rangle$ generates the subgroup $3\Z$. In $\Z_6$, $\langle 2\rangle$ generates $\{0,2,4\}$.
+\end{example}
+Generators are generally not unique. 
+\begin{example}
+    $Z_8 = \langle 1\rangle =\langle 3\rangle = \langle 5\rangle =\langle 7 \rangle$.
+\end{example}
+One observation is that if $G$ is a group and $H\leq G$, then if $S\subseteq H$, we must have $\langle S\rangle \subseteq H$.
+\begin{definition}
+    A group that is generated by one element is deemed \emph{cyclic}.
+\end{definition}
+\begin{proposition}
+    Any cyclic is abelian
+\end{proposition}
+\begin{proof}
+    Say $G=\langle x\rangle = \{ x^n : n\in \Z\}$. Let us propose 
+    \begin{equation*}
+        x^nx^m=x^{n+m} = x^{m+n} = x^mx^n
+    \end{equation*}
+    by the commutativity of addition.
+\end{proof}
+
+\begin{theorem}
+    Any subgroup of a cyclic group is itself cyclic.
+\end{theorem}
+\begin{proof}
+    Suppose $G=\langle a\rangle$ and $H\leq G$. If $H$ is trivial, then $\{e\}$ generates itself and there is nothing to show. Otherwise, let $a^n$ be the smallest positive power of $a$ in $H$. Since $a^n\in H$, we therefore have that $\langle a^n \rangle \subseteq H$. We now must show the reverse inclusion. Take any $a^k \in H$ for some $k$ since $H\leq G$ and $G$ is cyclic. We now use the division algorithm to say that $k=qn+r$ for $0\leq  r<n$. We then have $a^k = a^{qn+r}=(a^n)^qa^r$. $(a^n)^q\in H$ since it is a multiple of the smallest power of $a\in H$. Using cancellation, we have $a^r=(a^n)^{-q}a^k\in H$ and since the right hand side is closed under the group operation, we have that $a^r\in H$ but since $a^n$ is the smallest power of $a\in H$, we must have that $r=0$. Since $a^k$ is some arbitrary element in $H$, we have that $H\subseteq \langle a^n\rangle$ which establishes that $H=\langle a^n\rangle$.
+\end{proof}
+Let us look at an example of the subgroups of $\Z_{12}$. 
+\begin{example}
+    $\{0\}$ is the trivial subgroup. We can see that $\langle 1 \rangle =\Z_{12}$. $\langle 2 \rangle = \{ 0,2,4,6,8,10\}$. $\langle 3\rangle = \{0,3,6,9\}$. $\langle 4 \rangle =\{0,4,8\}$. $\langle 5\rangle =\Z_{12}$. $\langle 6 \rangle =\{0,6\}$. $\langle 7\rangle = \Z_{12}$. $\langle 8\rangle =\langle 4\rangle$. $\langle 9\rangle =\langle 3\rangle$. $\langle 2\rangle =\langle 10\rangle$. $\langle 11\rangle =\Z_{12}$. 
+\end{example}
+This example is a demonstration of a theorem we will soon prove. Let us first state some definitions
+\begin{definition}
+    If $a,b\in \Z \backslash 0$, their \emph{greatest common divisor} is the unique $g\in \Z^+$ satisfying 
+    \begin{enumerate}
+        \item $g|a$ and $g|b$
+        \item If $c|a$ and $c|b$ then $c|g$
+    \end{enumerate}
+\end{definition}
+\begin{theorem}[Bezout's]
+    Given any nonzero integers $a,b$ we can find integers $m,n$ such that $ma+nb=\gcd (a,b)$
+\end{theorem}
+We can now state our theorem.
+\begin{theorem}
+    In $Z_n$, $\langle a \rangle=\langle \gcd(a,n)\rangle$. Particularly, generators of $\Z_n$ are precisely those that are relatively prime to $n$.
+\end{theorem}
+\begin{proof}
+    Find $k,l$ such that $ka+ln =\gcd(a,n)$. Then in $\Z_n$, we have that $ka \equiv \gcd(a,n)$. Thus we have that $\langle \gcd(a,n)\rangle \subseteq \langle a \rangle$. Conversely, $a$ is a multiple of $\gcd(a,n)$ so $\langle a \rangle \subseteq \langle \gcd(a,n)\rangle$ so now $\langle a \rangle = \langle \gcd(a,n)\rangle$.
+\end{proof}
+
+\section{Homomorphisms}
+\subsection{Properties of Homomorphisms}
+Consider the following groups: $\Z_2=\{0,1\}$ under addition mod 2, $\{1,-1\}$ under multiplication, and  
 \begin{equation*}
-    \od{x}{t} = \beta - kx
+    \left\{ I_2,\begin{pmatrix}
+        0&1\\1&0
+    \end{pmatrix} \right\}
 \end{equation*}
-However, let us try to turn this into a stochastic process. Let us take $\Delta t$ as such a small time step such that at most, only one event (a synthesis OR a degradation occurs). Let us say that $x_i$ is a random variable for the number of mRNA for a particular gene $X$ at time $t=i\Delta t$, $x_0$ is the initial value of $x$, $\beta$ is the mean synthesis rate such that $\p($synthesis)$=\beta \Delta t$, $k$ is the per capita degradation rate such that $\p($degradation)$=kx\Delta t$, and $x^*$ is the final steady state. We can see that the birth-death rate represents a Poisson process but not exactly since the rates change. As such, let us take a look at 
+All these groups are of the form $\{e,a\}$ where $a\neq e$ and $a^2=e$. In other words, they all have the same group table (\ref{tab:groupCard2}). In some sense, all these groups are ``the same." 
+\begin{definition}
+    A function $\varphi:G_1 \mapsto G_2$ is a \emph{homomorphism} if it satisfies $\varphi(x*y)=\varphi(x)*\varphi(y)$ where the left hand side is the group operation on $G_1$ and the right hand side is the group operation on $G_2$.
+\end{definition}
+
+\begin{proposition}
+    If $\varphi : G_1\mapsto G_2$ is a homomorphism, then 
+    \begin{enumerate}
+        \item $\varphi_1(e_1)=e_2$
+        \item $\varphi(g^{-1})=\varphi (g)^{-1} \,\,\, \forall g\in G$
+    \end{enumerate}
+\end{proposition}
+\begin{proof}
+    To prove the first fact, we have that $e_1e_1=e_1$ so $\varphi (e_1e_1)=\varphi(e_1)$ but also by the definition of a homomorphism, $\varphi (e_1e_1) = \varphi(e_1)\varphi(e_1)$ which implies $\varphi(e_1)\varphi(e_1)=\varphi(e_1) \rightarrow \varphi(e_1)=e_2$. To prove the second fact, we know that $g^{-1}g=e_1$ and so we apply $\varphi$ to get $\varphi(g^{-1}g)=\varphi(e_1)$ but also is equal to $\varphi(g^{-1})\varphi(g)$ and so therefore $\varphi(g^{-1})\varphi(g)=e_2\rightarrow \varphi(g^{-1})=\varphi(g)^{-1}$  
+\end{proof}
+\begin{definition}
+    Suppose $\varphi: G_1 \mapsto G_2$ is a homomorphism. We define the \emph{kernel} of $\varphi$ as the set $\ker \varphi= \{x\in G_1: \varphi(x)=e_2\}$ and the \emph{image} of $\varphi$ as the set $\im \varphi = \{y\in G_2:y=\varphi(x)$ for some $x\in G_1\}=\{\varphi(x):x\in G_1\}$.
+\end{definition}
+
+\begin{proposition}
+    $\ker \varphi$ is a subgroup of its domain $G_1$ and $\im \varphi$ is a subgroup of the codomain $G_2$.
+\end{proposition}
+\begin{proof}
+    To prove that the kernel of $\varphi$ is a subgroup of $G_1$, we show that $\varphi(e_1)=e_2 \therefore e_1\in \ker \varphi$. If $\varphi(x)=e_2=\varphi(y)$, then $\varphi (xy)=\varphi(x)\varphi(y)=e_2e_2=e_2$ and therefore it is closed. Finally, if $\varphi(x)=e_2$, then $\varphi(x^{-1})=\varphi(x)^{-1} = e_2^{-1}=e_2$ and inverse closure exists in $\ker \varphi$. Hence, $\ker \varphi \leq G_1$. \\\\
+    Proving the image of $\varphi$ is a subgroup of $G_2$ is much of the same. The identity is in the image since $\varphi(e_1)=e_2$. If $y_1,y_2\in \im \varphi$, then $y_1y_2=\varphi(x_1)\varphi(x_2)=\varphi(x_1x_2)$ and hence it is closed. By the previous proposition, we know that $y^{-1} = \varphi(x^{-1})$ and hence the inverse also exists in the image. Hence, $\im \varphi \leq G_2$.
+\end{proof}
+Let us look at an example. 
+\begin{example}
+    Let us define a mapping $\det :GL_2(\R) \rightarrow \R^{\times}$ where $\R^{\times}$ are nonzero real numbers under multiplication. The determinant is a homomorphism since $\det(AB)=\det A \det B$. The kernel of the determinant is the set of all $2\times2$ invertible matrices with determinant 1 and is represented by the subgroup $SL_2(\R)$. The image of the determinant is just $\R^{\times}$ since if $a\in \R^{\times}$, it can be represented as
+    \begin{equation*}
+        a=\det \begin{bmatrix}
+            a&0\\0&1
+        \end{bmatrix}
+    \end{equation*}
+\end{example}
+There always exists two homomorphisms: the trivial and identity homomorphisms. The trivial homomorphism is defined as $\varphi : G_1 \mapsto G_2$ by $\varphi (x) = e_2$ where the kernel is $\ker \varphi = G_1$ and the image is $\im \varphi = \{e_2\}$. The identity homomorphism is defined as $\id_G :G\mapsto G$ such that $\id (x)=x$. The kernel is $\ker \id_G = \{ e\}$ and the image is $\im \id_G = G$.
+
+\subsection{Isomorphisms}
+\begin{definition}
+    A homomorphism is an isomorphism if it is invertible. More precisely, $\varphi : G_1 \mapsto G_2$ is an isomorphism if it is a homomorphism and there exists another homomorphism $\varphi ^{-1} : G_2 \mapsto G_1$ such that $\varphi ^{-1} \circ \varphi = \id _{G_1}$ and $\varphi \circ \varphi^{-1} = \id_{G_2}$.
+\end{definition}
+Two groups are isomorphic if there exists an isomorphism between them which is denoted by 
 \begin{equation*}
-    \p (x_{i+1}| x_1,x_2,\ldots,x_i) = \begin{cases}
-        \beta \Delta t & x_{i+1}=x_i + 1 \text{ synthesis} \\ kx\Delta t & x_{i+1} = x_i -1 \text{ degradation} \\ 1-\beta \Delta t-kx\Delta t& x_{i+1}=x_i \text{ do nothing}
+    G_1 \cong G_2
+\end{equation*}
+\begin{theorem}
+    A homomorphism is an isomorphism if and only if it is bijective.
+\end{theorem}
+\begin{proof}
+    ($\Rightarrow$) Suppose we have an isomorphism $\varphi : G_1 \mapsto G_2$ so therefore $\varphi ^{-1}$ exists. To prove $\varphi$ is injective, we have that $\varphi (x_1)=\varphi (x_2) \rightarrow \varphi^{-1}\varphi(x)=\varphi^{-1}\varphi(x) \rightarrow x_1=x_2$. To prove surjectivity, let $y\in G_2$. $\varphi^{-1}$ exists so let $x=\varphi^{-1}(y) \in G_1$. $\varphi (x) =\varphi \varphi^{-1}(y)=y$ which proves surjectivity. \\\\
+    ($\Leftarrow$) Now suppose $\varphi$ is bijective. We now need to find $\varphi ^{-1}$. Let $\varphi ^{-1}$ be as follows.; $y\in G_2$ and $\varphi^{-1} (y) = $ the unique $x\in G_1$ for which $y=\varphi(x)$. This exists since $\varphi $ is surjective and is unique since $\varphi$ is injective. We then have $\varphi \circ \varphi^{-1} (y) = \varphi (\varphi^{-1}(y))=\varphi($ the unique $x\in G_1$ such that $\varphi(x)=y)=y$. Now we check the other arrangement $\varphi ^{-1} \circ \varphi(x) = \varphi^{-1}(\varphi ($unique $x$ such that $\varphi(x)=y)) = \varphi^{-1}(y) = $ the unique $x$ such that $\varphi(x)=y$. This is our inversion. We still need to prove it is a homomorphism. Suppose $y_1 y_2 \in G_2 $ such that $\varphi^{-1} (y_1y_2) = $ unique $x\in G_1$ such that $\varphi(x)=y_1y_2$. We know that $\varphi ^{-1}(y_1) =x_1 \in G_1$ and $\varphi ^{-1}(y_2) =x_2$. Since $\varphi$ is a homomorphism, we have that $\varphi (x_1x_2) = \varphi(x_1)\varphi(x_2) = y_1y_2$ and therefore $\varphi^{-1}(y_1y_2) =x_1x_2 = \varphi ^{-1}(y_1)\varphi^{-1}(y_2)$. We therefore have proved that $\varphi^{-1}$ is a homomorphism.
+\end{proof}
+\begin{proposition}
+    A homomorphism is injective if and only if $\ker \varphi = \{ e_1 \}$.
+\end{proposition}
+\begin{proof}
+    ($\Rightarrow$) Suppose $\varphi$ is injective. $\ker \varphi = \{x \in G_1: \varphi(x)=e_2\}$. We have that $\varphi(e_1)=e_2$ and since $\varphi $ is injective, if $\varphi (x)=e_2$, $x=e_1$ and $\ker \varphi = \{e_1\}$. \\\\
+    ($\Leftarrow$) Now suppose $\ker \varphi = \{ e_1\}$.If $\varphi (y)=\varphi(h)$ then $\varphi (y) \varphi (h)^{-1} = e_2 \rightarrow \varphi (gh^{-1}) =e_2$ since $\varphi$ is a homomorphism. We therefore have that $gh^{-1} \in \ker \varphi$ but since we're assuming the only element in the kernel is $e_1$, we have that $gh^{-1}=e_1 \rightarrow g=h$ and therefore $\varphi $ is injective.
+\end{proof}
+In a similar way, one can prove that $\varphi$ is surjective if and only if $\im \varphi = G_2$. \\\\
+An isomorphism effectively means that if you rename the elements, two groups have the same group table. 
+\begin{proposition}
+    Any cyclic group of order $n$ is isomorphic to $\Z_n$ and any cyclic group of order $\infty$ is isomorphic to $\Z$.
+\end{proposition}
+\begin{proof}
+    Suppose $G$ is cyclic and has order $n$, then $G=\{ 1,a,a^2,\ldots,a^{n-1}\}$ where $a^n=1$. We now define $\varphi : G\rightarrow \Z_n$ by $\varphi (a^k) = k \mod n$. In $G$, we see that $a^ka^l = a^{(k+l)\mod n}$ so $\varphi(a^ka^l) = (k+l)\mod n = \varphi(a^k)+\varphi(a^l)$ in $\Z_n$. This is indeed a homomorphism. To see if $\varphi$ is injective, if we have $\varphi (a^k) =0\mod n$ then since $0\leq k \leq n-1$, it must be that $k=0$ since $a^k=1$. To check surjectivity, we can see that $\forall k \in \Z_n, k=\varphi (a^k)$.\\\\
+    If $|G| = \infty$ then $G=\{\ldots,a^{-2},a^{-1},1, a,a^2,\ldots\}$ with $a^k \neq 1 \,\,\, \forall k \in \Z$. We now define $\varphi (a^k)=k$ and therefore $\varphi(a^ka^l) = \varphi (a^{k+l})=k+l = \varphi(a^k)+\varphi (a^l)$. This proves it is a homomorphism. We can see that $\varphi(a^0) =0$ so it is injective and $k=\varphi(a^k)$ for all $k\in \Z$ so it is surjective.
+\end{proof}
+This classifies all cyclic groups up to isomorphism. A natural question to ask from this is, can we classify all groups up to isomorphism? 
+\begin{equation*}
+    \text{no.}
+\end{equation*}
+But if we modify the question, we can answer it and it has been answered. \\\\
+Note, if $\varphi : G_1 \mapsto G_2$ is an injective homomorphism, it may not always be an isomorphism onto $G_2$ but it will always be an isomorphism onto its image 
+\begin{equation*}
+    G_1 \cong \im \varphi
+\end{equation*}
+If $G$ is cyclic, let $\langle a \rangle =G$, then to uniquely define a homomorphism, we only need to specify where to send $a$ since $\varphi (a^k) =\varphi (a)^k$. 
+\begin{theorem}[Cayley's Theorem]
+    Every group is a group of permutations.
+\end{theorem}
+\begin{proof}
+    Given any set $A$, there exists a symmetric group $S_A=\{$all bijections $\sigma: A\mapsto A\}$ where the operation is composition. Given $G$, consider $S_G$ and given any $g \in G$, define $\sigma_g:G\mapsto G$ by $\sigma_g(x)=gx$. We claim that 
+    \begin{enumerate}
+        \item Each $\sigma_g$ is a permutation of the set $A$ 
+        \item $\varphi:G\mapsto S_G$ by $\varphi (g)=\sigma_g$ is a homomorphism
+        \item $\varphi$ is injective
+    \end{enumerate}
+    If we show this, then $G \cong $ a subgroup of $S_G$. Let us start by proving the first point. If $\sigma_g(x)=\sigma_g(y)$ then $gx=gy \rightarrow x=y$ and hence injective. Given anny $y=\in G$, $y=\sigma_g(g^{-1}y)$ which proves surjectivity and therefore $\sigma_g$ is bijective and a permutation. \\\\
+    To prove claim 2, we consider $\varphi (gh) =\sigma_{gh}$ where $\sigma_{gh}(x)=ghx$. If we consider $\varphi(g) \varphi(h) = \sigma_g(\sigma_h(x)) = \sigma_g(hx)=ghx$ and therefore $\varphi(gh)=\varphi(g)\varphi(h)$. Let us note that $\varphi(g)$ is a permutation and the operation between $\varphi(g) $ and $\varphi(h)$ is function composition. \\\\
+    To prove the final claim, we just need see the kernel of $\varphi$. Let us suppose $\varphi(g)=\id$ in $S_G$. Then $\sigma_g =\id $ so $\forall x, gx=x \to g=e$ and therefore $\varphi$ is injective.
+\end{proof}
+\subsubsection{Classifications of Small Groups}
+The trivial group is naturally isomorphic to $\Z_1$. We showed previously that groups of order 2 and 3 are fixed and therefore isomorphic to $\Z_2$ and $\Z_3$ respectively. For order 4, we need to split into cases. For the first case, we have that $a^2=1$.
+\begin{table}[htbp]
+    \centering
+    \begin{tabular}{c|c|c|c|c}
+         &  1&a&b&c  \\ \hline
+         1&1&a&b&c \\ \hline 
+         a&a&1&c&b \\ \hline
+         b&b&c&&\\ \hline
+         c&c&b&&
+    \end{tabular}
+    \caption{Case 1 when $a^2=1$}
+    \label{tab:case1}
+\end{table}
+We can split this into further subcases. The first is if $b^2=1$ which then forces $c^2=1$ and therefore $bc=a$ and $cb=a$. This is a group. The second subcase is $b^2\neq 1$ and so $b^2=a$ which implies $cb=1=bc$ and $c^2=a$. This is also a group. \\\\
+In case 2, without a loss of generality (since we can just rename the elements), we let $a^2\neq 1$ but rather $a^2 =b$. This gets the group table 
+\begin{table}[htbp]
+    \centering
+    \begin{tabular}{c|c|c|c|c}
+         &  1&a&b&c  \\ \hline
+         1&1&a&b&c \\ \hline 
+         a&a&b&c&1 \\ \hline
+         b&b&c&1&a\\ \hline
+         c&c&b&a&b
+    \end{tabular}
+    \caption{Case 2 when $a^2\neq 1$}
+    \label{tab:case2}
+\end{table}
+This also forms a group. If we look at this group and consider the mapping $1\leftrightarrow 0, a\leftrightarrow 1, b\leftrightarrow 2, c\leftrightarrow 3$, we see that this is an isomorphism between $G \cong \Z_4$. If we look at the second subcase of case 1, we have the mapping $1\leftrightarrow 0, b\leftrightarrow 1, a\leftrightarrow 2, c\leftrightarrow 3$ which is once again isomorphic to $\Z_4$. The first subcase is not isomorphic to $\Z$ since every element satisfies $x^2=1$. However, it is abelian and is called the \emph{Klein 4-group.} It is not a cyclic group. It is denoted as $V$ or $K_4$.
+
+\subsection{Back to the Symmetric Group}
+Let us consider $G=S_N$ and some cycle $(a_1,a_2,\ldots, a_k)$. We can write this cycle as a product of transpositions $(a_1,a_2,\ldots, a_k)=(a_1,a_k)(a_1,a_{k-1})\ldots (a_1,a_2)$. Every cycle can be written as product of transpositions $\tau$ where $\tau^2=1$. Since every permutation is a product of cycles, we can deduce that every permutation is a product of cycles as well. 
+\begin{theorem}
+    For any $\sigma \in S_n$, every way of writing it as a product of transpositions is either always even or odd.
+\end{theorem}
+\begin{proof}
+    First let us show that the identity $1=(a_1,b_1)(a_2,b_2)\ldots (a_m,b_m)$ must be such that $m$ is even. We shall perform induction on $m$. We can see that $m\neq 1$ since $1\neq (a,b)$. $m=2$ is possible but 2 is even. So let us assume then that $m\geq 3$. By looking at the structure, we require that $a_1$ needs to show up again in a transposition to swap the $a_1$ back into place. Therefore, it must be true that some $a_i/b_i$. Without loss of generality, let us say $a_i=a_1$. Suppose that $i$ is the first index for which this happens. Then we have 
+    \begin{equation*}
+        1=(a_1,b_1)\ldots(a_{i-1},b_{i-1})(a_i,b_i)\ldots (a_m,b_m)
+    \end{equation*}
+    If all the numbers are different, we can commute these transpositions. If either $a_{i-1}$ or $b_{i-1}$ is equal to $b_i$, we use the formula $(x,y)(x,z)=(x,z)(y,z)$ and we get that $(a_{i-1},b_{i-1})(a_i,b_i)=(a_1,*)(*,*)$ where $*\neq a_1$. We can now move this transposition left without changing the number of transpositions or the number of $a_1$'s in transpositions. Repeating this, we get 
+    \begin{equation*}
+        1=(a_1,b_1)(a_1,c)\ldots (a_m,b_m)
+    \end{equation*}
+    We now have two cases. Case 1: $c=b_1$ and the two front terms cancel each other and then $1$ can be written as a product of $m-2$ transpositions and by induction, $m-2$ is even and so is $m$.\\\\ 
+    Case 2: $c\neq b_1$ and therefore we have 
+    \begin{equation*}
+        \begin{split}
+            1&=(a_1,b_1)(a_1,c)\ldots(a_m,b_m)\\
+            &=(a_1,c)(b_1,c)\ldots(a_m,b_m)
+        \end{split}
+    \end{equation*}
+    which means we have one fewer $a_1$ than with what we started with. Therefore there exists another $a_1$ somewhere and we have to keep doing this process. If we get lucky, we go back to case 1 and the number of products is even. If we're not lucky, we get 
+    \begin{equation*}
+        1=(a_1,*)\ldots(*,*)
+    \end{equation*}
+    where again, $*\neq 1$. This is impossible. Therefore the number of transpositions must be even in order to recover the identity. Finally, if $\sigma$ is any permutation, we can write it as $\sigma =\tau_a\ldots\tau _m$ or as $\sigma=\tau_1'\ldots \tau_l'$ since a permutation can be expressed with different products of transpositions. Then we have 
+    \begin{equation*}
+        \tau_m\ldots \tau_1\tau_1'\ldots \tau_l'=1
+    \end{equation*}
+    Since there are $m+l$ transpositions and by the previous case we showed that there must be an even number of transpositions, $m+l$ must be even and therefore $m,l$ must have the same parity.
+\end{proof}
+\begin{definition}
+    We say $\sigma \in S_n$ is even if it can be written as an even product of transpositions and is odd otherwise. 
+\end{definition}
+The sign of a permutation, denoted by $\operatorname{sign}(\sigma)$, is 
+\begin{equation*}
+    \operatorname{sign}(\sigma) = (-1)^{\text{num of transpositions }\sigma\text{ can be written as prodct}} =\begin{cases}
+        1 & \sigma \text{ even} \\ -1 & \sigma \text{ odd}
     \end{cases}
 \end{equation*}
-We see here the probability of the value of $x_{i+1}$ is only dependent on the current state. This is known as a \emph{Markov Process}. In effect, $\p (x_{i+1}|x_i)$ is the only state that matters. Let us take a look at the expected value of the number of mRNA molecules at time $t=i+1$. Then we have that 
+\begin{proposition}
+    Half of the elements of $S_n$ are even and half are odd
+\end{proposition}
+\begin{proof}
+    Fix any transposition $\tau \in S_n$. Consider the map {even permutations}$\mapsto ${odd permutations} given by $\sigma \mapsto \tau \sigma$. We claim that this is a bijection. If $\tau \sigma = \tau \sigma ' \to \sigma = \sigma'$ and therefore it is one to one. For any odd permutation $\rho$, then there exists $\tau (\tau \rho)$ where $\tau \rho$ is an even permutation. Therefore it is also onto. 
+\end{proof}
+We note that the set of even permutations in $S_n$ is a subgroup. It is known as the alternating group on $n$ letters and we denote it as $A_n$. $|A_n| = \frac{n!}{2}$. For $n\geq 4$, $A_n$ is non abelian. 
+
+\section{Structure of Groups}
+\begin{definition}
+    An element of a group $G$ is said to have order $n$ if $g^n=1$ and $g^k \neq k$ for every $k$ such that $0<k<n$. If $g^n\neq 1$ for any $n$, then $g$ has infinite order. The order of $g$ is also the order $\langle g \rangle$. 
+\end{definition}
+As a consequence, $g$ generates a cyclic group $G$ if and only if the order of $g$ is $|G|$. 
+\begin{proposition}
+    The order of $g$ divides $|G|$
+\end{proposition}
+\begin{proof}
+    If $|G|=\infty$, there is nothing to show. If the order of $g$ is $k$, then $1,g,g^2,\ldots, g^{k-1}$ are $k$ distinct elements. If this is all of $g$, we're done. If not, then for some $a_1 \in G$ that isn't above, you can obtain $k$ more elements in $g$. We can do this until all of our remaining elements have been saturated. As such, we get that $|G|=nk$.
+\end{proof}
+We don't have to worry about $a_1 a_2$ since suppose $a_ig^k = a_jg^l$ and without a loss of generality with $j>1$, then $a_j = a_ig^{k-l}$ so $a_j$ would have appeared earlier.\\\\
+We can show that $\Z \times \Z \not\cong \Z$. Suppose there exists $(a,b)$ such that it generates all of $\Z^2$. Then $n(a,b)=(1,0)$ for some integer $n$ which forces $b=0$. We can use this same logic to say there exists an integer $m$ such that $m(a,b)=(0,1)$ which forces $a=0$ but $(0,0)$ can't generate $\Z^2$ therefore $\Z^2 $ cannot be cyclic. 
+\begin{proposition}
+    $\Z_m \times \Z_n \cong \Z_{mn}$ if and only if $m$ and $n$ are coprime.
+\end{proposition}
+\begin{proof}
+    $(\Leftarrow)$ We assume that $\gcd(m,n)=1$. We will show that $(1,1)$ has order $mn$ in $\Z_m\times Z_n$. Clearly, $mn(1,1)=0$ in $\Z_m\times Z_n$. However, there might be an integer smaller than $mn$. We ask if there exists a $k$ such that $k(1,1)=(0,0)$ for some $k$ such that $0<k<mmn$. Then we must have that $k(1,1)=(k\mod m, k\mod n)$ and if this is $0$, then $m|k$ and $n|k$. Since they're coprime, $mn|k$ which means that $mn\leq k$ so our previous assumption is wrong and $(1,1)$ has order $mn$ in $\Z_m\times \Z_n$ and hence is isomorphic to $Z_{mn}$. \\\\
+    $(\Rightarrow)$ Now suppose that their gcd isn't one. Let $a>1$ such that $a|m$ and $a|n$. Take any $(x,y)\in Z_m \times \Z_n$, then $\frac{mn}{a} (x,y)= (m\frac{n}{a}\mod m, n\frac{m}{a}\mod n) = (0,0)$. This means that every element in $\Z_m \times Z_n$ has order $\leq \frac{mn}{a} \leq mn$ and thus $\Z_m \times \Z_n$ cannot be cyclic.
+\end{proof}
+\begin{definition}
+    A group is \emph{finitely generated} if it can be generated by finitely many elements
+\end{definition}
+\begin{proposition}
+    $\mathbb{Q}$ is not finitely generated
+\end{proposition}
+\begin{proof}
+    Suppose we can generate $\mathbb{Q}$ by $\frac{a_1}{b_1},\ldots, \frac{a_n}{b_n}$. Let $p$ be any prime $> b_1b_2\ldots b_n$. Then $\frac{1}{p} \in \mathbb{Q} \neq m_1 \frac{a_1}{b_1}+\ldots +m_n \frac{a_n}{b_n}$ for all $m_1,\ldots, m_n$.
+\end{proof}
+\begin{proposition}
+    $\R$ is not finitely generated
+\end{proposition}
+\begin{proof}
+    Suppose $x_1,\ldots,x_n$ generates $\R$. The set $\{m_1x_1+\ldots+m_nx_n: m_1,\ldots,m_n \in \Z\}$ is countable but $\R$ is not.
+\end{proof}
+\begin{theorem}[Fundamental Theorem of Finitely Generated Abelian Groups]
+    Every finitely generated abelian group is isomorphic to $\Z_{p_1^{k_1}} \times\Z_{p_2^{k_2}} \times \ldots \times Z_{p_n^{k_n}} \times \Z^n$ where $p_1,\ldots,p_n$ are primes (where we can have repeats) and $n,p_1,\ldots, p_n, k_1,\ldots,k_n$ are uniquely determined.
+\end{theorem}
+\begin{corollary}
+    Every finite abelian group is isomorphic to $\Z_{p_1^{k_1}} \times\Z_{p_2^{k_2}} \times \ldots \times Z_{p_n^{k_n}}$
+\end{corollary}
+\subsection{Cosets}
+\begin{definition}
+    If $G$ is a group and $H\leq G$ then for $a\in G$, we define the \emph{left coset} of $H$ in $G$ and we represent it to be 
+    \begin{equation*}
+        aH := \{ah : h \in H\}
+    \end{equation*}
+\end{definition}
+
+\begin{proposition}
+    Two cosets are either disjoint or equal and $G=\displaystyle{\bigcup_{\substack{a \in G}}} aH$
+\end{proposition}
+\begin{proof}
+    Suppose $aH \cap bH \neq \emptyset$. Since the intersection isn't empty, there exists $ah_1=bh_2$ for some $h_1,h_2 \in H$. Now let $ah \in aH$ be any element, then $ah = bh_2h_1^{-1}h \in  bH$ since $H$ is a subgroup and therefore closed under group multiplication. We therefore have the $aH \subseteq bH$. Similarly, $\forall bh' \in bH, bh'=ah_1h_2h^{-1} \in aH $ and we have $bH \subseteq aH$ and therefore $aH = bH$. \\\\ $\bigcup aH \subseteq G \,\,\, \forall a\in G$ and $a\in aH $ (since $1\in H$) and so $G \subseteq \bigcup aH$ and therefore $\bigcup aH = G$.
+\end{proof}
+For every coset, $|aH| = |H|$ since multiplying by $a$ is a bijection. Since $G= \displaystyle{\bigcup_{\substack{\text{distinct}}\\\text{cosets}}}aH $, the order of $|G| = ($ \# distinct cosets of $H)|H|$. This is effectively the proof for Lagrange's Theorem.
+\begin{theorem}[Lagrange's Theorem]
+    If $G$ is a finite group, the order of any subgroup of $G$ divides the order of $G$.
+\end{theorem}
+\begin{corollary}
+    In any finite group $G$, the order of an element must divide $|G|$
+\end{corollary}
+\begin{proof}
+    Ask a toddler on the street.
+\end{proof}
+\begin{corollary}
+    Any group of prime order of $p$ is isomorphic to $\Z_p$.
+\end{corollary}
+\begin{proof}
+    Suppose $|G|=p$. Take any nontrivial element $x$. Then $\langle x \rangle $ is nontrivial so by Lagrange's theorem, it must have order $p$. So $\langle x \rangle = G$ and thus $G$ is cyclic and $G\cong \Z_p$.
+\end{proof}
+\begin{definition}
+    The number of distinct cosets of $H$ in $G$ is called the index of $H$ in $G$ and denoted as $(G:H)$. 
+\end{definition}
+When $G$ is finite, then $(G:H) = \frac{|G|}{|H|}$.
+\begin{proposition}
+    $aH = bH$ if and only if $b^{-1}a \in H$
+\end{proposition}
+\begin{proof}
+    ($\Rightarrow$) Suppose $aH = bH$. Since $a \in aH$, that means $a=bh$ for some $h\in H$ and then we have $b^{-1}a=h$. \\\\
+    ($\Leftarrow$) Suppose $b^{-1}a\in H$. For every $ah \in aH$, then we have that $ah = bb^{-1}ah \in bH$ since $b^{-1}a$ and $h$ are both in $h$ and therefore $aH \subseteq bH$. Because cosets must be disjoint or equivalent, $aH=bH$.
+\end{proof}
+We can effectively define an equivalence relation $\sim$ by $a\sim b$ if $b^{-1}a \in H$. The equivalence classes of this relation are the left cosets of $H$ in $G$. We can also have the equivalence condition for right cosets defined as 
 \begin{equation*}
-    \begin{split}
-        \langle x_{i+1} \rangle &= \sum_{x_{i+1}} x_{i+1} \p (x_{i+1}) \\
-        &= \sum_{x_{i+1},x_i} \p(x_{i+1}|x_i)\p(x_i) \\
-        &= \sum_{x_i} \p (x_i) [(x_i+1)\beta \Delta t + (x_i-1)kx_i\Delta t + x_i(1-\beta+kx_i)\Delta t] \\
-        &= \sum_{x_i} \p(x_i)[x_i + \beta \Delta t-kx_i \Delta t]
-    \end{split}
+    H_a = \{ ha : h \in H\}
 \end{equation*}
-Since this all depends on the probability of the state if $x_i$, we would have to do this all the way back down to $x_0$. Therefore we prefer to calculate the average expected change which is given by 
-\begin{equation*}
-    \begin{split}
-        \langle x_{i+1}-x_i\rangle &= \sum_{x_i} \p(x_i)[x_i+\beta\Delta t-kx_i \Delta t] - \sum_{x_i}x_i\p(x_i) \\ &= \sum_{x_i}\p(x_i) [\beta \Delta t-kx_i\Delta t] \\
-        &= \sum_{x_i}\p(x_i)[\beta-kx_i]\Delta t\\
-        &= \beta \Delta t\sum_{x_i} \p(x_i) - k\Delta t\sum_{x_i}x_i\p(x_i) \\
-        &= \beta \Delta t - k\Delta t \langle x_i \rangle \\
-        \frac{\langle \Delta x_i \rangle}{\Delta t}&= \beta - k \langle x_i \rangle
-    \end{split}
-\end{equation*}
-which we say takes a similar form as the deterministic equation. We can simulate this system but it is both computationally and time intensive to simulate every time step when most likely, nothing happens. As such, we use the Gillepsie Algorithm. The steps are 
-\begin{enumerate}
-    \item Initialize the initial value(s)
-    \item Draw a waiting time from an exponential distribution $t_{w,i} \sim \exp(\lambda)$ where $\lambda = \beta+kx_i$ 
-    \item Determine if it is a birth or death via a Bernoulli trial using $s \sim $Ber$\left( \frac{\beta}{\beta+kx} \right)$ where a sucess is a production 
-    \item update using $x_{i+1} = x_i +2 \left(s-\frac{1}{2}\right)$
-    \item Repeat steps 2-5
-\end{enumerate}
+to be $ab^{-1} \in H$. 
+\subsection{Normal Subgroups}
+\begin{definition}
+    A subgroup $H \in G$ is called \emph{normal} if $\forall g \in G$ and $h\in H$, $ghg^{-1}\in H$ or $gHg^{-1} \subseteq H\,\,\, \forall g\in G$. We denote it
+    \begin{equation*}
+        H\lhd G
+    \end{equation*}
+\end{definition}
+Trivially, every subgroup of an Abelian group is normal. We call $ghg^{-1}$ the \emph{conjugation} of $h$ by $g$. 
+\begin{theorem}
+    For a subgroup $H$ of $G$, the following are equivalent: 
+    \begin{enumerate}
+        \item $H \lhd G$ 
+        \item $aH = Ha \,\,\, \forall a \in G$
+        \item Every left coset of $H$ in $G$ is a right coset and conversely
+        \item $\forall a,b\in G$ and $h_1, h_2 \in H$, $ah_1bh_2 \in abH$
+    \end{enumerate}
+\end{theorem}
+\begin{proof}
+    Suppose $H \lhd G$. For every $h\in H$, $ah =aha^{-1}a \in H$ and we can show the same for the other inclusion or use that cosets must be disjoint or equivalent. Two implies three is trivial. For the three implies two, suppose that $aH = Hb$ for some $b$. We have that $a\in aH$ an by our assumption, $a = h_1b$ for some $b$. Simlarly, $b\in Hb$ so $b=ah_2$ for some $h_2 \in H$. Suppose $h'b \in Hb \,\,\, \forall h' \in H$, then $h' b = h'h_1^{-1}a \in Ha$ and therefore $Hb \cap Ha \neq \emptyset$ and therefore they must be the same. For two implies four, we have that $ah_1 bh_2 = abb^{-1}h_1bh_2$ where $b^{-1}h_1b \in H$ by $bH = Hb \to bh_1=h'b \to bh_1b^{-1}=h'$ and therefore $ah_1bh_2 \in abH$. Finally, we show that four implies one since $aha^{-1} = aha^{-1}e \in aa^{-1}H$ 
+\end{proof}
+Now suppose that $N \lhd G$. Let $G/N$ (said as ``$G$ mod $N$") be the set of left cosets of $N$ in $G$ and define an operation on this bet $(aN)(bN)=abN$. We should note that whenever we are working with equivalence classes, we require that functions on them must be \emph{well defined} which means it does not depend on the choice of the representative of the equivalence class. Let us take fractions for example. If we define $f(\frac{m}{n}) =m^2$ we see that it is not well defined because $f(\frac{1}{2}) \neq f(\frac{2}{4})$. If instead we had $f(\frac{m}{n})=\frac{m^2}{n^2}$, this would be well defined.
+\begin{theorem}
+    $G/N$ is a group defined as $G/N := \{aN:a\in G\}$ with its group operation being $(aN)(bN)=abN$. This is known as the quotient group of $G$ mod $N$.
+\end{theorem}
+\begin{proof}
+    We first need to show that the operation is well defined. If $aN = cN$ and $bN =dN$, we need that $abN = cdN$. If $aN = cN$, therefore $a^{-1}c\in N$ and if $bN = dN$ then $b^{-1}d \in N$. Then we can say $c=an_1$ and $d=bn_2$ for some $n_1,n_2 \in N$ and hence $cd= an_1bn_2 \in abN$ since $N$ is normal. Since $cdN\cap abN \neq \emptyset$, $cdN =abN$. We now check group axioms. For associativity, we have $(aNbN)cN = abNcN = abcN=a(bc)N = aN(bNcN)$. For the identity, we have $N$ since $aNN = aN =N(aN)$. For inverses, we have that $(aN)^{-1} = a^{-1}N$ since $aNa^{-1}N = N$.
+\end{proof}
+We can say that $\Z/3\Z$ is generated $1+n\Z$ and is isomorphic to $Z_n$. 
+\begin{proposition}
+    For a homomorphism $\varphi:G \to H$, then $\ker \varphi \lhd G$
+\end{proposition}
+\begin{proof}
+    Take some $k\in \ker \varphi$ and $g\in G$. Then $\varphi(gkg^{-1}) = \varphi(g)\varphi(k)\varphi(g^{-1}) = \varphi(g)e_{H} \varphi(g)^{-1} = e_H$. Therefore $gkg^{-1} \in \ker \varphi$.
+\end{proof}
+\begin{theorem}[First Isomorphism Theorem]
+    If $\varphi: G\mapsto H$ is any homomorphism, then $\im \varphi \cong G/\ker \varphi$.
+\end{theorem}
+\begin{proof}
+    Define $\Phi: G/\ker \varphi \mapsto \im \varphi$ by $\Phi (a\ker \varphi) = \varphi(a)$. We first need to show that $\Phi$ is well defined, a homomorphism, and is bijective. First, if $a\ker \varphi = b \ker \varphi$ then $a^{-1}b \in \ker \varphi$. We then have that $b=ak$ for some $k \in \ker \varphi$. So $\Phi (b\ker \varphi ) = \varphi(b) = \varphi(ak) = \varphi(a)\varphi(k) = \Phi(a\ker \varphi)$. To show it is a homomorphism, we have that $\Phi((a\ker \varphi) (b\ker \varphi)) = \Phi(ab\ker \varphi) = \varphi(ab)=\varphi(a)\varphi(b) = \Phi(a\ker \varphi)\Phi(b\ker \varphi) = \Phi((a\ker \varphi)(b\ker \varphi))$. $\Phi$ is surjective because for any $y \in \im \varphi$, $y=\varphi(x)$ for some $x\in G$ so $y=\Phi(x\ker \varphi)$. $\Phi$ is injective since $\Phi (a\ker \varphi) =1 \to \varphi(a)=1\therefore a\in \ker \varphi$. Therefore $a\ker \varphi = \ker \varphi$ and $a=e$.
+\end{proof}
+\begin{definition}
+    A \emph{fiber} of a map $f:X\to Y$ is an equivalence class on $X$ for having the same image in $Y$ under $f$. If $y$ is the image, then we can define this equivalence class to be $f^{-1}(y) := \{ x\in X:f(x)=y\}$.
+\end{definition}
+What the First Isomorphism Theorem is saying is to take the fibers of $\varphi$ on $H$ and collapse them all to one point that represents each equivalence class.
+\begin{proposition}
+    $\R/\Z \cong S^1$ where $S^1$ is the unit circle defined as $S^1 := \{ (x,y) \in \R^2 :x^2+y^2=1\}$.
+\end{proposition}
+\begin{proof}
+    In polar form, we can define the unit circle as $\{ e^{i\theta}: \theta \in [0,2\pi ) \}$. Let us suppose the homomorphism $\varphi : \R \to S^1$ by $\varphi(x) = e^{2\pi ix}$. This is trivially a homomorphism. The kernel is just $\Z$ and the image is all of $S^1$. Therefore by the First Isomorphism Theorem, $G/\Z \cong S^1$.
+\end{proof}
+\begin{example}
+    If we define the homomorphism $\varphi: \Z \times \Z \to \Z$ by the map $\varphi(a,b) = a+b$, then the kernel is $\ker \varphi = \{(a,-a):a\in \Z\} = \langle (1,-1)\rangle$. The image is just the integers so $\Z \times \Z / \langle(1,-1)\rangle \cong \Z$.
+\end{example}
+\subsection{Centers and Commutators}
+\begin{definition}
+    The \emph{center} of $G$ is defined to be 
+    \begin{equation*}
+        Z(G) := \{ g\in G: ag=ga \,\,\, \forall a\in G\}
+    \end{equation*}
+\end{definition}
+\begin{proposition}
+    \begin{equation*}
+        Z(D_n) = \begin{cases}
+            \{1,\rho^{\frac{n}{2}}\} &n \text{ even} \\
+            \{1\} & \text{otherwise}
+        \end{cases}
+    \end{equation*}
+\end{proposition}
+\begin{proof}
+    Assume $n =2k$. We use the fact that $\mu \rho^k=\rho^{-k}\mu \Rightarrow \mu \rho^k = \rho^k \mu$ if $n=2k$. This means that $\rho$ commutes with $\mu$. $\rho^k$ also commutes with any $\rho^l$ for $l=0,1,\ldots,n-1$ just by commutativity of addition. $\rho^k$ also commutes with $\mu \rho^l$ due to the above facts and therefore $\{1,\rho^k \} \subseteq Z(D_{2k})$. We note that $\rho^l$ for any $l\neq 0,k$ cannot commute since $\mu \rho^l = \rho^{-l}\mu = \rho^{n-l}\mu$ and $\rho (\mu \rho^l) = \mu \rho^{l-1}$ whereas $\mu\rho^l \rho = \mu\rho^{l+1}$ and so we've exhausted all other possibilities and hence the center is just $Z(D_{2k}) = \{ 1, \rho^{\frac{n}{2}}\}$. For odd, we apply the same logic above and so the center is just the trivial element $Z(D_{2k+1}) = \{1\}$.
+\end{proof}
+\begin{definition}
+    The commutator subgroup of $G$ is defined to be 
+    \begin{equation*}
+        G' := \langle \{ aba^{-1}b^{-1}:a,b\in G\} \rangle
+    \end{equation*}
+\end{definition}
+\begin{proposition}
+    \begin{enumerate}
+        \item $G' \lhd G$
+        \item $G/G'$ is Abelian 
+        \item For $N \lhd G$, $G/N$ is abelian if and only if $G' \subseteq N$.
+    \end{enumerate}
+\end{proposition}
+\begin{proof}
+    \begin{enumerate}
+        \item $g(aba^{-1}b^{-1})g = (gag^{-1})(gbg^{-1})(ga^{-1}g^{-1}) (gb^{-1}g^{-1}) =xyx^{-1}y^{-1}\in G'$ where $x=gag^{-1}$ and $y=gbg^{-1}$. This is true for every $g\in G$ and every generator $aba^{-1}b^{-1}$ of $G'$ and hence $G' \lhd G$.
+        \item Take $aG',bG' \in G/G'$, then $aG'bG' =abG' =abb^{-1}a^{-1}baG' = baG' =bG'aG'$ since $b^{-1}a^{-1}ba \in G'$ as it is a commutator. Alternatively we can say that $abG' = baG' \Leftrightarrow (ba)^{-1}ab = a^{-1}b^{-1}ab \in G'$. 
+        \item Suppose $G' \subseteq N$, then $G/N$ is abelian. $aNbN = abN = baN = bNaN$ where commutativity comes from the fact that $(ba)^{-1}ab \in G' \subseteq N$. Now we suppose that $G/N$ is abelian, then $(ba)^{-1}ab \in N \,\,\, \forall b,a \in G$ so $G' \subseteq N$ since $abN =baN \to N=(ba)^{-1}abN$.
+    \end{enumerate}
+\end{proof}
+\begin{definition}
+    A group is \emph{simple} if it has no proper nontrivial normal subgroups. 
+\end{definition}
+\begin{theorem}
+    $A_n$ is simple for all $n\geq 5$.
+\end{theorem}
+\subsection{Group Actions and Orbits}
+\begin{definition}
+    Suppose $G$ is any group and $X$ is a set. We say $G$ \emph{acts} on $X$ (or $X$ is a $G$-set) if to any $g\in G, x\in X$, we assign a point $g\cdot x \in X$ satisfying 
+    \begin{enumerate}
+        \item $e\cdot x=x\,\,\, \forall x\in X$
+        \item $h\cdot (g\cdot x) = (hg)\cdot x$
+    \end{enumerate}
+\end{definition}
+\begin{example}
+    $\Z$ is a group action on the set $\R$ by a translation $n\cdot x=n+x$. Additionally, $\R$ is a group on $\R^2$ by $\theta \in \R, \vec{x}\in \R^2$, $\theta \cdot \vec{x} = \vec{x}$ rotated by $\theta$ radians counter clockwise. 
+\end{example}
+\begin{definition}
+    Suppose $G$ acts on $X$. Given $x\in X$, we define 
+    \begin{equation*}
+        G_x := \{ g\in G: g\cdot x = x\}
+    \end{equation*}
+    This is known as the \emph{isotropy subgroup} or \emph{stabilizer} of $x$ in $G$.
+\end{definition}
+\begin{proposition}
+    The stabilizer of $x$ in $\G$ is a subgroup.
+\end{proposition}
+\begin{proof}
+    1 $\in G_x$ since $1$ fixed everything. Suppose $g\cdot x=x $ and $h\cdot x=x$, then $(gh)\cdot x = g\cdot (h\cdot x) = g\cdot x=x$. Now suppose that $g\in G_x$, then that implies $g\cdot x= x \to g^{-1}g\cdot x=g^{-1}\cdot x\to 1\cdot x=g^{-1}\cdot x$ and therefore $g^{-1} \in G_x$.
+\end{proof}
+\begin{definition}
+    Fix $x\in X$. The \emph{orbit} of $G$ on $x$ is 
+    \begin{equation*}
+        Gx := \{ g\cdot x: g\in G\} \subseteq X
+    \end{equation*}
+\end{definition}
+\begin{proposition}
+    Orbits are disjoint.
+\end{proposition}
+\begin{proof}
+    Suppose $Gx\cap Gy \neq \emptyset$. Then $g\cdot x = h\cdot y$ for some $g,h \in G$. Then $y = h^{-1}g\cdot x$ and $x=g^{-1}h\cdot y$. For some $a\cdot x \in Gx$, then we have $a\cdot x=ag^{-1}h\cdot y \in Gy$ and likewise for some $b\cdot y \in Gy$, then $by = bh^{-1}g\cdot x \in Gx$ and hence we $Gy\subseteq Gx$ and $Gx \subseteq Gy$.
+\end{proof}
 
-\section{Excitable Systems}
-Excitable systems have a single stable attractor with two modes of restoring the stable state. One is a small perturbation leads to a monotonic return. The other way is after a big perturbation, the system takes a large excursion from the stable point before returning. The key distinction for an excitable system compared to other systems is that it has a threshold. This is good for sensing in a noisy environment. 
-\subsection{Hodgkin-Huxley}
-In 1952, Hodgkin and Huxley performed some experiments on the axons of giant squids. The action potential effectively acts as an excitable system. The resting state has a high concentration of sodium ions outside of the cell and potassium ions inside of the cell. The resting potential is roughly -70 mV when comparing the inside versus the outside.
-\begin{figure}[htbp]
-    \centering
-    
-    % ==========================================================================
-    % SUBFIGURE (a): Subthreshold Current Pulse
-    % ==========================================================================
-    \begin{subfigure}[b]{0.32\textwidth}
-        \centering
-        \resizebox{\linewidth}{!}{%
-        \begin{tikzpicture}[
-            >=Stealth,
-            axis/.style={->, thick, black!80},
-            thresh/.style={dashed, thick, red!75!black},
-            rest/.style={dotted, thick, black!60},
-            curve/.style={very thick, blue!75!black},
-            stim/.style={thick, purple!75!black},
-            font=\sffamily\small
-        ]
-            % Membrane Potential V_m
-            \draw[axis] (0,0) -- (4.3,0) node[right] {$t$};
-            \draw[axis] (0,-0.3) -- (0,3.2) node[above] {$V_m\text{ (mV)}$};
-
-            \draw[rest] (0,0.6) -- (4.1,0.6);
-            \node[left, font=\scriptsize] at (0,0.6) {$-70$};
-            \draw[thresh] (0,1.3) -- (4.1,1.3);
-            \node[left, font=\scriptsize, red!75!black] at (0,1.3) {$-55$};
-            \node[above right, font=\scriptsize, red!75!black] at (2.8,1.3) {$V_{\text{th}}$};
-
-            % Passive RC charging and decay
-            \draw[curve] 
-                (0,0.6) -- (0.8,0.6) 
-                .. controls (1.1, 1.05) and (1.5, 1.12) .. (2.0, 1.13)
-                .. controls (2.3, 0.72) and (2.8, 0.61) .. (4.0, 0.6);
-
-            % Injected Current I_inj
-            \begin{scope}[yshift=-1.6cm]
-                \draw[axis] (0,0) -- (4.3,0) node[right] {$t$};
-                \draw[axis] (0,-0.15) -- (0,1.0) node[above] {$I_{\text{inj}}$};
-                \draw[stim] (0,0) -- (0.8,0) -- (0.8,0.35) -- (2.0,0.35) -- (2.0,0) -- (4.0,0);
-                \draw[dotted, black!40] (0.8,0) -- (0.8,2.2);
-                \draw[dotted, black!40] (2.0,0) -- (2.0,2.2);
-            \end{scope}
-        \end{tikzpicture}%
-        }
-        \caption{Subthreshold ($I < I_{\text{th}}$)}
-        \label{fig:ap-subthreshold}
-    \end{subfigure}
-    \hfill
-    % ==========================================================================
-    % SUBFIGURE (b): Large Suprathreshold Pulse
-    % ==========================================================================
-    \begin{subfigure}[b]{0.32\textwidth}
-        \centering
-        \resizebox{\linewidth}{!}{%
-        \begin{tikzpicture}[
-            >=Stealth,
-            axis/.style={->, thick, black!80},
-            thresh/.style={dashed, thick, red!75!black},
-            rest/.style={dotted, thick, black!60},
-            curve/.style={very thick, teal!75!black},
-            stim/.style={thick, purple!75!black},
-            font=\sffamily\small
-        ]
-            % Membrane Potential V_m
-            \draw[axis] (0,0) -- (4.3,0) node[right] {$t$};
-            \draw[axis] (0,-0.3) -- (0,3.2) node[above] {$V_m\text{ (mV)}$};
-
-            \draw[rest] (0,0.6) -- (4.1,0.6);
-            \node[left, font=\scriptsize] at (0,0.6) {$-70$};
-            \draw[thresh] (0,1.3) -- (4.1,1.3);
-            \node[left, font=\scriptsize, red!75!black] at (0,1.3) {$-55$};
-
-            % Single Action Potential
-            \draw[curve] 
-                (0,0.6) -- (0.8,0.6)
-                .. controls (1.0, 0.85) and (1.1, 1.15) .. (1.15, 1.3)
-                .. controls (1.22, 2.2) and (1.28, 2.95) .. (1.35, 2.95)
-                .. controls (1.45, 2.95) and (1.58, 0.25) .. (1.80, 0.25)
-                .. controls (2.15, 0.25) and (2.5, 0.6) .. (3.2, 0.6)
-                -- (4.0, 0.6);
-
-            \node[right, font=\scriptsize, teal!75!black] at (1.42, 2.85) {$+30\text{ mV}$};
-
-            % Injected Current I_inj
-            \begin{scope}[yshift=-1.6cm]
-                \draw[axis] (0,0) -- (4.3,0) node[right] {$t$};
-                \draw[axis] (0,-0.15) -- (0,1.0) node[above] {$I_{\text{inj}}$};
-                \draw[stim] (0,0) -- (0.8,0) -- (0.8,0.75) -- (2.0,0.75) -- (2.0,0) -- (4.0,0);
-                \draw[dotted, black!40] (0.8,0) -- (0.8,2.2);
-                \draw[dotted, black!40] (2.0,0) -- (2.0,2.2);
-            \end{scope}
-        \end{tikzpicture}%
-        }
-        \caption{Suprathreshold ($I > I_{\text{th}}$)}
-        \label{fig:ap-suprathreshold}
-    \end{subfigure}
-    \hfill
-    % ==========================================================================
-    % SUBFIGURE (c): Constant Suprathreshold Current
-    % ==========================================================================
-    \begin{subfigure}[b]{0.32\textwidth}
-        \centering
-        \resizebox{\linewidth}{!}{%
-        \begin{tikzpicture}[
-            >=Stealth,
-            axis/.style={->, thick, black!80},
-            thresh/.style={dashed, thick, red!75!black},
-            rest/.style={dotted, thick, black!60},
-            curve/.style={very thick, orange!85!black},
-            stim/.style={thick, purple!75!black},
-            font=\sffamily\small
-        ]
-            % Membrane Potential V_m
-            \draw[axis] (0,0) -- (4.3,0) node[right] {$t$};
-            \draw[axis] (0,-0.3) -- (0,3.2) node[above] {$V_m\text{ (mV)}$};
-
-            \draw[rest] (0,0.6) -- (4.1,0.6);
-            \node[left, font=\scriptsize] at (0,0.6) {$-70$};
-            \draw[thresh] (0,1.3) -- (4.1,1.3);
-            \node[left, font=\scriptsize, red!75!black] at (0,1.3) {$-55$};
-
-            % Tonic Spike Train
-            \draw[curve]
-                (0,0.6) -- (0.5,0.6)
-                % Spike 1
-                .. controls (0.65, 0.85) and (0.75, 1.15) .. (0.80, 1.3)
-                .. controls (0.87, 2.2) and (0.93, 2.95) .. (1.00, 2.95)
-                .. controls (1.10, 2.95) and (1.20, 0.25) .. (1.40, 0.25)
-                % ISI 1 -> Spike 2
-                .. controls (1.65, 0.25) and (1.85, 1.0) .. (1.95, 1.3)
-                .. controls (2.02, 2.2) and (2.08, 2.95) .. (2.15, 2.95)
-                .. controls (2.25, 2.95) and (2.35, 0.25) .. (2.55, 0.25)
-                % ISI 2 -> Spike 3
-                .. controls (2.80, 0.25) and (3.00, 1.0) .. (3.10, 1.3)
-                .. controls (3.17, 2.2) and (3.23, 2.95) .. (3.30, 2.95)
-                .. controls (3.40, 2.95) and (3.50, 0.25) .. (3.70, 0.25)
-                % Recovery
-                .. controls (3.85, 0.25) and (3.95, 0.65) .. (4.05, 0.95);
-
-            % Injected Current I_inj
-            \begin{scope}[yshift=-1.6cm]
-                \draw[axis] (0,0) -- (4.3,0) node[right] {$t$};
-                \draw[axis] (0,-0.15) -- (0,1.0) node[above] {$I_{\text{inj}}$};
-                \draw[stim] (0,0) -- (0.5,0) -- (0.5,0.75) -- (4.05,0.75);
-                \draw[dotted, black!40] (0.5,0) -- (0.5,2.2);
-            \end{scope}
-        \end{tikzpicture}%
-        }
-        \caption{Constant ($I = \text{const} > I_{\text{th}}$)}
-        \label{fig:ap-constant}
-    \end{subfigure}
-
-    \caption{Membrane potential ($V_m$) dynamics under three injected current ($I_{\text{inj}}$) regimes: (\subref{fig:ap-subthreshold}) passive RC depolarization without reaching threshold $V_{\text{th}}$; (\subref{fig:ap-suprathreshold}) a single all-or-none action potential triggered by a brief suprathreshold pulse; and (\subref{fig:ap-constant}) repetitive tonic spiking driven by a sustained suprathreshold current.}
-    \label{fig:ap-regimes-grid}
-\end{figure}
-While there exists linear resistors, the membrane channels act as nonlinear resistors such that $I=R(V)V$ where the resistance $R$ is some function of the voltage. 
-\begin{figure}[htbp]
-    \centering
-    \resizebox{\linewidth}{!}{%
-    \begin{circuitikz}[american voltages, american currents, thick]
-        % Top and bottom rails (Extracellular = Ground, Intracellular = V)
-        \draw (0,4) to[short, o-] (13.5,4);
-        \draw (0,0) to[short, o-] (13.5,0);
-        
-        % Left terminal labels
-        \node[left] at (0,4) {$\delta V_{\text{in}}$};
-        \node[left] at (0,0) {$\delta V_{\text{out}} = 0$};
-
-        % Branch 1: Injected Current Source I_inj
-        \draw (1.2,0) to[isource, l=$I_{\text{inj}}$] (1.2,4);
-
-        % Branch 2: Membrane Capacitance C_m
-        \draw (3.4,4) to[C, l=$C_m$] (3.4,0);
-
-        % Branch 3: Instantaneous / Steady-State Chord Conductance g_0
-        \draw (5.6,4) to[R, l=$R_0 \equiv g_0^{-1}$] (5.6,0);
-
-        % Branch 4: K+ Activation Inductive Branch (n-gate)
-        \draw (8.0,4) to[R, l=$R_n$] (8.0,2)
-                    to[L, l=$L_n$] (8.0,0);
-
-        % Branch 5: Na+ Inactivation Inductive Branch (h-gate)
-        \draw (10.5,4) to[R, l=$R_h$] (10.5,2)
-                     to[L, l=$L_h$] (10.5,0);
-
-        % Branch 6: Fast Na+ Activation Branch (m-gate, negative resistance)
-        \draw (13.0,4) to[R, l=$R_m < 0$] (13.0,2)
-                     to[L, l=$L_m < 0$] (13.0,0);
-
-        % Annotations above branches
-        \node[above, font=\sffamily\scriptsize, align=center] at (3.4,4.1) {Lipid\\Bilayer};
-        \node[above, font=\sffamily\scriptsize, align=center] at (5.6,4.1) {Instantaneous\\Conductance};
-        \node[above, font=\sffamily\scriptsize, align=center, teal!75!black] at (8.0,4.1) {$\text{K}^+$ Activation\\($n$-gate lag)};
-        \node[above, font=\sffamily\scriptsize, align=center, teal!75!black] at (10.5,4.1) {$\text{Na}^+$ Inactivation\\($h$-gate lag)};
-        \node[above, font=\sffamily\scriptsize, align=center, red!75!black] at (13.0,4.1) {Fast $\text{Na}^+$\\Amplification};
-    \end{circuitikz}%
-    }
-    \caption{Small-signal linearized Hodgkin–Huxley (quasi-active) equivalent circuit around resting potential $V_0$. Delayed voltage-gated recovery processes ($n$ and $h$) appear explicitly as positive phenomenological inductors $L_n, L_h > 0$, transforming the membrane from a passive RC filter into an active RLC resonator.}
-    \label{fig:hh-inductor-circuit}
-\end{figure}
 \end{document}
