@@ -14,6 +14,10 @@
 \usepackage{xpatch}
 \usepackage{xr}
 \usepackage{enumitem}
+\usepackage{subcaption}
+\usepackage[american,siunitx]{circuitikz}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, positioning}
 
 \setlength{\parindent}{0pt}
 \title{Bio 338 Modeling Biological Dynamics Notes}
@@ -37,14 +41,15 @@
 State: numbers that describe variables (state variables) of interest \\
 State variables: Things we care about and measure\\
 State space: space of allowable values of a state variable \\ 
-One thing to note is that units can affect the state space. For example, the state space for allowable temperatures in Celsius is $C\in[-273.15,+\infty)$ whereas the allowable temperatures in Kelvin is $K \in [0,+\infty)$. \\
-We can express differential equations as compartment diagrams. 
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.5\linewidth]{linearGrowth.png}
     \caption{Compartment diagram of linear growth}
     \label{fig:linearGrowth}
 \end{figure}
+One thing to note is that units can affect the state space. For example, the state space for allowable temperatures in Celsius is $C\in[-273.15,+\infty)$ whereas the allowable temperatures in Kelvin is $K \in [0,+\infty)$. \\
+We can express differential equations as compartment diagrams. 
+
 This diagram represents linear growth and is isomorphic to the equation 
 \begin{equation*}
     \dot x=b
@@ -749,4 +754,276 @@ and therefore
     Y \sim N(np, np(1-p))
 \end{equation*}
 for large $n$ (though usually converges by $n\approx 50$) and $p$ is not close to $0$ or $1$.
+
+\subsection{Synthesis and Degradation - Stochastic}
+If we consider the deterministic system below.
+% Method B: Floating figure with caption
+\begin{figure}[htbp]
+    \centering
+    \begin{tikzpicture}[
+    box/.style={
+        draw,
+        minimum width=1.5cm,
+        minimum height=1.2cm,
+        align=center,
+        font=\large\bfseries
+    },
+    % Scaled arrowhead definition
+    bigarr/.style={
+        -{Latex[length=3.5mm, width=2.5mm]},
+        line width=1.2pt
+    }
+]
+        \node[box] (X) {x};
+        \draw[bigarr] ([xshift=-2.5cm]X.west) -- (X.west)
+            node[midway, above] {synthesis}
+            node[midway, below] {$\beta$};
+        \draw[bigarr] (X.east) -- ([xshift=2.5cm]X.east)
+            node[midway, above] {degradation}
+            node[midway, below] {$k$};
+    \end{tikzpicture}
+    \caption{Compartment model for some molecule like mRNA or a protein.}
+\end{figure}
+Deterministically, we would get that 
+\begin{equation*}
+    \od{x}{t} = \beta - kx
+\end{equation*}
+However, let us try to turn this into a stochastic process. Let us take $\Delta t$ as such a small time step such that at most, only one event (a synthesis OR a degradation occurs). Let us say that $x_i$ is a random variable for the number of mRNA for a particular gene $X$ at time $t=i\Delta t$, $x_0$ is the initial value of $x$, $\beta$ is the mean synthesis rate such that $\p($synthesis)$=\beta \Delta t$, $k$ is the per capita degradation rate such that $\p($degradation)$=kx\Delta t$, and $x^*$ is the final steady state. We can see that the birth-death rate represents a Poisson process but not exactly since the rates change. As such, let us take a look at 
+\begin{equation*}
+    \p (x_{i+1}| x_1,x_2,\ldots,x_i) = \begin{cases}
+        \beta \Delta t & x_{i+1}=x_i + 1 \text{ synthesis} \\ kx\Delta t & x_{i+1} = x_i -1 \text{ degradation} \\ 1-\beta \Delta t-kx\Delta t& x_{i+1}=x_i \text{ do nothing}
+    \end{cases}
+\end{equation*}
+We see here the probability of the value of $x_{i+1}$ is only dependent on the current state. This is known as a \emph{Markov Process}. In effect, $\p (x_{i+1}|x_i)$ is the only state that matters. Let us take a look at the expected value of the number of mRNA molecules at time $t=i+1$. Then we have that 
+\begin{equation*}
+    \begin{split}
+        \langle x_{i+1} \rangle &= \sum_{x_{i+1}} x_{i+1} \p (x_{i+1}) \\
+        &= \sum_{x_{i+1},x_i} \p(x_{i+1}|x_i)\p(x_i) \\
+        &= \sum_{x_i} \p (x_i) [(x_i+1)\beta \Delta t + (x_i-1)kx_i\Delta t + x_i(1-\beta+kx_i)\Delta t] \\
+        &= \sum_{x_i} \p(x_i)[x_i + \beta \Delta t-kx_i \Delta t]
+    \end{split}
+\end{equation*}
+Since this all depends on the probability of the state if $x_i$, we would have to do this all the way back down to $x_0$. Therefore we prefer to calculate the average expected change which is given by 
+\begin{equation*}
+    \begin{split}
+        \langle x_{i+1}-x_i\rangle &= \sum_{x_i} \p(x_i)[x_i+\beta\Delta t-kx_i \Delta t] - \sum_{x_i}x_i\p(x_i) \\ &= \sum_{x_i}\p(x_i) [\beta \Delta t-kx_i\Delta t] \\
+        &= \sum_{x_i}\p(x_i)[\beta-kx_i]\Delta t\\
+        &= \beta \Delta t\sum_{x_i} \p(x_i) - k\Delta t\sum_{x_i}x_i\p(x_i) \\
+        &= \beta \Delta t - k\Delta t \langle x_i \rangle \\
+        \frac{\langle \Delta x_i \rangle}{\Delta t}&= \beta - k \langle x_i \rangle
+    \end{split}
+\end{equation*}
+which we say takes a similar form as the deterministic equation. We can simulate this system but it is both computationally and time intensive to simulate every time step when most likely, nothing happens. As such, we use the Gillepsie Algorithm. The steps are 
+\begin{enumerate}
+    \item Initialize the initial value(s)
+    \item Draw a waiting time from an exponential distribution $t_{w,i} \sim \exp(\lambda)$ where $\lambda = \beta+kx_i$ 
+    \item Determine if it is a birth or death via a Bernoulli trial using $s \sim $Ber$\left( \frac{\beta}{\beta+kx} \right)$ where a sucess is a production 
+    \item update using $x_{i+1} = x_i +2 \left(s-\frac{1}{2}\right)$
+    \item Repeat steps 2-5
+\end{enumerate}
+
+\section{Excitable Systems}
+Excitable systems have a single stable attractor with two modes of restoring the stable state. One is a small perturbation leads to a monotonic return. The other way is after a big perturbation, the system takes a large excursion from the stable point before returning. The key distinction for an excitable system compared to other systems is that it has a threshold. This is good for sensing in a noisy environment. 
+\subsection{Hodgkin-Huxley}
+In 1952, Hodgkin and Huxley performed some experiments on the axons of giant squids. The action potential effectively acts as an excitable system. The resting state has a high concentration of sodium ions outside of the cell and potassium ions inside of the cell. The resting potential is roughly -70 mV when comparing the inside versus the outside.
+\begin{figure}[htbp]
+    \centering
+    
+    % ==========================================================================
+    % SUBFIGURE (a): Subthreshold Current Pulse
+    % ==========================================================================
+    \begin{subfigure}[b]{0.32\textwidth}
+        \centering
+        \resizebox{\linewidth}{!}{%
+        \begin{tikzpicture}[
+            >=Stealth,
+            axis/.style={->, thick, black!80},
+            thresh/.style={dashed, thick, red!75!black},
+            rest/.style={dotted, thick, black!60},
+            curve/.style={very thick, blue!75!black},
+            stim/.style={thick, purple!75!black},
+            font=\sffamily\small
+        ]
+            % Membrane Potential V_m
+            \draw[axis] (0,0) -- (4.3,0) node[right] {$t$};
+            \draw[axis] (0,-0.3) -- (0,3.2) node[above] {$V_m\text{ (mV)}$};
+
+            \draw[rest] (0,0.6) -- (4.1,0.6);
+            \node[left, font=\scriptsize] at (0,0.6) {$-70$};
+            \draw[thresh] (0,1.3) -- (4.1,1.3);
+            \node[left, font=\scriptsize, red!75!black] at (0,1.3) {$-55$};
+            \node[above right, font=\scriptsize, red!75!black] at (2.8,1.3) {$V_{\text{th}}$};
+
+            % Passive RC charging and decay
+            \draw[curve] 
+                (0,0.6) -- (0.8,0.6) 
+                .. controls (1.1, 1.05) and (1.5, 1.12) .. (2.0, 1.13)
+                .. controls (2.3, 0.72) and (2.8, 0.61) .. (4.0, 0.6);
+
+            % Injected Current I_inj
+            \begin{scope}[yshift=-1.6cm]
+                \draw[axis] (0,0) -- (4.3,0) node[right] {$t$};
+                \draw[axis] (0,-0.15) -- (0,1.0) node[above] {$I_{\text{inj}}$};
+                \draw[stim] (0,0) -- (0.8,0) -- (0.8,0.35) -- (2.0,0.35) -- (2.0,0) -- (4.0,0);
+                \draw[dotted, black!40] (0.8,0) -- (0.8,2.2);
+                \draw[dotted, black!40] (2.0,0) -- (2.0,2.2);
+            \end{scope}
+        \end{tikzpicture}%
+        }
+        \caption{Subthreshold ($I < I_{\text{th}}$)}
+        \label{fig:ap-subthreshold}
+    \end{subfigure}
+    \hfill
+    % ==========================================================================
+    % SUBFIGURE (b): Large Suprathreshold Pulse
+    % ==========================================================================
+    \begin{subfigure}[b]{0.32\textwidth}
+        \centering
+        \resizebox{\linewidth}{!}{%
+        \begin{tikzpicture}[
+            >=Stealth,
+            axis/.style={->, thick, black!80},
+            thresh/.style={dashed, thick, red!75!black},
+            rest/.style={dotted, thick, black!60},
+            curve/.style={very thick, teal!75!black},
+            stim/.style={thick, purple!75!black},
+            font=\sffamily\small
+        ]
+            % Membrane Potential V_m
+            \draw[axis] (0,0) -- (4.3,0) node[right] {$t$};
+            \draw[axis] (0,-0.3) -- (0,3.2) node[above] {$V_m\text{ (mV)}$};
+
+            \draw[rest] (0,0.6) -- (4.1,0.6);
+            \node[left, font=\scriptsize] at (0,0.6) {$-70$};
+            \draw[thresh] (0,1.3) -- (4.1,1.3);
+            \node[left, font=\scriptsize, red!75!black] at (0,1.3) {$-55$};
+
+            % Single Action Potential
+            \draw[curve] 
+                (0,0.6) -- (0.8,0.6)
+                .. controls (1.0, 0.85) and (1.1, 1.15) .. (1.15, 1.3)
+                .. controls (1.22, 2.2) and (1.28, 2.95) .. (1.35, 2.95)
+                .. controls (1.45, 2.95) and (1.58, 0.25) .. (1.80, 0.25)
+                .. controls (2.15, 0.25) and (2.5, 0.6) .. (3.2, 0.6)
+                -- (4.0, 0.6);
+
+            \node[right, font=\scriptsize, teal!75!black] at (1.42, 2.85) {$+30\text{ mV}$};
+
+            % Injected Current I_inj
+            \begin{scope}[yshift=-1.6cm]
+                \draw[axis] (0,0) -- (4.3,0) node[right] {$t$};
+                \draw[axis] (0,-0.15) -- (0,1.0) node[above] {$I_{\text{inj}}$};
+                \draw[stim] (0,0) -- (0.8,0) -- (0.8,0.75) -- (2.0,0.75) -- (2.0,0) -- (4.0,0);
+                \draw[dotted, black!40] (0.8,0) -- (0.8,2.2);
+                \draw[dotted, black!40] (2.0,0) -- (2.0,2.2);
+            \end{scope}
+        \end{tikzpicture}%
+        }
+        \caption{Suprathreshold ($I > I_{\text{th}}$)}
+        \label{fig:ap-suprathreshold}
+    \end{subfigure}
+    \hfill
+    % ==========================================================================
+    % SUBFIGURE (c): Constant Suprathreshold Current
+    % ==========================================================================
+    \begin{subfigure}[b]{0.32\textwidth}
+        \centering
+        \resizebox{\linewidth}{!}{%
+        \begin{tikzpicture}[
+            >=Stealth,
+            axis/.style={->, thick, black!80},
+            thresh/.style={dashed, thick, red!75!black},
+            rest/.style={dotted, thick, black!60},
+            curve/.style={very thick, orange!85!black},
+            stim/.style={thick, purple!75!black},
+            font=\sffamily\small
+        ]
+            % Membrane Potential V_m
+            \draw[axis] (0,0) -- (4.3,0) node[right] {$t$};
+            \draw[axis] (0,-0.3) -- (0,3.2) node[above] {$V_m\text{ (mV)}$};
+
+            \draw[rest] (0,0.6) -- (4.1,0.6);
+            \node[left, font=\scriptsize] at (0,0.6) {$-70$};
+            \draw[thresh] (0,1.3) -- (4.1,1.3);
+            \node[left, font=\scriptsize, red!75!black] at (0,1.3) {$-55$};
+
+            % Tonic Spike Train
+            \draw[curve]
+                (0,0.6) -- (0.5,0.6)
+                % Spike 1
+                .. controls (0.65, 0.85) and (0.75, 1.15) .. (0.80, 1.3)
+                .. controls (0.87, 2.2) and (0.93, 2.95) .. (1.00, 2.95)
+                .. controls (1.10, 2.95) and (1.20, 0.25) .. (1.40, 0.25)
+                % ISI 1 -> Spike 2
+                .. controls (1.65, 0.25) and (1.85, 1.0) .. (1.95, 1.3)
+                .. controls (2.02, 2.2) and (2.08, 2.95) .. (2.15, 2.95)
+                .. controls (2.25, 2.95) and (2.35, 0.25) .. (2.55, 0.25)
+                % ISI 2 -> Spike 3
+                .. controls (2.80, 0.25) and (3.00, 1.0) .. (3.10, 1.3)
+                .. controls (3.17, 2.2) and (3.23, 2.95) .. (3.30, 2.95)
+                .. controls (3.40, 2.95) and (3.50, 0.25) .. (3.70, 0.25)
+                % Recovery
+                .. controls (3.85, 0.25) and (3.95, 0.65) .. (4.05, 0.95);
+
+            % Injected Current I_inj
+            \begin{scope}[yshift=-1.6cm]
+                \draw[axis] (0,0) -- (4.3,0) node[right] {$t$};
+                \draw[axis] (0,-0.15) -- (0,1.0) node[above] {$I_{\text{inj}}$};
+                \draw[stim] (0,0) -- (0.5,0) -- (0.5,0.75) -- (4.05,0.75);
+                \draw[dotted, black!40] (0.5,0) -- (0.5,2.2);
+            \end{scope}
+        \end{tikzpicture}%
+        }
+        \caption{Constant ($I = \text{const} > I_{\text{th}}$)}
+        \label{fig:ap-constant}
+    \end{subfigure}
+
+    \caption{Membrane potential ($V_m$) dynamics under three injected current ($I_{\text{inj}}$) regimes: (\subref{fig:ap-subthreshold}) passive RC depolarization without reaching threshold $V_{\text{th}}$; (\subref{fig:ap-suprathreshold}) a single all-or-none action potential triggered by a brief suprathreshold pulse; and (\subref{fig:ap-constant}) repetitive tonic spiking driven by a sustained suprathreshold current.}
+    \label{fig:ap-regimes-grid}
+\end{figure}
+While there exists linear resistors, the membrane channels act as nonlinear resistors such that $I=R(V)V$ where the resistance $R$ is some function of the voltage. 
+\begin{figure}[htbp]
+    \centering
+    \resizebox{\linewidth}{!}{%
+    \begin{circuitikz}[american voltages, american currents, thick]
+        % Top and bottom rails (Extracellular = Ground, Intracellular = V)
+        \draw (0,4) to[short, o-] (13.5,4);
+        \draw (0,0) to[short, o-] (13.5,0);
+        
+        % Left terminal labels
+        \node[left] at (0,4) {$\delta V_{\text{in}}$};
+        \node[left] at (0,0) {$\delta V_{\text{out}} = 0$};
+
+        % Branch 1: Injected Current Source I_inj
+        \draw (1.2,0) to[isource, l=$I_{\text{inj}}$] (1.2,4);
+
+        % Branch 2: Membrane Capacitance C_m
+        \draw (3.4,4) to[C, l=$C_m$] (3.4,0);
+
+        % Branch 3: Instantaneous / Steady-State Chord Conductance g_0
+        \draw (5.6,4) to[R, l=$R_0 \equiv g_0^{-1}$] (5.6,0);
+
+        % Branch 4: K+ Activation Inductive Branch (n-gate)
+        \draw (8.0,4) to[R, l=$R_n$] (8.0,2)
+                    to[L, l=$L_n$] (8.0,0);
+
+        % Branch 5: Na+ Inactivation Inductive Branch (h-gate)
+        \draw (10.5,4) to[R, l=$R_h$] (10.5,2)
+                     to[L, l=$L_h$] (10.5,0);
+
+        % Branch 6: Fast Na+ Activation Branch (m-gate, negative resistance)
+        \draw (13.0,4) to[R, l=$R_m < 0$] (13.0,2)
+                     to[L, l=$L_m < 0$] (13.0,0);
+
+        % Annotations above branches
+        \node[above, font=\sffamily\scriptsize, align=center] at (3.4,4.1) {Lipid\\Bilayer};
+        \node[above, font=\sffamily\scriptsize, align=center] at (5.6,4.1) {Instantaneous\\Conductance};
+        \node[above, font=\sffamily\scriptsize, align=center, teal!75!black] at (8.0,4.1) {$\text{K}^+$ Activation\\($n$-gate lag)};
+        \node[above, font=\sffamily\scriptsize, align=center, teal!75!black] at (10.5,4.1) {$\text{Na}^+$ Inactivation\\($h$-gate lag)};
+        \node[above, font=\sffamily\scriptsize, align=center, red!75!black] at (13.0,4.1) {Fast $\text{Na}^+$\\Amplification};
+    \end{circuitikz}%
+    }
+    \caption{Small-signal linearized Hodgkin–Huxley (quasi-active) equivalent circuit around resting potential $V_0$. Delayed voltage-gated recovery processes ($n$ and $h$) appear explicitly as positive phenomenological inductors $L_n, L_h > 0$, transforming the membrane from a passive RC filter into an active RLC resonator.}
+    \label{fig:hh-inductor-circuit}
+\end{figure}
 \end{document}
