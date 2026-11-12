@@ -724,7 +724,7 @@ where $\psi(x)$ is the digamma defined as
 \end{definition}
 Let $\mathcal{D}$ denote the space of all test functions. 
 \begin{definition}
-    A distribution on $\R$ is a continuos linear map $f:\mathcal{D} \to \R$ via some combination $\phi \mapsto (f,\phi)$.
+    A distribution on $\R$ is a continous linear map $f:\mathcal{D} \to \R$ via some combination $\phi \mapsto (f,\phi)$.
 \end{definition}
 $f:\mathcal{D}\to \R$ is continuous if the following holds: $\phi_k, \phi \in \mathcal{D}$ all vanish outside of the same interval and all derivatives $\phi_k^{(i)} \to \phi^{(i)}$ converge uniformly. Then $(f,\phi_k) \to (f,\phi)$ converges uniformly as $k\to \infty$. What's important to note is that distributions are \emph{generalized functions} and cannot be defined in the traditional sense. The rigorous way to denote the use of a distribution is pairing the distribution with a test function which then outputs a number. In other words, it is \emph{functional} which maps from a function space (in this case, the space of all test functions on our interval of choice) to a field (in this case, $\R$). Let us look at some examples 
 \begin{example}
@@ -753,5 +753,48 @@ Let us use this to determine the derivative of the Heaviside step function.
     which is the definition of the Dirac Delta. We can also find the derivative of the Delta function. $(\delta ',\phi) = -(\delta, \phi') =-\phi'(0)$ and so we can show by induction that the $n^{th}$ derivative of the Delta function is defined by $(\delta^{(n)},\phi) = (-1)^n\phi^{(n)}(0)$.
 \end{example}
 If $f_n$ is a sequence of distributions then $f_n$ weakly converges to a distribution $f$ is $(f_n,\phi)\to (f,\phi)$ as $n\to \infty\,\,\,\forall \phi \in \mathcal{D}$.
+The power of distributions allows us to talk about convergence as distributions which is more general. 
+\begin{example}
+    The Fourier Series of $|x|$ on $[-\pi,\pi]$ is given by 
+    \begin{equation*}
+        |x| = \frac{\pi}{2} -\sum^\infty_{n=0} \frac{4}{(2n+1)^2 \pi} \cos((2n+1)x)
+    \end{equation*}
+    Let $S_N$ be the $N^{th}$ partial sum and $S_N \to |x|$ as distributions on $(-\pi,\pi)$. In other words, $(S_N, \phi) \to (|x|,\phi)$ for $\phi \in \mathcal{D}$ that vanish outside of $(-\pi,\pi)$. Let us call $|x| = F(x)$. Then $S_N' \to F'(x)$ as distributions through $(S_n', \phi) = - (S_N,\phi') \to -(F,\phi')=(F',\phi)$. Then we have that 
+    \begin{equation*}
+        S_N' = \sum ^N_{n=0} \frac{4}{(2n+1)\pi} \sin((2n+1)x)  \to F'(x) = \begin{cases}
+            -1 & x\in (-\pi,0) \\
+            1 & x\in (0,\pi)
+        \end{cases}
+    \end{equation*}
+    While this makes sense normally, what doesn't make sense is the second derivative which gives utter nonsense. However through the lens of the distributions, it makes perfect sense as 
+    \begin{equation*}
+        S_N'' = \sum^N_{n=0} \frac{4}{\pi}\cos((2n+1)x) \to F''(x) = 2 \sum^\infty_{n=-\infty} (-1)^n \delta (x-n\pi)
+    \end{equation*}
+    where we have that 
+    \begin{equation*}
+        (S_N'',\phi) = \sum^N_{n=0} \int^\pi_{-\pi} \phi(x) \frac{4}{\pi}\cos(nx)dx \to 2\phi(0) \text{ as } N \to \infty
+    \end{equation*}
+\end{example}
 
+\subsubsection{2D and 3D Distributions}
+We use the same idea and define $\mathcal{D}$ to be the test functions on $\R^2$ and $\R^3$ with bounded support. Once again, a distribution is a continuous linear map $f:\mathcal{D} \to \R$. If $f$ is continuous and reasonable function, we can express it via 
+\begin{equation*}
+    (f,\phi) = \int \!\!\! \int \!\!\! \int_{\R^3} f(x) \phi (x) dV
+\end{equation*}
+In this way, we can also talk about how distributions can ``solve" differential equations. Suppose we want a distribution $u(x,y)=f(x+y)$ such that it solves the equation $u_x-u_y=0$. Then we want to check that $(u_x-u_y,\phi) = 0 \,\,\, \forall \phi \in \mathcal{D}$. We proceed as standard 
+\begin{equation*}
+    \begin{split}
+        (u_x-u_y,\phi) &= (u_x,\phi)-(u_y,\phi) \\
+        &= -(u,\phi_x) + (u,\phi_y) \\
+        &= \int\!\!\!\int_{\R^2} u(x,y)(-\phi_x (x,y)+\phi_y(x,y))dA
+    \end{split}
+\end{equation*}
+we now make the change of variables $w=x-y $ and $v= x+y$ so that $\pd{\phi}{w} = 2\phi_w$ and the Jacobian evaluates to $\frac{1}{2}$. Putting this together, we get 
+\begin{equation*}
+    \begin{split}
+        (u_x-u_y,\phi) &= \frac{1}{2}\int \!\!\! \int_{\R^2} f(v) 2\phi_w dw dv \\
+        &= \int^\infty_{-\infty} f(v) \int^\infty_{-\infty} \phi_w dw dv 
+    \end{split}
+\end{equation*}
+and since $\phi$ only has support on a finite region, the inner integral evaluates to zero and so therefore any distribution in the form $u(x,y) = f(x+y)$ satisfies this one dimensional transport equation.
 \end{document}
