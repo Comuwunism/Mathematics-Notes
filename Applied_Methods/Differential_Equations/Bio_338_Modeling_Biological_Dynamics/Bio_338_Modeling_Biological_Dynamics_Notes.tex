@@ -29,8 +29,12 @@
 \newcommand{\p}{\mathbb{P}}
 \newcommand{\twen}{\hspace{20pt}}
 
-\newtheorem{definition}{Definition}[section]
-\newtheorem{theorem}[definition]{Theorem}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
 
 \begin{document}
 
@@ -55,12 +59,6 @@ This diagram represents linear growth and is isomorphic to the equation
     \dot x=b
 \end{equation*}
 For these examples, let us use $x$ to describe the rabbit population. In this case, the population is increasing by $b$ rabbits per time unit (we shall say month for the example).
-\begin{figure}[hbtp]
-    \centering
-    \includegraphics[width=0.5\linewidth]{perCapitaBirth.png}
-    \caption{Compartment diagram of per capita growth}
-    \label{fig:perCapitaGrowth}
-\end{figure}
 Figure \ref{fig:perCapitaGrowth} is the compartment diagram for the equation 
 \begin{equation*}
     \dot x=bx
@@ -74,6 +72,12 @@ which has the solution
 \begin{equation*}
     x(t)=x_0e^{rt} \hspace{20pt} r =b-d
 \end{equation*}
+\begin{figure}[hbtp]
+    \centering
+    \includegraphics[width=0.5\linewidth]{perCapitaBirth.png}
+    \caption{Compartment diagram of per capita growth}
+    \label{fig:perCapitaGrowth}
+\end{figure}
 
 If $r>0$, then the birth rate ``out competes" the death rate which leads to exponential growth. On the other hand, if $r<0$, the death rate overrides the birth and hence the rabbit population disappears. We can make it more realistic by adding carrying capacity that only allows $k$ rabbits in our system. This system is described by the \emph{Euler-Lotka} Model 
 \begin{equation*}
@@ -173,7 +177,7 @@ We can further adjust the model to include latent infected cells: that is, cells
     The tangent space of a \emph{manifold} is a vector space that contains all possible directions tangent to the manifold at that point.
 \end{definition}
 \begin{definition}[Manifold]
-    An $n$-dimensional manifold is a topological space with the property that each point has a neighborhood that is homeomorphic to an open subset of $n$-dimensional Euclidean space.
+    An $n$-dimensional manifold is a topological space with the property that each point has a neighborhood that is diffeomorphic to an open subset of $n$-dimensional Euclidean space.
 \end{definition}
 We can effectively think of the a state space as a manifold and each point on that manifold corresponds to a specific state in that state space. We can then think of the tangent spaces as all possible changes that can be made to a certain state in that state space. I wish I knew more about differential geometry but maybe G\'abor Sz\'ekelyhidi can teach me about it. 
 \begin{definition}[Vector Field]
@@ -204,20 +208,16 @@ We can also take a look at the Lotka-Volterra model which describes predator-pre
     \end{split}
 \end{equation*}
 We can see that in Figure \ref{fig:LV}, there exists a fixed point at the origin (no predators and no prey so no dynamics) and another one somewhere in the positive plane which suggests the existence of a steady state.
-\begin{figure}[htbp]
-    \centering
-    \includegraphics[width=0.5\linewidth]{LotkaVolterra.png}
-    \caption{Vector field of the Lotka-Volterra model}
-    \label{fig:LV}
-\end{figure}
 \begin{definition}
     \emph{Trajectories} are solutions to ODEs that exist and are unique (assuming the conditions of the Picard-Lindel\"of Theorem are satisfied) and are \emph{curves} in the state space that follow the vector field.
 \end{definition}
+
 We can describe a vector field $V$ to be a function $V: \mathbb{R}^n\mapsto T_pM$ where $T_pM$ denotes the tangent space at a point $p$ along the state space manifold $M$. It is worth noting that two trajectories can \emph{never} cross since that would require the vector field to be multi valued which is not possible over $\mathbb{R}$. One way to approximate solution curves to ODEs is via Euler's method which is as follows 
 \begin{equation*}
     x(t+\Delta t) = x(t)+x'(t)\Delta t
 \end{equation*}
 Other numerical methods improve on Euler's method like Runge-Kutta but Euler's method is the most clear to see. Some numerical integrators can have adaptive time steps that are based on the magnitude of the local vector field. This is because small time steps offer better accuracy at the expense of compute time. Large time steps are faster to calculate but may not converge to the true solution and are prone to deviations. 
+
 \subsection{Fixed Points and Stability}
 \begin{definition}
     A \emph{fixed point} $\bold{x}$ is a point in the state space such that $\dot{\bold{x}} =0$. 
@@ -228,6 +228,12 @@ The vector field at a fixed point is the zero vector. We can classify the stabil
     \item A system is \emph{unstable} if it leaves its fixed point when given a slight perturbation
     \item A system is \emph{quasi-stable} or \emph{semi-stable} if one direction is stable while the direction is unstable (saddle point). We generally consider this to be unstable since there is only an infinitesimally small line of stability and the rest of the space unstable.
 \end{enumerate}
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.5\linewidth]{LotkaVolterra.png}
+    \caption{Vector field of the Lotka-Volterra model}
+    \label{fig:LV}
+\end{figure}
 It is worth noting that there are different notions of stability. We shall state two.
 \begin{definition}
     Consider an autonomous nonlinear dynamical system 
@@ -982,6 +988,22 @@ In 1952, Hodgkin and Huxley performed some experiments on the axons of giant squ
     \label{fig:ap-regimes-grid}
 \end{figure}
 While there exists linear resistors, the membrane channels act as nonlinear resistors such that $I=R(V)V$ where the resistance $R$ is some function of the voltage. 
+Using the properties of resistors, capacitors, and inductors, we get 
+\begin{equation*}
+    \begin{split}
+        I_m &= f_{R_m}(V) = \frac{V^3}{3}-V\\
+        I_{C} &=C\dot V = -I_m-I_L\\
+        \dot I_L &= \frac{V_L}{L} = \frac{V-I_LR-V_0}{L} 
+    \end{split}
+\end{equation*}
+where the expression for the current through the channels $I_m$ is phenomenological and $V_0$ is the homeostatic setpoint. Doing some rearranging and adding a stimulating potential $V_{\text{stim}}$, we get 
+\begin{equation*}
+    \begin{split}
+        \dot V&= \frac{1}{C} \left[ \left(V-\frac{V^3}{3} \right) -I_L + V_{\text{stim}}\right] \\
+        \dot I_L&= \frac{V-I_LR-V_0}{L}
+    \end{split}
+\end{equation*}
+As $V_\text{stim}$ increases, the system undergoes a bifurcation and a stable limit cycle appears.
 \begin{figure}[htbp]
     \centering
     \resizebox{\linewidth}{!}{%
@@ -1026,4 +1048,17 @@ While there exists linear resistors, the membrane channels act as nonlinear resi
     \caption{Small-signal linearized Hodgkin–Huxley (quasi-active) equivalent circuit around resting potential $V_0$. Delayed voltage-gated recovery processes ($n$ and $h$) appear explicitly as positive phenomenological inductors $L_n, L_h > 0$, transforming the membrane from a passive RC filter into an active RLC resonator.}
     \label{fig:hh-inductor-circuit}
 \end{figure}
+\subsection{Discrete Time Systems}
+In discrete time systems, we model at the specified time steps but nothing in between time steps. For example,  let us suppose we have non-overlapping generations of a species that reproduces once and dies. Then 
+\begin{equation*}
+    x_{t+1} = (\text{per capita birth rate})x_t
+\end{equation*}
+where the per capita birth rate is given by $r\left( 1- \frac{x_t}{k} \right)$ in a logistic like system. This looks functionally similar to the continuous logistic model but the key difference is that the right hand side determines the change in $x$ but in this discrete time model, it determines the value of the next $x$. An interesting thing to note is if we bring $r$ above a specific value, then the system undergoes a bifurcation and oscillations appear since we cannot get the exact $x$-value for the fixed point. Another interesting thing to note is this does not require two dimensions since again, the system never passes through the fixed point. It just jumps. If we raise the value of $r$ even further, then it undergoes another bifurcation and we get chaos. We define a system to be chaotic if it is 
+\begin{enumerate}
+    \item deterministic
+    \item bounded
+    \item irregular (no fixed points, no limit cycle, nothing periodic in the asymptotic limit)
+    \item and is exponentially sensitive to initial conditions
+\end{enumerate}
+
 \end{document}
