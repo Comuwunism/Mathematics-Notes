@@ -453,11 +453,11 @@ Consider the following groups: $\Z_2=\{0,1\}$ under addition mod 2, $\{1,-1\}$ u
 \end{equation*}
 All these groups are of the form $\{e,a\}$ where $a\neq e$ and $a^2=e$. In other words, they all have the same group table (\ref{tab:groupCard2}). In some sense, all these groups are ``the same." 
 \begin{definition}
-    A function $\varphi:G_1 \mapsto G_2$ is a \emph{homomorphism} if it satisfies $\varphi(x*y)=\varphi(x)*\varphi(y)$ where the left hand side is the group operation on $G_1$ and the right hand side is the group operation on $G_2$.
+    A function $\varphi:G_1 \to G_2$ is a \emph{homomorphism} if it satisfies $\varphi(x*y)=\varphi(x)*\varphi(y)$ where the left hand side is the group operation on $G_1$ and the right hand side is the group operation on $G_2$.
 \end{definition}
 
 \begin{proposition}
-    If $\varphi : G_1\mapsto G_2$ is a homomorphism, then 
+    If $\varphi : G_1\to G_2$ is a homomorphism, then 
     \begin{enumerate}
         \item $\varphi_1(e_1)=e_2$
         \item $\varphi(g^{-1})=\varphi (g)^{-1} \,\,\, \forall g\in G$
@@ -467,7 +467,7 @@ All these groups are of the form $\{e,a\}$ where $a\neq e$ and $a^2=e$. In other
     To prove the first fact, we have that $e_1e_1=e_1$ so $\varphi (e_1e_1)=\varphi(e_1)$ but also by the definition of a homomorphism, $\varphi (e_1e_1) = \varphi(e_1)\varphi(e_1)$ which implies $\varphi(e_1)\varphi(e_1)=\varphi(e_1) \rightarrow \varphi(e_1)=e_2$. To prove the second fact, we know that $g^{-1}g=e_1$ and so we apply $\varphi$ to get $\varphi(g^{-1}g)=\varphi(e_1)$ but also is equal to $\varphi(g^{-1})\varphi(g)$ and so therefore $\varphi(g^{-1})\varphi(g)=e_2\rightarrow \varphi(g^{-1})=\varphi(g)^{-1}$  
 \end{proof}
 \begin{definition}
-    Suppose $\varphi: G_1 \mapsto G_2$ is a homomorphism. We define the \emph{kernel} of $\varphi$ as the set $\ker \varphi= \{x\in G_1: \varphi(x)=e_2\}$ and the \emph{image} of $\varphi$ as the set $\im \varphi = \{y\in G_2:y=\varphi(x)$ for some $x\in G_1\}=\{\varphi(x):x\in G_1\}$.
+    Suppose $\varphi: G_1 \mapsto G_2$ is a homomorphism. We define the \emph{kernel} of $\varphi$ as the set $\ker \varphi:= \{x\in G_1: \varphi(x)=e_2\}$ and the \emph{image} of $\varphi$ as the set $\im \varphi := \{y\in G_2:y=\varphi(x)$ for some $x\in G_1\}=\{\varphi(x):x\in G_1\}$.
 \end{definition}
 
 \begin{proposition}
@@ -486,11 +486,11 @@ Let us look at an example.
         \end{bmatrix}
     \end{equation*}
 \end{example}
-There always exists two homomorphisms: the trivial and identity homomorphisms. The trivial homomorphism is defined as $\varphi : G_1 \mapsto G_2$ by $\varphi (x) = e_2$ where the kernel is $\ker \varphi = G_1$ and the image is $\im \varphi = \{e_2\}$. The identity homomorphism is defined as $\id_G :G\mapsto G$ such that $\id (x)=x$. The kernel is $\ker \id_G = \{ e\}$ and the image is $\im \id_G = G$.
+There always exists two homomorphisms: the trivial and identity homomorphisms. The trivial homomorphism is defined as $\varphi : G_1 \mapsto G_2$ by $\varphi (x) = e_2$ where the kernel is $\ker \varphi = G_1$ and the image is $\im \varphi = \{e_2\}$. The identity homomorphism is defined as $\id_G :G\to G$ such that $\id (x)=x$. The kernel is $\ker \id_G = \{ e\}$ and the image is $\im \id_G = G$.
 
 \subsection{Isomorphisms}
 \begin{definition}
-    A homomorphism is an isomorphism if it is invertible. More precisely, $\varphi : G_1 \mapsto G_2$ is an isomorphism if it is a homomorphism and there exists another homomorphism $\varphi ^{-1} : G_2 \mapsto G_1$ such that $\varphi ^{-1} \circ \varphi = \id _{G_1}$ and $\varphi \circ \varphi^{-1} = \id_{G_2}$.
+    A homomorphism is an isomorphism if it is invertible. More precisely, $\varphi : G_1 \to G_2$ is an isomorphism if it is a homomorphism and there exists another homomorphism $\varphi ^{-1} : G_2 \to G_1$ such that $\varphi ^{-1} \circ \varphi = \id _{G_1}$ and $\varphi \circ \varphi^{-1} = \id_{G_2}$.
 \end{definition}
 Two groups are isomorphic if there exists an isomorphism between them which is denoted by 
 \begin{equation*}
@@ -500,7 +500,7 @@ Two groups are isomorphic if there exists an isomorphism between them which is d
     A homomorphism is an isomorphism if and only if it is bijective.
 \end{theorem}
 \begin{proof}
-    ($\Rightarrow$) Suppose we have an isomorphism $\varphi : G_1 \mapsto G_2$ so therefore $\varphi ^{-1}$ exists. To prove $\varphi$ is injective, we have that $\varphi (x_1)=\varphi (x_2) \rightarrow \varphi^{-1}\varphi(x)=\varphi^{-1}\varphi(x) \rightarrow x_1=x_2$. To prove surjectivity, let $y\in G_2$. $\varphi^{-1}$ exists so let $x=\varphi^{-1}(y) \in G_1$. $\varphi (x) =\varphi \varphi^{-1}(y)=y$ which proves surjectivity. \\\\
+    ($\Rightarrow$) Suppose we have an isomorphism $\varphi : G_1 \to G_2$ so therefore $\varphi ^{-1}$ exists. To prove $\varphi$ is injective, we have that $\varphi (x_1)=\varphi (x_2) \rightarrow \varphi^{-1}\varphi(x)=\varphi^{-1}\varphi(x) \rightarrow x_1=x_2$. To prove surjectivity, let $y\in G_2$. $\varphi^{-1}$ exists so let $x=\varphi^{-1}(y) \in G_1$. $\varphi (x) =\varphi \varphi^{-1}(y)=y$ which proves surjectivity. \\\\
     ($\Leftarrow$) Now suppose $\varphi$ is bijective. We now need to find $\varphi ^{-1}$. Let $\varphi ^{-1}$ be as follows.; $y\in G_2$ and $\varphi^{-1} (y) = $ the unique $x\in G_1$ for which $y=\varphi(x)$. This exists since $\varphi $ is surjective and is unique since $\varphi$ is injective. We then have $\varphi \circ \varphi^{-1} (y) = \varphi (\varphi^{-1}(y))=\varphi($ the unique $x\in G_1$ such that $\varphi(x)=y)=y$. Now we check the other arrangement $\varphi ^{-1} \circ \varphi(x) = \varphi^{-1}(\varphi ($unique $x$ such that $\varphi(x)=y)) = \varphi^{-1}(y) = $ the unique $x$ such that $\varphi(x)=y$. This is our inversion. We still need to prove it is a homomorphism. Suppose $y_1 y_2 \in G_2 $ such that $\varphi^{-1} (y_1y_2) = $ unique $x\in G_1$ such that $\varphi(x)=y_1y_2$. We know that $\varphi ^{-1}(y_1) =x_1 \in G_1$ and $\varphi ^{-1}(y_2) =x_2$. Since $\varphi$ is a homomorphism, we have that $\varphi (x_1x_2) = \varphi(x_1)\varphi(x_2) = y_1y_2$ and therefore $\varphi^{-1}(y_1y_2) =x_1x_2 = \varphi ^{-1}(y_1)\varphi^{-1}(y_2)$. We therefore have proved that $\varphi^{-1}$ is a homomorphism.
 \end{proof}
 \begin{proposition}
@@ -524,7 +524,7 @@ This classifies all cyclic groups up to isomorphism. A natural question to ask f
     \text{no.}
 \end{equation*}
 But if we modify the question, we can answer it and it has been answered. \\\\
-Note, if $\varphi : G_1 \mapsto G_2$ is an injective homomorphism, it may not always be an isomorphism onto $G_2$ but it will always be an isomorphism onto its image 
+Note, if $\varphi : G_1 \to G_2$ is an injective homomorphism, it may not always be an isomorphism onto $G_2$ but it will always be an isomorphism onto its image 
 \begin{equation*}
     G_1 \cong \im \varphi
 \end{equation*}
@@ -826,7 +826,7 @@ What the First Isomorphism Theorem is saying is to take the fibers of $\varphi$ 
 \end{definition}
 \begin{proposition}
     The stabilizer of $x$ in $G$ is a subgroup.
-\end{proposition}
+\end{proposition} 
 \begin{proof}
     1 $\in G_x$ since $1$ fixed everything. Suppose $g\cdot x=x $ and $h\cdot x=x$, then $(gh)\cdot x = g\cdot (h\cdot x) = g\cdot x=x$. Now suppose that $g\in G_x$, then that implies $g\cdot x= x \to g^{-1}g\cdot x=g^{-1}\cdot x\to 1\cdot x=g^{-1}\cdot x$ and therefore $g^{-1} \in G_x$.
 \end{proof}
@@ -842,5 +842,83 @@ What the First Isomorphism Theorem is saying is to take the fibers of $\varphi$ 
 \begin{proof}
     Suppose $Gx\cap Gy \neq \emptyset$. Then $g\cdot x = h\cdot y$ for some $g,h \in G$. Then $y = h^{-1}g\cdot x$ and $x=g^{-1}h\cdot y$. For some $a\cdot x \in Gx$, then we have $a\cdot x=ag^{-1}h\cdot y \in Gy$ and likewise for some $b\cdot y \in Gy$, then $by = bh^{-1}g\cdot x \in Gx$ and hence we $Gy\subseteq Gx$ and $Gx \subseteq Gy$.
 \end{proof}
+
+\begin{theorem}[Orbit Stabilizer Theorem]
+    There is a bijection between 
+    \begin{equation*}
+         \{ \text{cosets of }G_x \text{ of } G\} \longleftrightarrow Gx
+    \end{equation*}
+    In particular, if $|G|<\infty,$ then $|Gx| = [G:Gx]$.
+\end{theorem}
+\begin{proof}
+    Define $f:\{$cosets of $G_x\} \to Gx$ by $f(aG_x) = ax$. To show that $f$ is well defined, we need to show that if $aH=bH$, then $f(aH)=f(bH)$. This means if $b^{-1}a\in H$, then $f(aH)=f(bH)$ or for any $h\in H$, $f(ahH) = f(aH)$. \\\\
+    If $b^{-1}a \in G_x$, then $b^{-1}ax=x \to ax=bx$ so the function is well defined. To show $f$ is onto, every point of $Gx$ is $ax$ for some $a\in G$ so $ax = f(aG_x)$. To prove $1-1$, we suppose that $f(aG_x) = f(bG_x) \iff ax=bx \iff  b^{-1}ax=x \iff b^{-1}a\in G_x \iff aG_x = bG_x$. 
+\end{proof}
+Note that if {$Gx$} = {$x$} $\iff G_x =G$.
+\begin{definition}
+    We define the \emph{fixed point set} as the set 
+    \begin{equation*}
+        X_G := \{ x\in X: x \text{ fixed by all of } G\}
+    \end{equation*}
+\end{definition}
+Since orbits partition all of $X$, we have 
+\begin{equation*}
+    \begin{split}
+        |X| &= |X_G| + \sum_{\substack{\text{all orbits}\\\text{of size}\geq 2}} |Gx| \\
+        &=|X_G| + \sum_{\substack{\text{all orbits }Gx\\\text{with size }\geq 2}} [G:G_x]
+    \end{split}
+\end{equation*}
+\begin{corollary}
+    If $|G| =p^n$ where $p$ is prime, then $|X| \equiv |X_G|\mod p$. \label{coro:3.37}
+\end{corollary}
+\begin{proof}
+    For each $[G:G_x]$ in our formula, $G_x$ is a proper subgroup of $G$. Therefore for each $x$ in the sum, $|G_x| = p^{\text{some }0\leq k <n }$ and hence the index $\frac{|G|}{|G_x|} = p^{\text{positive integer}}$ so $p|[G:G_x]$ in the sum and hence 
+    \begin{equation*}
+        |X| \equiv |X_G| \mod p
+    \end{equation*}
+\end{proof}
+\begin{theorem}[Cauchy's Theorem]
+    If $p\big||G|$ where $p$ is prime, then $G$ has an element of order $p$.
+\end{theorem}
+\begin{proof}
+    Let us define a set $X:= \{ (a_1,\ldots, a_p) \in G\times G\times\ldots\times G: a_1a_2\ldots a_p =1\}$. We claim that $X$ is not empty as $(1,1,\ldots,1)\in X$. We can see that $|X| = |G|^{p-1}$ since we can freely choose the first $p-1$ elements but not the last. Therefore $p\big| |G|$. Notice that if $(a_1,\ldots, a_p) \in X$, then $(a_2,\ldots,a_p,a_1)\in X$ since 
+\begin{equation*}
+    a_2a_3\ldots a_pa_1 =a_1^{-1}a_1a_2\ldots a_p a_1 =a_1^{-1}a_1=1
+\end{equation*}
+We can't permute these elements but we can shift them around by one. It therefore follows that $\Z_p$ acts on $X$. By Corollary \ref{coro:3.37}, it follows that $|X_{\Z_p}|\equiv |X|\mod p \equiv 0 \mod p$ and hence $p\big||X_{\Z_p}|$. We can see that 
+\begin{equation*}
+    X_{\Z_p} = \{ (a,a,\ldots,a) \in G^p : a^p=1\}
+\end{equation*}
+Since we know that $X_{\Z_p}$ contains $(1,1,\ldots,1)$, we know that it is non empty and divisible by $p$, then we know that $|X_{\Z_p}|\geq 2$ and so hence there exists an element with order $p$.
+\end{proof}
+Every group acts on itself by conjugation. Suppose we have some group $G$ that acts on the set $X=G$ via conjugation such that $g\cdot x=gxg^{-1}$. Then the fixed point set of $X$ by $G$ is 
+\begin{equation*}
+    X_G = \{ x\in G: gxg^{-1}=x \,\,\, \forall g\in G\} = Z(G)
+\end{equation*}
+where $Z(G)$ is the center. If $|G|=p^n$, then it follows $|G|\equiv |Z(G)|\mod p$. 
+\begin{proposition}
+    If $|G|=p^n$ then $Z(g) \neq \{1\}$.
+\end{proposition}
+\begin{proof}
+    By above, $|G|\equiv |Z(G)| \mod p$ and we get that $|Z(G)|\equiv 0\mod p$ so $p\big| |Z(G)|$ so $|Z(G)|\neq 1$ and there must exist a nontrivial element in the center.
+\end{proof}
+\begin{proposition}
+    Every group of order $p^2$ is Abelian.
+\end{proposition}
+\begin{proof}
+    By the previous result, $Z(G) \neq \{1\}$ and hence $|Z(G)|=p$ or $p^2$. If $|Z(G)|=p^2$ then we are done since that means the center is the enter group (in other words, the group is Abelian). Now suppose $|Z(G)|=p$ and therefore not Abelian. Since $Z(G) \lhd G$, let us look at $G/Z(G)$. Then $|G/Z(G)|=p$ and $G/Z(G)$ is cyclic. This implies that $G$ is abelian and we have a contradiction so this case is impossible.
+\end{proof}
+\begin{corollary}
+    If $|G|=p^2 $, $G\cong Z_{p^2}$ or $G\cong \Z_p \times \Z_p$.
+\end{corollary}
+\begin{proof}
+    Ask a toddler on the street.
+\end{proof}
+\begin{lemma}
+    Suppose a finite group $G$ acts on a finite set $X$. Then 
+    \begin{equation*}
+        \# \text{ of orbits} = \frac{1}{|G|}\sum_{g\in G} |X_g|
+    \end{equation*}
+\end{lemma}
 
 \end{document}
