@@ -223,7 +223,7 @@ where we integrated by parts in the middle. This shows that energy is conserved 
 \begin{proof}
     Let us first prove the result under the stronger assumption that $F(t,x) = \pd{u}{t} -\gamma \pdt{u}{x} <0$ which implies $\pd{u}{t} < \gamma \pdt{u}{x}$ everywhere in $R$. Suppose there exists a point $(t^\star, x^\star) \in R$ such that $u(t,x)$ is at a local maximum. By definition, its gradient must be 0.
     \begin{equation*}
-        \nabla u(t^\star, x^\star ) = \bold{0} \rightarrow u_t(t^\star,x^\star) = u_{x}(t^\star, x^\star) = 0
+        \nabla u(t^\star, x^\star ) = \mathbf{0} \rightarrow u_t(t^\star,x^\star) = u_{x}(t^\star, x^\star) = 0
     \end{equation*}
     Now let us assume a scalar function $h(x) = (t_\star, x)$. $h(x)$ has a maximum at $x=x^\star$ which means by the second derivative test,
     \begin{equation*}
@@ -837,8 +837,8 @@ Intuitively we can think of $\hat f(k)$ as the Fourier coefficients of $f$.
     The Fourier transform of $F(k)$ is 
     \begin{equation*}
         \begin{split}
-            \hat F(-x)  &=\int^\infty_{-\infty} F(k) e^{-ik(-x)}dx \\
-            &= \int^\infty_{-\infty} F(k) e^{ikx}dx
+            \hat F(-x)  &=\int^\infty_{-\infty} F(k) e^{-ik(-x)}dk \\
+            &= \int^\infty_{-\infty} F(k) e^{ikx}dk
         \end{split}
     \end{equation*}
     The inverse Fourier transform is defined as 
@@ -916,5 +916,87 @@ Now observe that $\od{\hat f}{k} = -ix\hat f \rightarrow x\hat f = i\od{\hat f}{
         \end{split}
     \end{equation*}
 \end{proof}
+
+\subsection{Fundamental Solutions}
+We can also generate the fundamental solutions to certain partial differential equations by finding the Green's functions. Let us look at the equation 
+\begin{equation*}
+    S_t = S_{xx} \,\,\, \forall t>0, x\in \R
+\end{equation*}
+with initial conditions 
+\begin{equation*}
+    S(0,x) = \delta (x)
+\end{equation*}
+The solution $S(t,x)$ converges to $\delta (x)$ as $t \to 0$ as a distribution. In other words, $(S(t,x),\varphi(x)) \to (\delta (x) , \varphi(x)) = \varphi(0)$ as $t\to 0$. Using the Fourier transform on both sides, we get 
+\begin{equation*}
+    \hat S_t = -k^2 \hat S \twen \hat S(0,k) = 1
+\end{equation*}
+This solves trivially to 
+\begin{equation*}
+    \hat S(t,k) = e^{-k^2 t}
+\end{equation*}
+which if we consult a table of Fourier transforms, we see that 
+\begin{equation*}
+    e^{-x^2/2} = \sqrt{2\pi} e^{-k^2/2}
+\end{equation*}
+and 
+\begin{equation*}
+    \hat f(ax) = \frac{1}{|a|} \hat f\left(\frac{k}{a}\right)
+\end{equation*}
+and so therefore 
+\begin{equation*}
+    e^{-(ax)^2/2} = \frac{1}{|a|} \sqrt{2\pi} e^{-k^2/(2a^2)} 
+\end{equation*}
+and therefore $t=\frac{1}{2a^2}\to a=\frac{1}{\sqrt{2t}}$ and so finally the fundamental solution to the heat equation is 
+\begin{equation*}
+    S(t,x) = \frac{1}{\sqrt{4\pi t}} e^{-x^2/(4t)}
+\end{equation*}
+If we have an initial condition $S(0,x) = \varphi(x)$, we can write $\varphi(x)$ as 
+\begin{equation*}
+    \varphi(x) = \int^\infty_{-\infty} \varphi(\xi) \delta(x-\xi) d\xi
+\end{equation*}
+we can linearly combine all the fundamental solutions to get the solution for the general initial condition:
+\begin{equation*}
+    u(t,x) = \int^\infty_{-\infty} \varphi(\xi) S(t,x-\xi) d\xi
+\end{equation*}
+One can also express this as a convolution which can be seen easier by Fourier transforming as seen above but with the the $S(0,x)= \varphi(x)$ initial condition. When applying the inverse Fourier transform, one applies the convolution theorem to get 
+\begin{equation*}
+    u(t,x) = \varphi(x) * S(t,x)
+\end{equation*}
+For the wave equation, consider 
+\begin{equation*}
+    S_{tt} = S_{xx} \,\,\, \forall t>0, x\in \R
+\end{equation*}
+with initial conditions 
+\begin{equation*}
+    S(0,x) = 0 \twen S_t(0,x) = \delta (x)
+\end{equation*}
+Therefore the Fourier transform yields 
+\begin{equation*}
+    \hat S_{tt} = -k^2 \hat S \twen \hat S(0,k) = 0 \twen \hat S_t(0,k) = 1
+\end{equation*}
+The general solution is 
+\begin{equation*}
+    \hat S = A\cos (ckt)+B\sin(ckt)
+\end{equation*}
+and the initial conditions imply that $A=0$ and $B = \frac{1}{ck}$. Therefore the solution is 
+\begin{equation*}
+    \hat S = \frac{1}{ck} \sin(ckt)
+\end{equation*}
+Doing the inverse yields 
+\begin{equation*}
+    S = \frac{1}{2c} H(ct-|x|) = \begin{cases}
+        \frac{1}{2c} &  |x| < ct \\
+        0 & \text{otherwise}
+    \end{cases}
+\end{equation*}
+We can relate this to D'Alembert's formula for an arbitrary initial condition $u_t(0,x) = \psi(x)$ such that 
+\begin{equation*}
+    \begin{split}
+        u(t,x) &= \psi (x) *_x \frac{1}{2c} H(ct-|x|) \\
+        &= \int^\infty_{-\infty} \psi(\xi) \frac{1}{2c} H(ct-|x-\xi|) d\xi \\
+        &= \frac{1}{2c} \int^{x+ct}_{x-ct} \psi(\xi) d\xi
+    \end{split}
+\end{equation*}
+We then check the other initial condition for $u(0,x) = \varphi(x)$ and $u_t(0,x) = 0$ and then we can add them up to recover D'Alembert's solution.
 
 \end{document}
