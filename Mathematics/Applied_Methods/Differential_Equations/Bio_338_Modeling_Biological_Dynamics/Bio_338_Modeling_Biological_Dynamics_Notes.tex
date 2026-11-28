@@ -79,12 +79,11 @@ which has the solution
     \label{fig:perCapitaGrowth}
 \end{figure}
 
-If $r>0$, then the birth rate ``out competes" the death rate which leads to exponential growth. On the other hand, if $r<0$, the death rate overrides the birth and hence the rabbit population disappears. We can make it more realistic by adding carrying capacity that only allows $k$ rabbits in our system. This system is described by the \emph{Euler-Lotka} Model 
+If $r>0$, then the birth rate ``outcompetes" the death rate, which leads to exponential growth. On the other hand, if $r<0$, the death rate overrides the birth and hence the rabbit population disappears. We can make it more realistic by adding carrying capacity that only allows $k$ rabbits in our system. This system is described by the \emph{Euler-Lotka} model.
 \begin{equation*}
     \dot x = r\left(1-\frac{x}{k}\right)x
 \end{equation*}
-
-where $r$ is once again the sum of the birth and death rates. The second term effectively scales the birth and death based off of how close the population is to the carrying capacity. We must have that $r>0$ or else we see that the amount of deaths slows down as we approach the carrying capacity which is unphysical.
+where $r$ is once again the sum of the birth and death rates. The second term effectively scales the birth and death based on how close the population is to the carrying capacity. We must have $r>0$; otherwise, the number of deaths slows down as we approach the carrying capacity, which is unphysical.
 \begin{figure}[hbtp]
     \centering
     \includegraphics[width=0.5\linewidth]{perCapitaBirthDeath.png}
@@ -122,7 +121,9 @@ What perplexed people about HIV was the timeline of the disease. The viral load 
     \item What causes the initial spike and decline?
     \item What causes the sudden climb in viral load leading to AIDS?
 \end{enumerate}
-The initial hypothesis was that there wold be rapid viral growth and then the immune system would respond (leading to increase and decline in viral load) before replicating slowly in the background. In 1994, the first antiretroviral drugs were in clinical trials. These vaccines worked by stopping viral replication rather than directly killing existing viral particles. According to the previous hypothesis, these drugs shouldn't make a significant impact since the viruses are only replicating slowly. What they noticed was an exponential decay in viral load as time progress after the treatment. \\\\In 1996, Alan Perelson publishes \textit{HIV-1 Dynamics in Vivo: Virion Clearance Rate, Infected Cell Life-Span, and Viral Generation Time} to explain what was observed. Let us consider a basic bathtub with a faucet and a drain. The inflow is described as $Q_i$ and the outflow is described as $Q_o$ and is dependent on the volume in the bathtub. We can therefore describe the amount of volume in the bathtub, $V$ as the following differential equation 
+The initial hypothesis was that there would be rapid viral growth and then the immune system would respond (leading to increase and decline in viral load) before replicating slowly in the background. In 1994, the first antiretroviral drugs were in clinical trials. These drugs worked by stopping viral replication rather than directly killing existing viral particles. According to the previous hypothesis, these drugs shouldn't make a significant impact since the viruses are only replicating slowly. What they noticed was an exponential decay in viral load as time progressed after the treatment. 
+
+In 1996, Alan Perelson publishes \textit{HIV-1 Dynamics in Vivo: Virion Clearance Rate, Infected Cell Life-Span, and Viral Generation Time} to explain what was observed. Let us consider a basic bathtub with a faucet and a drain. The inflow is described as $Q_i$ and the outflow is described as $Q_o$ and is dependent on the volume in the bathtub. We can therefore describe the amount of volume in the bathtub, $V$ as the following differential equation 
 \begin{equation*}
     \dot V=Q_i-Q_oV
 \end{equation*}
@@ -141,7 +142,8 @@ mass flow rate but also a really efficient drain or a dripping faucet and ineffi
         V(t)&=\frac{Q_i}{Q_o}+Ce^{-Q_ot}
     \end{split}
 \end{equation*}
-If we apply the initial condition that $V(t=0)=V_0$, then we find the constant to be $C=V_0-\frac{Q_i}{Q_o}$. If $Q_i$ and $Q_o$ are small, we should expect small exponential decay and vice versa. This effectively explains the dramatic difference the antiretrovirals made. Let us now consider a more sophisticated model. \\\\
+If we apply the initial condition that $V(t=0)=V_0$, then we find the constant to be $C=V_0-\frac{Q_i}{Q_o}$. If $Q_i$ and $Q_o$ are small, we should expect small exponential decay and vice versa. This effectively explains the dramatic difference the antiretrovirals made. Let us now consider a more sophisticated model. 
+
 One thing to note is that the line from $N_v$ implies that the rate of infection is dependent on the number of virus particles. There is also a negligible consumption of $N_v$ in this process. Shedding also depends on $N_i$ but doesn't change $N_i$. We can then write these as a set of differential equations 
 \begin{equation*}
     \begin{split}
@@ -220,7 +222,7 @@ Other numerical methods improve on Euler's method like Runge-Kutta but Euler's m
 
 \subsection{Fixed Points and Stability}
 \begin{definition}
-    A \emph{fixed point} $\bold{x}$ is a point in the state space such that $\dot{\bold{x}} =0$. 
+    A \emph{fixed point} $\mathbf{x}$ is a point in the state space such that $\dot{\mathbf{x}} =0$. 
 \end{definition}
 The vector field at a fixed point is the zero vector. We can classify the stability of a fixed point into a few categories: 
 \begin{enumerate}[label=(\roman*)]
