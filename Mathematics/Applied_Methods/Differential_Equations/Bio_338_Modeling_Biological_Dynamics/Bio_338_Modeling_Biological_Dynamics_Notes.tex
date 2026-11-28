@@ -318,7 +318,7 @@ where $k_{\text{on}}$ is the binding rate per repressor (mM), $C$ is the concent
 \begin{equation*}
     \begin{split}
         k_{\text{on}}C(1-\p(\text{bound})) = \beta_{\text{off}}\p(\text{bound}) \\
-        \P(\text{bound}) = \frac{k_{\text{on}}C}{\beta_\text{off}+k_\text{on}C}
+        \p(\text{bound}) = \frac{k_{\text{on}}C}{\beta_\text{off}+k_\text{on}C}
     \end{split}
 \end{equation*}
 which is the location of this fixed point. Doing some more algebraic manipulation, we get that 
@@ -505,6 +505,126 @@ $\rho$ is the probability of recovering instead of dying. This model is also clo
 \end{equation*}
 What we notice is that $\dot D $ can never be less than zero. What we can do is to attempt to minimize $\dot D$ which can be done by increasing $\rho$ (analogous to better treatments), decreasing $\gamma$ (keeping people sick instead of dying), or decreasing $I$ (by reducing the rate of infection such that $\dot I \ll0$). This implies that $\beta IS \ll \gamma I \to S \ll \frac{1}{R_0}$. We can do this by making $S$ small, $\gamma $ large (make duration shorter), or $\beta$ small (reduce transmissibility).
 
+\subsection{Higher Order Differential Equations}
+Let us consider the Duffing Equation which is given by 
+\begin{equation*}
+    \ddot x+\delta \dot x- x+ x^3 = A \cos(t)
+\end{equation*}
+We can reduce this equation to two second order equations by introducing a new variable $y = \dot x$. Then we have
+\begin{equation*}
+    \begin{split}
+        \dot x &= y \\
+        \dot y &= -\delta y + x - x^3 + A \cos(t)
+    \end{split}
+\end{equation*}
+Solving for the fixed points, we get that $x=x^3$ and $y=0$. This gives us the fixed points $(x,y) = (0,0)$, $(1,0)$, and $(-1,0)$ (assuming there is no forcing, $A=0$). To determine their stability, we use the Jacobian matrix which given a parametrization $(x_1,x_2,\ldots,x_n) \mapsto (f_1(x_1,x_2,\ldots,x_n),f_2(x_1,x_2,\ldots,x_n),\ldots,f_n(x_1,x_2,\ldots,x_n))$ is defined as
+\begin{equation*}
+    J = \begin{pmatrix}
+        \frac{\partial f_1}{\partial x_1} & \frac{\partial f_1}{\partial x_2} & \cdots & \frac{\partial f_1}{\partial x_n} \\
+        \frac{\partial f_2}{\partial x_1} & \frac{\partial f_2}{\partial x_2} & \cdots & \frac{\partial f_2}{\partial x_n} \\
+        \vdots & \vdots & \ddots & \vdots \\
+        \frac{\partial f_n}{\partial x_1} & \frac{\partial f_n}{\partial x_2} & \cdots & \frac{\partial f_n}{\partial x_n}
+    \end{pmatrix}
+\end{equation*}
+Since our system is only in two dimensions, the Jacobian matrix for the system is 
+\begin{equation*}
+    J = \begin{pmatrix}
+        \frac{\partial \dot x}{\partial x} & \frac{\partial \dot x}{\partial y} \\
+        \frac{\partial \dot y}{\partial x} & \frac{\partial \dot y}{\partial y}
+    \end{pmatrix} = \begin{pmatrix}
+        0 & 1 \\
+        1-3x^2 & -\delta
+    \end{pmatrix}
+\end{equation*}
+\begin{definition}
+    The \emph{determinant} is the unique alternating multilinear function of the rows (or columns) of a square matrix that maps the identity matrix to 1.
+\end{definition}
+We can find the determinant using cofactor expansion along any row or column. For a $2 \times 2$ matrix, the determinant is given by
+\begin{equation*}
+    \det \begin{pmatrix}
+        a & b \\
+        c & d
+    \end{pmatrix} = ad - bc
+\end{equation*}
+\begin{definition}
+    The \emph{trace} of a square matrix is the sum of the elements on its main diagonal. In other words, it is defined as 
+    \begin{equation*}
+        \operatorname{tr} A = \sum_{i=1}^{n} a_{ii}
+    \end{equation*}
+\end{definition}
+We want to find the eigenvalues of the Jacobian matrix $J$. Every matrix represents a linear transformation and by finding its eigenvalues and eigenvectors, we can understand decompose how the matrix induces a strecth along a given direction and by how much. 
+\begin{theorem}[Lyapunov's First Method / Linearized Stability Theorem]
+Let $U \subseteq \mathbb{R}^n$ be an open set, let $f \in C^1(U, \mathbb{R}^n)$, and suppose $x^* \in U$ is an equilibrium point of the autonomous differential equation
+\begin{equation*}
+    \dot{x} = f(x), \qquad f(x^*) = 0.
+\end{equation*}
+Let $A = Df(x^*) \in \mathbb{R}^{n \times n}$ denote the Jacobian matrix of $f$ evaluated at $x^*$, with eigenvalues $\lambda_1, \dots, \lambda_n \in \mathbb{C}$. Then:
+\begin{enumerate}
+    \item Asymptotic Stability: If $\operatorname{Re}(\lambda_i) < 0$ for all $i = 1, \dots, n$, then $x^*$ is locally asymptotically (and exponentially) stable; that is, there exist constants $\delta, C, \alpha > 0$ such that
+    \begin{equation*}
+        \|x(0) - x^*\| < \delta \implies \|x(t) - x^*\| \le C e^{-\alpha t}\|x(0) - x^*\| \quad \text{for all } t \ge 0.
+    \end{equation*}
+    \item Instability: If there exists at least one $k \in \{1, \dots, n\}$ such that $\operatorname{Re}(\lambda_k) > 0$, then $x^*$ is unstable; that is, there exists $\varepsilon > 0$ such that for every $\delta > 0$, there is an initial condition $x(0)$ with $\|x(0) - x^*\| < \delta$ and a time $t_1 > 0$ satisfying $\|x(t_1) - x^*\| \ge \varepsilon$.
+    \item Inconclusive Case: If $\operatorname{Re}(\lambda_i) \le 0$ for all $i = 1, \dots, n$ and $\operatorname{Re}(\lambda_k) = 0$ for at least one $k$, then linearization alone is inconclusive, and the stability of $x^*$ depends on higher-order nonlinear terms.
+\end{enumerate}
+\end{theorem}
+For 2x2 matrices, we cheat by solving $\lambda ^2 - \operatorname{tr}(A) \lambda + \det(A) = 0$. 
+\begin{figure}[htbp]
+    \centering
+    \begin{tikzpicture}[
+        >=Stealth,
+        scale=1.15,
+        axis/.style={->, very thick, black!85},
+        parabola/.style={very thick, blue!75!black},
+        regionlabel/.style={align=center, font=\small\bfseries}
+    ]
+        % Region shading
+        % Saddle region (\Delta < 0)
+        \fill[red!10] (-4.2, -1.8) rectangle (4.2, 0);
+        % Stable spiral (\tau < 0, \Delta > \tau^2 / 4)
+        \fill[green!12] (-4.2, 0) -- plot[domain=-4.2:0, samples=80] (\x, {0.25*\x*\x}) -- (0, 4.41) -- (-4.2, 4.41) -- cycle;
+        % Stable node (\tau < 0, 0 < \Delta < \tau^2 / 4)
+        \fill[teal!14] (-4.2, 0) -- (0, 0) -- plot[domain=0:-4.2, samples=80] (\x, {0.25*\x*\x}) -- cycle;
+        % Unstable spiral (\tau > 0, \Delta > \tau^2 / 4)
+        \fill[orange!12] (0, 0) -- plot[domain=0:4.2, samples=80] (\x, {0.25*\x*\x}) -- (4.2, 4.41) -- (0, 4.41) -- cycle;
+        % Unstable node (\tau > 0, 0 < \Delta < \tau^2 / 4)
+        \fill[yellow!18] (0, 0) -- (4.2, 0) -- plot[domain=4.2:0, samples=80] (\x, {0.25*\x*\x}) -- cycle;
+
+        % Coordinate axes
+        \draw[axis] (-4.4, 0) -- (4.6, 0) node[right, font=\small] {$\tau = \operatorname{tr}(A)$};
+        \draw[axis] (0, -2.0) -- (0, 4.7) node[above, font=\small] {$\Delta = \det(A)$};
+
+        % Discriminant parabola \Delta = \tau^2 / 4
+        \draw[parabola, domain=-4.2:4.2, samples=120, smooth]
+            plot (\x, {0.25*\x*\x});
+
+        % Parabola equation callout (placed cleanly inside upper-right region)
+        \node[blue!75!black, font=\small, anchor=west] (parablabel) at (1.55, 3.85) {$\Delta = \frac{1}{4}\tau^2$};
+        \draw[->, blue!75!black, thin] (2.25, 3.62) -- (3.05, 2.38);
+
+        % Region labels
+        \node[regionlabel, green!45!black] at (-1.55, 2.65) {Stable\\Spirals};
+        \node[regionlabel, orange!65!black] at (1.55, 2.65) {Unstable\\Spirals};
+
+        \node[regionlabel, teal!65!black] at (-3.15, 0.95) {Stable\\Nodes};
+        \node[regionlabel, orange!65!yellow!55!black] at (3.15, 0.95) {Unstable\\Nodes};
+
+        \node[regionlabel, red!65!black] at (2, -0.95) {Saddle Points ($\Delta < 0$)};
+
+        % Boundary / degenerate case annotations (placed in margins with leader arrows)
+        \node[left, font=\scriptsize, black!80] (centerlabel) at (-0.25, 3.95) {Centers ($\tau = 0, \Delta > 0$)};
+        \draw[->, black!75, thin] (centerlabel.east) -- (-0.04, 3.75);
+
+        \node[left, align=right, font=\scriptsize, blue!75!black] (deglabel) at (-4.45, 2.35) {Degenerate /\\Star nodes};
+        \draw[->, blue!75!black, thin] (deglabel.east) -- (-3.06, 2.35);
+
+        \node[below, font=\scriptsize, black!80] (nonisolabel) at (-2.65, -0.35) {Non-isolated equilibria ($\Delta = 0$)};
+        \draw[->, black!75, thin] (-2.65, -0.35) -- (-2.65, -0.04);
+    \end{tikzpicture}
+    \caption{Stability classification of equilibrium points for a planar linear system $\dot{x} = Ax$ in the trace--determinant $(\tau, \Delta)$ plane, where eigenvalues satisfy $\lambda^2 - \tau\lambda + \Delta = 0$. The discriminant parabola $\Delta = \frac{1}{4}\tau^2$ separates real eigenvalues (nodes) from complex conjugate eigenvalues (spirals and centers), while the axes $\tau = 0$ ($\Delta > 0$) and $\Delta = 0$ mark non-hyperbolic bifurcation boundaries.}
+    \label{fig:trace_det_stability}
+\end{figure}
+For our system, the $(\pm 1,0)$ give that $\operatorname{tr}A = -\delta$ and $\det A = 2$. Therefore it is stable and circuluates if and only if $\delta ^2 < 8$. For the $(0,0)$ fixed point, the determinant is $\det A = -1$ which leads to a saddle. When $A\neq 0$ and $\omega \neq \omega_n$, the system exhibits chaos.
 
 \section{Stochastic Processes}
 \subsection{Probability}
@@ -1048,6 +1168,7 @@ As $V_\text{stim}$ increases, the system undergoes a bifurcation and a stable li
     \caption{Small-signal linearized Hodgkin–Huxley (quasi-active) equivalent circuit around resting potential $V_0$. Delayed voltage-gated recovery processes ($n$ and $h$) appear explicitly as positive phenomenological inductors $L_n, L_h > 0$, transforming the membrane from a passive RC filter into an active RLC resonator.}
     \label{fig:hh-inductor-circuit}
 \end{figure}
+\section{Chaos}
 \subsection{Discrete Time Systems}
 In discrete time systems, we model at the specified time steps but nothing in between time steps. For example,  let us suppose we have non-overlapping generations of a species that reproduces once and dies. Then 
 \begin{equation*}
@@ -1060,5 +1181,172 @@ where the per capita birth rate is given by $r\left( 1- \frac{x_t}{k} \right)$ i
     \item irregular (no fixed points, no limit cycle, nothing periodic in the asymptotic limit)
     \item and is exponentially sensitive to initial conditions
 \end{enumerate}
+Let us start with two vlaues $x$ and $x+\Delta x$. We want to know if they converge or diverge over time. Let us say that $x_t = f(x_{t-1})$. After one time step, their difference bcomes $f(x+\Delta x) - f(x)$. Let us take the ratio of this difference to the original difference:
+\begin{equation*}
+    \frac{f(x+\Delta x) - f(x)}{\Delta x}
+\end{equation*}
+If we take the limit as $\Delta x \to 0$, this ratio becomes the derivative of $f$ at $x$:
+\begin{equation*}
+    \lim_{\Delta x \to 0} \frac{f(x+\Delta x) - f(x)}{\Delta x} = f'(x)
+\end{equation*}
+Let us now linearize this with 
+\begin{equation*}
+    |f(x+\Delta x)-f(x)|= |f'(x)| |\Delta x|
+\end{equation*}
+We can view the left hand side as $|\Delta x_1|$ and $|\Delta x|$ as $|\Delta x_0|$. Then we have their ratio to be 
+\begin{equation*}
+    \frac{|\Delta x_1|}{|\Delta x_0|} = |f'(x_0)|
+\end{equation*}
+and the next step to be 
+\begin{equation*}
+    \frac{|\Delta x_2|}{|\Delta x_1|} = |f'(x_1)|
+\end{equation*}
+If we do this for $t$ time steps, then we get that the ratio between the final and initial differences is
+\begin{equation*}
+    \frac{|\Delta x_t|}{|\Delta x_0|} = \frac{|\Delta x_t|}{|\Delta x_0|} = \frac{|\Delta x_t|}{|\Delta x_{t-1}|} \frac{|\Delta x_{t-1}|}{|\Delta x_{t-2}|} \cdots \frac{|\Delta x_1|}{|\Delta x_0|} = |f'(x_{t-1})| |f'(x_{t-2})| \cdots |f'(x_0)|
+\end{equation*}
+Expressing this more elegantly gives us 
+\begin{equation*}
+    \frac{|\Delta x_t|}{|\Delta x_0|} = \prod_{k=0}^{t-1} |f'(x_k)| \approx e^{\lambda t}
+\end{equation*}
+where $\lambda$ is known as the \emph{Lyapunov exponent}. We can determine its value by taking the natural logarithm to get 
+\begin{equation*}
+    \lambda = \frac{1}{t} \sum^{t-1}_{i=0} \ln |f'(x_i)|
+\end{equation*}
+We can see that if $\lambda <0$, the differences converge to zero as $t \to \infty$. Conversely, if $\lambda >0$, the differences diverge exponentially as $t \to \infty$ which hence leads to chaos. The Lyapunov exponent provides a quantitative measure of this sensitivity to initial conditions and intuitively is the time average of the logarithmic growth rate of the differences between nearby trajectories. If we take the logistic map $f(x) = r x (1-x)$, we get that 
+\begin{equation*}
+    f'(x) = r (1-2x) \to \lambda = \frac{1}{t} \sum^{t-1}_{i=0} \ln |r (1-2x_i)|
+\end{equation*}
+To determine the Lyapunov exponent for a given initial condition, one can iteratively apply the logistic map and compute the average of the logarithmic derivatives as shown above. When $\lambda = 0$, the system undergoes a bifurcation. What's interesting is that as $\lambda \to 0$, the system undergoes a phenomenon known as the \emph{critical slowing down}. This is because since $|\lambda| \ll 1$, the system takes a long time to either converge or diverge. Hence, this phenomenon is often teling of a bifurcation. In the logistic map, the first time it occurs leads to a transition to a 2-cycle. If we want to find the fixed point of a cycle for a discrete system, we just want to set $x_t = x_{t+1}$. For the logistic map, it is as follows
+\begin{align*}
+    x_{t+1} &= rx_t (1-x_t) \\
+    r(1-x_t) = 1 \\
+    x_t = 1 - \frac{1}{r}
+\end{align*}
+We also want to ask about the stability of the fixed point. Let us consider the ratio 
+\begin{equation*}
+    \frac{x_{t+1}-x^*}{x_t-x^* } = \frac{f(x_t)-f(x^*)}{x_t-x^* } \approx f'(x^*)
+\end{equation*}
+We can see that the fixed point is stable if $|f'(x^*)| < 1$ and unstable if $|f'(x^*)| > 1$ since it is a ratio between the next time step and the current time step. So a value greater one implies that the deviation from the fixed point grows over time, leading to instability. Let us evaluate this for the logistic map.
+\begin{equation*}
+    f'(x^*) = r (1-2x^*) = r \left(1-2\left(1-\frac{1}{r}\right)\right) = r \left(1-2+\frac{2}{r}\right) = 2-r
+\end{equation*}
+Therefore must have that the fixed point is stable if and only if $|2-r| < 1$, which gives $1 < r < 3$. Now if we want to find a 2-cycle, we set $x_{t+2} = x_t$ and solve for $x_t$. Let us say this two cycle bounces between $p,q$ such that $q = f(p)$ and $p = f(q)$ and $p \neq q$. This gives us 
+\begin{equation*}
+    p=rq(1-q) \twen q=rp(1-p)
+\end{equation*}
+This gives us 
+\begin{align*}
+    q& = rrq(1-q)(q-r1(1-q)) \\
+    &= 1= r^2(1-q)(1-rq(1-q)) \\
+    &= r^2[1-q-rq(1-q)^2]
+\end{align*}
+This gives us three solutions, one for $q$, one for $p$, and one for the fixed point.
+\subsection{Continuum Models}
+We can also consider continuous-time models, where the state of the system evolves according to a differential equation rather than a discrete-time map. Note, chaos can only occur in systems with at least three dimensions in continuous time. Let us take a look at the plant, herbivore, carnivore (PHC) model. This system is described by the following set of differential equations
+\begin{align*}
+    \dot x &= rx\left(1-\frac{x}{k} \right)-\frac{a_1 x}{1+b_1x}y \\
+    \dot y &= \frac{a_1 x}{1+b_1x}y - \frac{a_2 y}{1+b_2y}z -d_1y \\
+    \dot z &= \frac{a_2 y}{1+b_2y}z - d_2 z
+\end{align*}
+where hyperbolic terms represent the saturating functional responses of the herbivore to the plant and the carnivore to the herbivore as described by the Holling-Tanner model. 
+\begin{figure}[htbp]
+    \centering
+    \begin{tikzpicture}[
+        >=Stealth,
+        node distance=2.6cm,
+        compartment/.style={
+            rectangle,
+            draw=black!85,
+            very thick,
+            rounded corners=3pt,
+            minimum width=2.2cm,
+            minimum height=1.15cm,
+            align=center,
+            font=\bfseries
+        },
+        activate/.style={->, very thick, green!55!black, shorten >=2pt, shorten <=2pt},
+        inhibit/.style={-|, very thick, red!75!black, shorten >=2pt, shorten <=2pt}
+    ]
+        % Trophic level compartments
+        \node[compartment, fill=green!10] (P) {Plant\\($P$)};
+        \node[compartment, fill=yellow!15, right=of P] (H) {Herbivore\\($H$)};
+        \node[compartment, fill=red!10, right=of H] (C) {Carnivore\\($C$)};
+
+        % Logistic per-capita growth self-loop on Plant only
+        \draw[activate] (P.north west) to[out=135, in=70, looseness=6]
+            node[above left, font=\small] {$r$} (P.north);
+
+        % Plant <-> Herbivore interactions
+        \draw[activate, bend left=22] (P.north east) to
+            node[midway, above, font=\small] {$+$} (H.north west);
+        \draw[inhibit, bend left=22] (H.south west) to
+            node[midway, below, font=\small] {$-$} (P.south east);
+
+        % Herbivore <-> Carnivore interactions
+        \draw[activate, bend left=22] (H.north east) to
+            node[midway, above, font=\small] {$+$} (C.north west);
+        \draw[inhibit, bend left=22] (C.south west) to
+            node[midway, below, font=\small] {$-$} (H.south east);
+    \end{tikzpicture}
+    \caption{Interaction diagram of the plant--herbivore--carnivore (PHC) model with logistic per-capita plant growth ($r$). Pointed arrows ($\rightarrow$) indicate positive trophic transfer and per-capita growth, while flat-headed arrows ($\dashv$) indicate negative inhibitory effects.}
+    \label{fig:phc_interaction_model}
+\end{figure}
+The interaction between the plants is a fast time scale whereas the predator-prey interactions occur on a slower time scale ($a_2 \ll 1$). We therefore have the possibility for coupled oscillations and this can often lead to chaos. We can discern chaos from noise by using a Poincaré map. We plot $X(t)$ on one axis and $X(t-\tau)$ on the other axis where $\tau$ is a fixed time delay.
+\begin{figure}[htbp]
+    \centering
+    \begin{tikzpicture}[
+        >=Stealth,
+        scale=1.15,
+        axis/.style={->, thick, black!80},
+        diag/.style={dashed, gray!65, thin},
+        pt/.style={fill=blue!75!black, opacity=0.75}
+    ]
+        % =========================================================
+        % PANEL A: Deterministic Pattern (Logistic Map x_{n+1} = 4 x_n (1 - x_n))
+        % =========================================================
+        \begin{scope}[shift={(0, 0)}]
+            \draw[axis] (0, 0) -- (3.4, 0) node[right, font=\small] {$x_n$};
+            \draw[axis] (0, 0) -- (0, 3.4) node[above, font=\small] {$x_{n+1}$};
+            \draw[diag] (0, 0) -- (3.1, 3.1);
+
+            % Deterministic parabolic return map curve + sampled iterate points
+            \draw[blue!75!black, thick, domain=0:3.0, samples=80, smooth]
+                plot (\x, {4*\x*(1 - \x/3.0)});
+
+            \foreach \k in {1,...,45} {
+                \pgfmathsetmacro{\u}{0.5*(1 - cos(137.5*\k))}
+                \pgfmathsetmacro{\px}{3.0*\u}
+                \pgfmathsetmacro{\py}{3.0*(4*\u*(1 - \u))}
+                \fill[pt] (\px, \py) circle (1.3pt);
+            }
+
+            \node[font=\small\bfseries] at (1.7, 4.15) {(a) Deterministic Pattern};
+        \end{scope}
+
+        % =========================================================
+        % PANEL B: Uncorrelated Noise (Isotropic Random Scatter)
+        % =========================================================
+        \begin{scope}[shift={(5.4, 0)}]
+            \draw[axis] (0, 0) -- (3.4, 0) node[right, font=\small] {$x_n$};
+            \draw[axis] (0, 0) -- (0, 3.4) node[above, font=\small] {$x_{n+1}$};
+            \draw[diag] (0, 0) -- (3.1, 3.1);
+
+            % Fixed seed for reproducible, genuinely unstructured random scatter
+            \pgfmathsetseed{42}
+            \foreach \k in {1,...,140} {
+                \pgfmathsetmacro{\px}{0.2 + 2.75*rnd}
+                \pgfmathsetmacro{\py}{0.2 + 2.75*rnd}
+                \fill[pt] (\px, \py) circle (1.25pt);
+            }
+
+            \node[font=\small\bfseries] at (1.7, 4.15) {(b) Uncorrelated Noise};
+        \end{scope}
+    \end{tikzpicture}
+    \caption{Comparison of $(x_n, x_{n+1})$ Poincar\'e return plots: \textbf{(a)} a deterministic nonlinear system collapses onto a low-dimensional manifold (here, the quadratic map $x_{n+1} = 4x_n(1 - x_n)$); and \textbf{(b)} independent, identically distributed (white) noise fills the $(x_n, x_{n+1})$ plane isotropically with no discernible structure.}
+    \label{fig:poincare_comparison}
+\end{figure}
+If we compare the two panels, we can see that the deterministic system exhibits a clear, structured pattern, while the uncorrelated noise results in a scattered, unstructured distribution of points. This highlights the difference between deterministic chaos and random noise in the context of Poincar\'e return maps. \\\\
+If we consider the Fitzhugh Nagumo again but now shift over the cubic by replacing the nonlinear resistor with $f(V) = V(V-1)(a-V)$ for $0<a<1$. Hayashi et al. experimentally showed that chaos can emergy from a periodict output. Additionally, Schulten showed that giving neurons noise can lead to firing. Forger and Takashi in 2010 also showed that noise induced oscillations in circadian pacemakers.
 
 \end{document}
