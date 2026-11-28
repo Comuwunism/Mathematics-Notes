@@ -897,7 +897,7 @@ Every group acts on itself by conjugation. Suppose we have some group $G$ that a
 \end{equation*}
 where $Z(G)$ is the center. If $|G|=p^n$, then it follows $|G|\equiv |Z(G)|\mod p$. 
 \begin{proposition}
-    If $|G|=p^n$ then $Z(g) \neq \{1\}$.
+    If $|G|=p^n$ then $Z(g) \neq \{1\}$. \label{prop:Z(G) nontrivial for p-groups}
 \end{proposition}
 \begin{proof}
     By above, $|G|\equiv |Z(G)| \mod p$ and we get that $|Z(G)|\equiv 0\mod p$ so $p\big| |Z(G)|$ so $|Z(G)|\neq 1$ and there must exist a nontrivial element in the center.
@@ -914,11 +914,104 @@ where $Z(G)$ is the center. If $|G|=p^n$, then it follows $|G|\equiv |Z(G)|\mod 
 \begin{proof}
     Ask a toddler on the street.
 \end{proof}
-\begin{lemma}
+\begin{lemma}[Burnside's Lemma]
     Suppose a finite group $G$ acts on a finite set $X$. Then 
     \begin{equation*}
         \# \text{ of orbits} = \frac{1}{|G|}\sum_{g\in G} |X_g|
     \end{equation*}
 \end{lemma}
-
+\begin{proof}
+    Let $S$ be the set of all pairs $S := \{(g,x) \in G \times X : gx = x\}$. We now compute $|S|$ in two different ways. For any $g\in G$, the number of $x$'s in $X$ such that $(g,x) \in S$ is exactly $|X_g|$. Therefore, $|S| = \sum_{g\in G} |X_g|$. On the other hand, for any $x\in X$, we can count the $g's$ such that $(g,x) \in S$ as $|S| = \sum_{x\in X} |G_x|$. By the Orbit Stabilizer Theorem, $[G:G_x] = |G_x| = \frac{|G|}{|Gx|}$. Therefore we have $|S| = \sum_{x\in X} \frac{|G|}{|Gx|}$. Let us say there are $n$ distinct orbits $\mathcal{O}_1, \mathcal{O}_2, \ldots, \mathcal{O}_n$. For every element of an orbit $\mathcal{O}_i$, we add $\frac{1}{\mathcal{O}_i}$ and since we do this $|\mathcal{O}_i|$ times, we get a total contribution of $1$ for each orbit. Therefore $|S| = |G| \sum^n_{i=1} 1 = |G| \cdot n$. Combining the two expressions for $|S|$, we get 
+    \begin{equation*}
+        n = \frac{1}{|G|} \sum_{g\in G} |X_g|
+    \end{equation*}
+\end{proof}
+\begin{example}
+    Consider a mounted 4-blade ceiling fan such that each blade can be one of $n$ colors. How many different fans can you get? The group acting on each of the blades is $\Z_4$ (reflections don't count since the fan is mounted and cannot be flipped) where each group element corresponds to a rotation of the fan by $90^\circ$. We can apply Burnside's Lemma to count the number of distinct colorings of the fan by counting the number of orbits (since intuitively, each orbit represents how you take an object and apply every group element to it and see what you get. In this case, since we are considering rotational symmetries, each orbit corresponds to a distinct fan configuration). If we consider the set of all colorings fixed by the identity, we have $n^4$ different colors. For one rotation by $90^\circ$, the colorings fixed by this rotation must have all blades the same color, giving $n$ different colorings. For a rotation by $180^\circ$, the colorings fixed by this rotation must have opposite blades the same color, giving $n^2$ different colorings. For a rotation by $270^\circ$, the colorings fixed by this rotation must have all blades the same color, giving $n$ different colorings. Therefore, by Burnside's Lemma, the number of distinct fans is 
+    \begin{equation*}
+        \frac{1}{4} (n^4 + n + n^2 + n) = \frac{1}{4} (n^4 + n^2 + 2n)
+    \end{equation*}
+\end{example}
+\subsection{Cool Theorems}
+\begin{theorem}[The Second Isomorphism Theorem]
+    Suppose $H,N \leq G$ and $N \lhd G$. Then $HN$ is a group, $H\cap N \lhd H$, and $HN/N \cong H/H\cap N$.
+\end{theorem}
+\begin{proof}
+    We define $\varphi:H \to HN/N$ by $\varphi(h) = hN$. This is a homomorphism since 
+    \begin{equation*}
+        \varphi(h_1h_2) = h_1h_2N = (h_1N)(h_2N) = \varphi(h_1)\varphi(h_2)
+    \end{equation*}
+    The kernel of $\varphi$ is $\{h \in H : hN = N\} = H \cap N$. By the First Isomorphism Theorem, we get $H/H\cap N \cong HN/N$.
+\end{proof}
+\begin{theorem}[The Third Isomorphism Theorem]
+    Suppose $H,N \lhd G$ and $N \subseteq H$. Then $H/N \lhd G/N$ and $G/H \cong (G/N)/(H/N)$.
+\end{theorem}
+\begin{proof}
+    We first show that $H/N \lhd G/N$. Given an $h\in H$ and a $g \in G$, an element of each of these factor groups look like $hN$ and $gN$ respectively. Then $(gN)(h_1N)(gN)^{-1} = gNh_1Ng^{-1}N = gh_1g^{-1}N = h_2N$ and hence $H/N \lhd G/N$. Let us define $\varphi: G/N \to  G/H$ by $\varphi(gN) = gH$. We need to make sure that $\varphi$ is well-defined. Suppose $gN = g'N \to g^{-1}g' \in N \subseteq H$. Hence $g^{-1}g' \in H$ and therefore $gH = g'H$ so $\varphi(gN) = \varphi(g'N)$. $\varphi$ is a homomorphism under the group operaton. We can see that the kernel of $\varphi$ is $H/N$ because if $gN \in \ker \varphi$, then $gN=N$ and hence $g\in N\subseteq H$. Therefore, by the First Isomorphism Theorem, we get $G/H \cong (G/N)/(H/N)$.
+\end{proof}
+Generally if we want to understand finite groups, suppose $G$ and $N\lhd G$ where $N\neq \{1\}$, then $N,G/N$ are strictly lower order than $G$. The hope is that we can learn about $G$ from the knowledge of $N$ and $G/N$. However, if $G$ is simple, then it has no nontrivial normal subgroups, and this approach cannot be applied. 
+\begin{theorem}
+    If $|G| = p^n$, then $G$ has a subgroup of order $p^{n-1}$.
+\end{theorem}
+\begin{proof}
+    We prove by induction on $n$. Let us start with the base case $n=1$. Then we get the trivial subgroup wh ich satisfies our condition. By Proposition \ref{prop:Z(G) nontrivial for p-groups}, we know that $Z(G) \neq \{1\}$. Let us choose a $z\in Z(g)$ of order $p$ (by Cauchy's Theorem). Then $\langle z \rangle$ has order $p$ and is normal. $G/\langle z \rangle$ has order $p^{n-1}$, and by the induction hypothesis, it has a subgroup of order $p^{n-2}$. Let us call this $H \leq G/\langle z \rangle$. Let us consider $\varphi : G\to G/\langle z \rangle$ by $\varphi(g) = g\langle z \rangle $. $\varphi$ is surjective and $\varphi ^{-1}(H) $ is a subgroup of $G$ since $\varphi^{-1}(H)/\langle z \rangle \cong H$. Then $|\varphi^{-1}(H)| = |H||\langle z \rangle| = p^{n-2}p = p^{n-1}$. Thus $\varphi^{-1}(H)$ is the required subgroup of order $p^{n-1}$ in $G$.
+\end{proof}
+\begin{theorem}[First Sylow Theorem]
+    Suppose $|G| = p^nm  $ where $p$ is prime and $(p,m)=1$. Then $G$ has at least one subgroup of order $p^n$. This is called a Sylow $p$-subgroup of $G$.
+\end{theorem}
+\begin{theorem}[Second Sylow Theorem]
+    All such Sylow $p$-subgroups are conjugate to each other meaning that if $P_1$ and $P_2$ are Sylow $p$-subgroups of $G$, then there exists an element $g \in G$ such that $P_2 = gP_1g^{-1}$.
+\end{theorem}
+\begin{theorem}[Third Sylow Theorem]
+    If $n_p$ is the number of Sylow $p$-subgroups of $G$, then $n_p \equiv 1 \pmod{p}$ and $n_p| m$.
+\end{theorem}
+Let us note that if $n_p=1$, for some prime $p$, then the unique Sylow $p$-subgroup is normal in $G$. This is because $|H|=p^n$ and so by the Second Sylow Theorem, we must have that $|gHg^{-1}| = p^n$ and so therefore $gHg^{-1}= H$ and therefore $H$ is unique and normal in $G$. We also note that if $n_p |p^nm$ and $n_p \equiv 1 \pmod{p}$, then $n_p$ must be a divisor of $m$.
+\begin{theorem}
+    Suppose $|G|=pq$ where $p$ and $q$ are distinct primes and $q>p$ without a loss of generality. We also impose that $q\not \equiv 1 \mod p$. Then $G \cong \Z_p,q$.
+\end{theorem}
+\begin{proof}
+    We know that at least one Sylow $p$-subgroup with order $p$ exists by the first Sylow theorem. This subgroup is isomorphic to $\Z_p$. By the third Sylow theorem, $n_p | q$ and $n_p \equiv 1 \mod p$. Therefore $n_p = q$ or 1. By the hypothesis, $q\not \equiv 1 \mod p$, so $n_p =1$. Therefore we have exactly one subgroup of order $p$ and it is normal. Let us call this subgroup $P$. We know that $P\cong \Z_p$. Next, we can by a similar argument says that there is exactly one subgroup of order $q$ and it is normal. We get that $n_q =p$ or $1$. If $p$, then $n_q|(p-1)$ which would contradict our hypothesis. Therefore $n_q$ must be 1. Let us call this subgroup $Q$. We know that $Q\cong \Z_q$. Since $P$ and $Q$ are normal, $PG$ is a group of order $pq$. Since $pq||PQ|$ and $PQ \leq G$, we must have that $PQ=G$. We must also have that $|P\cap Q| \big| |P|$ since it is a subgroup of $P$ (and by a similar argument $Q$). But since they are coprime, this intersection must be the trivial element and so $G \cong P \times Q \cong \Z_p \times \Z_q \cong \Z_{pq}$.
+\end{proof}
+\subsection{Applied Group Theory}
+\subsubsection{ISBN-10}
+An ISBN-10 (International Standard Book Number) is a 10-digit number in base 11 used to uniquely identify books. The first 9 digits are the actual book identifier, and the 10th digit is a check digit. The digits satisfy the following condition:
+\begin{equation*}
+    x_1 + 2x_2 +\ldots + 10x_{10} \equiv 0 \mod{11}
+\end{equation*}
+This condition was made to detect the two most common types of errors in ISBN-10 numbers: single-digit errors and transposition errors.
+\begin{proof}
+Suppose we receive $y_i$ instead of $x_i$. Then we have the two equations 
+\begin{align*}
+    x_1 +2x_2+\ldots + ix_i +\ldots + 10x_{10} &\equiv 0 \mod{11}\\
+    x_1+2x_2+\ldots + iy_i +\ldots + 10x_{10} &\equiv 0 \mod{11}
+\end{align*}
+Subtracting these two equations gives
+\begin{equation*}
+    i(x_i - y_i) \equiv 0 \mod{11}
+\end{equation*}
+Since $i$ is not divisible by 11, we must have $x_i \equiv y_i \mod{11}$. Therefore, any single-digit error will be detected. For a transposition error, it looks like we have swapped two digits, say $x_i$ and $x_{i+1}$. Then we have the two equations
+\begin{align*}
+    x_1 +2x_2+\ldots + ix_i + (i+1)x_{i+1} +\ldots + 10x_{10} &\equiv 0 \mod{11}\\
+    x_1 +2x_2+\ldots + ix_{i+1} + (i+1)x_i +\ldots + 10x_{10} &\equiv 0 \mod{11}
+\end{align*}
+Subtracting these two equations gives
+\begin{equation*}
+    (i+1)x_i + ix_{i+1} - ix_i - (i+1)x_{i+1} \equiv 0 \mod{11}
+\end{equation*}
+\begin{equation*}
+    (x_i - x_{i+1}) \equiv 0 \mod{11}
+\end{equation*}
+Since $x_i \neq x_{i+1}$, this cannot be satisfied, and therefore any transposition error will be detected.
+\end{proof}
+One question was whether this could be done in base 10 instead of base 11. The answer is yes and is known as the Verhoeff Algorithm and is based on the group actions of $D_5$. 
+\subsubsection{RSA Encryption}
+Let us define $Z_n^\times := \{ \forall a \in Z_n | (a,n)=1\}$ as the set of integers modulo $n$ that are coprime to $n$. This set forms a group under multiplication modulo $n$, known as the multiplicative group of integers modulo $n$. One such example is $\Z_8^\times = \{1, 3, 5, 7\}$ where we note that $3^2 = 5^2 = 7^2 = 1 \mod{8}$ and hence the group is isomorphic to the Klein four-group $V_4$.
+\begin{proposition}
+    If $p,q$ are prime numbers, then $\Z_{pq}^\times \cong \Z_p^\times \times \Z_q^\times$.
+\end{proposition}
+\begin{proof}
+    $\varphi (a\mod pq) = (a\mod p, a\mod q)$ is an isomorphism. In particular $|\Z_{pq}^\times| \big| (p-1)(q-1)$. This is because since $p$ and $q$ are prime, their multiplicative groups have are of the form $\{1,2,\ldots,p-1\}$ and $\{1,2,\ldots,q-1\}$ respectively. By Lagrange's theorem, if $x\in \Z_{pq}^\times$, then $x^{(p-1)(q-1)} \equiv 1 \mod{pq}$.
+\end{proof}
+The general RSA scheme is that we choose 2 very large primes $p$ and $q$ and set $n=pq$. We then choose an $e\in \{1,2,\ldots, (p-1)(q-1)\}$ such that $\gcd(e, (p-1)(q-1)) = 1$. In other words, $e \in \Z_{(p-1)(q-1)}^\times$. Our public key is $(n,e)$ which others use to encrypt messages to us. We now want to find a $d$ such that $de \equiv 1 \mod{(p-1)(q-1)}$. This $d$ is our private key. Also $d = e^{-1} \in \Z_{(p-1)(q-1)}^\times$. Say the message $M <n$ (if $M>n$, we can break the message into smaller chunks and encrypt each chunk separately). It is then encrypted as $M^e \mod {n}$. We receive the message $C$ and we can decrypt it using $C^d \mod n$ since $C^d \equiv (M^e)^d \equiv M^{ed} \equiv M^{1\mod (p-1)(q-1)}\equiv M \mod n$. Since $M<n$, we have decoded $C$. \\\\
+Why is this secure? Everyone knows what our $n$ is but they need to figoure our private key $d$ which requires knowing $p$ and $q$. Prime factorization is computationally expensive and especially so in this case since our primes are so large. With the current technology, it is impossible to compute in a reasonable amount of time.
 \end{document}
