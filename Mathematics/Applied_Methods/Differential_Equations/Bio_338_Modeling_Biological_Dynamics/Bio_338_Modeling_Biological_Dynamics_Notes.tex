@@ -1292,7 +1292,8 @@ where hyperbolic terms represent the saturating functional responses of the herb
     \caption{Interaction diagram of the plant--herbivore--carnivore (PHC) model with logistic per-capita plant growth ($r$). Pointed arrows ($\rightarrow$) indicate positive trophic transfer and per-capita growth, while flat-headed arrows ($\dashv$) indicate negative inhibitory effects.}
     \label{fig:phc_interaction_model}
 \end{figure}
-The interaction between the plants is a fast time scale whereas the predator-prey interactions occur on a slower time scale ($a_2 \ll 1$). We therefore have the possibility for coupled oscillations and this can often lead to chaos. We can discern chaos from noise by using a Poincaré map. We plot $X(t)$ on one axis and $X(t-\tau)$ on the other axis where $\tau$ is a fixed time delay.
+The interaction between the plants is a fast time scale whereas the predator-prey interactions occur on a slower time scale ($a_2 \ll 1$). We therefore have the possibility for coupled oscillations and this can often lead to chaos. \\\\ 
+We can discern chaos from noise by using a Poincaré map. We plot $X(t)$ on one axis and $X(t-\tau)$ on the other axis where $\tau$ is a fixed time delay. If we compare the two panels in Figure \ref{fig:poincare_comparison}, we can see that the deterministic system exhibits a clear, structured pattern, while the uncorrelated noise results in a scattered, unstructured distribution of points. This highlights the difference between deterministic chaos and random noise in the context of Poincar\'e return maps. \\\\
 \begin{figure}[htbp]
     \centering
     \begin{tikzpicture}[
@@ -1346,7 +1347,6 @@ The interaction between the plants is a fast time scale whereas the predator-pre
     \caption{Comparison of $(x_n, x_{n+1})$ Poincar\'e return plots: \textbf{(a)} a deterministic nonlinear system collapses onto a low-dimensional manifold (here, the quadratic map $x_{n+1} = 4x_n(1 - x_n)$); and \textbf{(b)} independent, identically distributed (white) noise fills the $(x_n, x_{n+1})$ plane isotropically with no discernible structure.}
     \label{fig:poincare_comparison}
 \end{figure}
-If we compare the two panels, we can see that the deterministic system exhibits a clear, structured pattern, while the uncorrelated noise results in a scattered, unstructured distribution of points. This highlights the difference between deterministic chaos and random noise in the context of Poincar\'e return maps. \\\\
-If we consider the Fitzhugh Nagumo again but now shift over the cubic by replacing the nonlinear resistor with $f(V) = V(V-1)(a-V)$ for $0<a<1$. Hayashi et al. experimentally showed that chaos can emergy from a periodict output. Additionally, Schulten showed that giving neurons noise can lead to firing. Forger and Takashi in 2010 also showed that noise induced oscillations in circadian pacemakers.
+\noindent If we consider the Fitzhugh Nagumo again but now shift over the cubic by replacing the nonlinear resistor with $f(V) = V(V-1)(a-V)$ for $0<a<1$. Hayashi et al. experimentally showed that chaos can emergy from a periodict output. Additionally, Schulten showed that giving neurons noise can lead to firing. Forger and Takashi in 2010 also showed that noise induced oscillations in circadian pacemakers.
 
 \end{document}
