@@ -14,6 +14,8 @@
 \usepackage{xpatch}
 \usepackage{xr}
 \usepackage{enumitem}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,decorations.pathmorphing,backgrounds,fit,positioning,shapes.symbols,chains}
 \setlength{\parindent}{0pt}
 
 \title{ESAM 420 Notes}
@@ -869,6 +871,193 @@ If we set $\delta_0=1$ (in practice, we can give any first order and then determ
         &= c_1\left(-\delta - \frac{1}{2}\right)\cos t+c_2 \left( \delta_1 +\frac{1}{2} \right) \sin t
     \end{split}
 \end{equation*}
-We now have a branch where we choose that $c_1=0\to \delta_1 = \frac{1}{2}$ or $c_2 =0 \to \delta = \frac{1}{2}$.
+We now have a branch where we choose that $c_1=0\to \delta_1 = \frac{1}{2}$ or $c_2 =0 \to \delta = \frac{1}{2}$. Let us now look at a more exotic example. Consider 
+\begin{equation*}
+    y'' + k^2 (\varepsilon t) t =0 
+\end{equation*}
+where $k(\varepsilon t)$ is a function of the slow time scale $\varepsilon t$. Let us naively introduce $t_1 = t$ and $t_2 = \varepsilon t$ as our new time variables. The derivatives transform as
+\begin{align*}
+    y_t&= \pd{y}{t_1} + \varepsilon \pd{y}{t_2}\\
+    y_{tt} &= \pd{^2y}{t_1^2} + 2\varepsilon \pd{^2y}{t_1\partial t_2} + \varepsilon^2 \pd{^2y}{t_2^2}
+\end{align*}
+Therefore the $\mathcal{O}(1)$ equation becomes 
+\begin{equation*}
+    \mathcal{O}(1): \pd{^2y_0}{t_1^2} + k^2(t_2) t_1 y_0 =0
+\end{equation*}
+The general leading term solution is 
+\begin{equation*}
+    y_0 = A(t_2) \cos(k(t_2) t_1) + B(t_2) \sin(k(t_2) t_1)
+\end{equation*}
+The $\mathcal{O}(\varepsilon)$ equation becomes 
+\begin{equation*}
+    \mathcal{O}(\varepsilon): \pd{^2y_1}{t_1^2} + k^2(t_2) t_1 y_1 = -2 \pd{^2y_0}{t_1\partial t_2} - \pd{^2y_0}{t_2^2}
+\end{equation*}
+Substituting the leading order solution $y_0$ into the right-hand side of the $\mathcal{O}(\varepsilon)$ equation gives us the forcing term for $y_1$ 
+\begin{equation*}
+    \pdt{y_0}{t_1} + k^2 (t_2)y_1 = -2 [\cos (kt_1)((BK)'-AKK't_1)-\sin (kt_1)((AK)'+BKK't_1)] -[Bk\cos(kt_1)-Ak\sin(kt_1)]
+\end{equation*}
+This yields 
+\begin{align*}
+    \od{}{t_2} (Ak) + Bk \od{k}{t_2}t_1 &= 0 \\
+    \od{}{t_2}(Bk) +Ak \od{k}{t_2}t_1 &=0 
+\end{align*}
+This is bad since we have terms that depend on $t_1$ in the equations for $A$ and $B$, which are supposed to be functions of the slow time scale $t_2$ only. Trying to solve these equations would lead to $A=0$ and $B=0$, which is not a useful result. Let us strain coordinates in addition to our multiple time scale approach. Let us keep $t_2=\varepsilon t$ as our slow time variable but change our fast time variable to $t_1 = f(t,\varepsilon)$. The chain rule gets us 
+\begin{align*}
+    \pd{y}{t} &= \pd{y}{t_1} f_t + \pd{y}{t_2}\varepsilon \\
+    \pd{^2y}{t^2} &= \pd{^2y}{t_1^2} f_t^2 + 2 \pd{^2y}{t_1\partial t_2} f_t \varepsilon + \pd{^2y}{t_2^2} \varepsilon^2 + \pd{y}{t_1} f_{tt} 
+\end{align*}
+In order to get oscillatory solutions, we want our dominant balance to be between $f_t^2 \pd{^2y}{t_1^2}$ and $k^2(t_2) y$. Hence, $f_t^2 =k^2 \to f_t = k(t_2)$ and $f_{tt} = \varepsilon k'$. Additionally, $f=\frac{1}{\varepsilon}\int^{\varepsilon t}_0 k(s)ds)$. Our new leading order equation becomes 
+\begin{equation*}
+    \mathcal{O}(1): \pd{^2y_0}{t_1^2} + y_0 =0
+\end{equation*}
+which has the general solution
+\begin{equation*}
+    y_0 = A(t_2) \cos(t_1) + B(t_2) \sin(t_1)
+\end{equation*}
+The $\mathcal{O}(\varepsilon)$ equation becomes 
+\begin{align*}
+    \mathcal{O}(\varepsilon): \pd{^2y_1}{t_1^2} + y_1 &= -2 \pd{^2y_0}{t_1\partial t_2}  - \pd{y_0}{t_1} k'\\
+    &= (Ak' + 2A'k)\sin  t_1 - (Bk'+2B'k)\cos t_1
+\end{align*}
+Therefore we have the conditions 
+\begin{align*}
+    Ak' + 2A'k &= 0 \\
+    Bk' + 2B'k &= 0
+\end{align*}
+By doing an inverse product rule, we get that $A = \frac{C_1}{\sqrt{k}}$ and $B = \frac{C_2}{\sqrt{k}}$ for some constants $C_1$ and $C_2$. Therefore the uniform solution is 
+\begin{equation*}
+    y(t) = \frac{C_1}{\sqrt{k}} \cos\left(\frac{1}{\varepsilon}\int^{\varepsilon t}_0 k(s)ds\right) + \frac{C_2}{\sqrt{k}} \sin\left(\frac{1}{\varepsilon}\int^{\varepsilon t}_0 k(s)ds\right)
+\end{equation*}
+\subsubsection{Rayleigh Oscillator}
+Let us consider the Rayleigh oscillator, which is described by the differential equation
+\begin{equation*}
+    \ddot x + \varepsilon\left( \frac{1}{3} \dot x^3 - \dot x \right) + x = 0
+\end{equation*}
+Multiplying the equation by $\dot x$ gives us the energy-like quantity
+\begin{equation*}
+    \od{}{t} \left( \frac{1}{2} \dot x^2 + \frac{1}{2} x^2 \right) = \varepsilon \dot x^2 \left( 1 - \frac{1}{3} \dot x^2 \right)
+\end{equation*}
+The left hand side represents the rate of change of the total energy of a spring oscillator. The right hand side therefore dictates whether energy is pumped into the system or dissipated from it depending on the sign of $1-\frac{1}{3} \dot x^2$. If there is a large amount of energy in the system, the right hand side becomes negative, indicating that energy is being dissipated. Conversely, if the energy is low, the right hand side is positive, indicating that energy is being pumped into the system. This mechanism leads to the existence of a stable limit cycle in the system, where the energy input and dissipation balance each other out. Let us try to find this limit cycle using strained coordinates $\tau =\omega t$ such that $x(t) = y(\tau)$ where $y(\tau)$ is a $2\pi$-periodic function. By the chain rule, we get $\dot x = \omega \dot y$ and $\ddot x = \omega^2 \ddot y$. Substituting these into the original equation gives us the transformed differential equation for $y(\tau)$:
+\begin{equation*}
+    \omega^2  \ddot y + \varepsilon\left( \frac{1}{3} (\omega \dot y)^3 - \omega \dot y \right) + y = 0
+\end{equation*}
+Let us now do a perturbation expansion in $\varepsilon$ for $\omega = 1 + \varepsilon \omega_1 + \varepsilon^2 \omega_2 + \cdots$ and $y = y_0 + \varepsilon y_1 + \varepsilon^2 y_2 + \cdots$. For the $\mathcal{O}(1)$ equation, we get
+\begin{equation*}
+    \mathcal{O}(1): \ddot y_0 + y_0 = 0
+\end{equation*}
+The general solution is
+\begin{equation*}
+    y_0 = A \cos \tau + B \sin \tau
+\end{equation*}
+\begin{figure}[htbp]
+    \centering
+    \begin{tikzpicture}[
+        >=Stealth,
+        scale=1.35,
+        axis/.style={->, thick, black!80},
+        unperturbed/.style={dashed, thick, gray!80},
+        limitcycle/.style={very thick, blue!75!black},
+        spiral/.style={thin, teal!65!black, ->}
+    ]
+        % Coordinate axes
+        \draw[axis] (-3.1, 0) -- (3.3, 0) node[right] {$y$};
+        \draw[axis] (0, -3.1) -- (0, 3.3) node[above] {$\dot{y}$};
+
+        % O(1) circular approximation: y_0 = 2 cos(tau), \dot{y}_0 = -2 sin(tau)
+        \draw[unperturbed] (0,0) circle (2);
+
+        % O(\varepsilon) deformed limit cycle (illustrated with \varepsilon = 0.45 for visibility):
+        % y(\tau) = 2 cos(\tau) + \varepsilon (1/12 sin(3\tau) - 1/4 sin(\tau))
+        % \dot{y}(\tau) = -2 sin(\tau) + \varepsilon (1/4 cos(3\tau) - 1/4 cos(\tau))
+        \draw[limitcycle, domain=0:360, samples=200, smooth, variable=\t]
+            plot (
+                {2*cos(\t) + 0.45*(sin(3*\t)/12 - sin(\t)/4)},
+                {-2*sin(\t) + 0.45*(cos(3*\t)/4 - cos(\t)/4)}
+            );
+
+        % Direction of flow along the limit cycle (clockwise for \dot{y} vs y)
+        \draw[->, very thick, blue!75!black] (0, 2) -- (0.12, 2);
+        \draw[->, very thick, blue!75!black] (0, -2) -- (-0.12, -2);
+
+        % Neighboring trajectories spiraling onto the limit cycle (when A(0) != A_0)
+        \draw[spiral, domain=0:310, samples=120, smooth, variable=\t]
+            plot (
+                {(2 + 0.9*exp(-0.0045*\t))*cos(\t)},
+                {-(2 + 0.9*exp(-0.0045*\t))*sin(\t)}
+            );
+        \draw[spiral, domain=180:490, samples=120, smooth, variable=\t]
+            plot (
+                {(2 - 1.25*exp(-0.0045*(\t-180)))*cos(\t)},
+                {-(2 - 1.25*exp(-0.0045*(\t-180)))*sin(\t)}
+            );
+
+        % Initial condition point (A_0, 0)
+        \filldraw[red!80!black] (2, 0) circle (2.2pt);
+        \node[below right, red!80!black] at (2.02, -0.05) {$(A_0, 0)$};
+
+        % Annotations / Legend
+        \node[anchor=west, font=\small, blue!75!black] at (1.55, 2.35) {Limit cycle ($O(\varepsilon)$)};
+        \draw[limitcycle] (1.1, 2.35) -- (1.5, 2.35);
+
+        \node[anchor=west, font=\small, gray!80] at (1.55, 1.95) {$O(1)$ circle ($r = A_0$)};
+        \draw[unperturbed] (1.1, 1.95) -- (1.5, 1.95);
+    \end{tikzpicture}
+    \caption{Phase portrait of the Rayleigh oscillator $\ddot{y} + y = \varepsilon\left(\dot{y} - \frac{1}{3}\dot{y}^3\right)$ in the $(y, \dot{y})$ plane. Strained coordinates seek a closed periodic orbit anchored at $(y(0), \dot{y}(0)) = (A_0, 0)$.}
+    \label{fig:rayleigh_limit_cycle}
+\end{figure}
+To proceed, we need to impose some initial conditions. Let us choose the initial condition $(y(0), \dot{y}(0)) = (A_0, 0)$. Note, we do not know a priori the value of $A_0$ that will lead to a closed periodic orbit; it will be determined by the requirement of periodicity. This can be seen in Figure \ref{fig:rayleigh_limit_cycle}. Applying the initial condition to the unperturbed solution, we get 
+\begin{equation*}
+    y_0 = A_0\cos \tau
+\end{equation*}
+For the $\mathcal{O}(\varepsilon)$ correction, we have
+\begin{align*}
+    \mathcal{O}(\varepsilon): \ddot y_1 + y_1 &= \dot y_0 - \frac{1}{3}(\dot y_0)^3-2\omega _1 \ddot y_0 \\
+    &= 2\omega_1 A_0 \cos \tau + \left(1-\frac{1}{4}A_0^2\right) A_0 \sin \tau - \frac{1}{12}A_0^3 \sin 3\tau
+\end{align*}
+Eliminating secular terms, we get that $\omega_1 =0$ and $A_0 = \pm2$ (the sign doesn't matter since it's the same limit cycle). We can also see before that $\omega_1=0$. This is because if we run time backwards, $\omega$ should be the same as if we ran time forwards. The odd derivatives generate terms that are antisymmetric in time (if we replace $\varepsilon $ with $-\varepsilon$, there is an extra minus sign), which must vanish for the solution to be periodic. Therefore $\omega_{2n+1}=0\,\,\, \forall n$. Now solving for $y_1$ with the inital conditions $y_1(0)=A_1=0$ and $\dot y_1(0)=0$, we get
+\begin{equation*}
+    y_1 = -\frac{1}{4} \sin \tau + \frac{1}{12} \sin 3\tau
+\end{equation*}
+For the next order correction, we get 
+\begin{equation*}
+    \mathcal{O}(\varepsilon^2): \ddot y_2 + y_2 = \left(4\omega_2 + \frac{3}{4}\right)\cos \tau + \text{Non-secular terms}
+\end{equation*}
+and therefore $\omega_2 = -\frac{3}{16}$. So our limit cycle is 
+\begin{equation*}
+    x(t) = 2\cos (\omega t)+\varepsilon\left(-\frac{1}{4} \sin (\omega t) + \frac{1}{12} \sin (3\omega t)\right) + \mathcal{O}(\varepsilon^2) \twen \omega \sim 1 -\frac{3}{16}\varepsilon^2
+\end{equation*}
+Now let us approach the Rayleight oscillator using multiple scales. Let us introduce $t_0=t$ and $t_1 =\varepsilon t$. Let us also have the inital conditions be $y(0,0) = a$ and $\dot y(0,0) = 0$. Using the chain rule, we have 
+\begin{equation*}
+    (\partial_{t_0} + \varepsilon \partial_{t_1})^2 y + y = \varepsilon \left((\partial_{t_0} + \varepsilon \partial_{t_1}) y - \frac{1}{3} ((\partial_{t_0} + \varepsilon \partial_{t_1}) y)^3\right)
+\end{equation*}
+Then the $\mathcal{O}(1)$ equation is
+\begin{equation*}
+    \mathcal{O}(1):y_{0,t_0t_0} + y_0 = 0
+\end{equation*}
+In this case, the solution to the $\mathcal{O}(1)$ equation is
+\begin{equation*}
+    y_0(t_0,t_1) = A(t_1)e^{i t_0} + \bar A (t_1)e^{-i t_0}
+\end{equation*}
+where we have used the complex representation of the solution since it is much simpler later on. Additionally, we know that since the solution must be real valued, $A(t_1)+B(t_1) \in \mathbb{R}$ and so $B(t_1) = \bar A(t_1)$. Applying the initial conditions, we get $A(0) = \frac{a}{2}$ and $\dot A(0) = 0$. For the next order correction, we have 
+\begin{equation*}
+    \mathcal{O}(\varepsilon): y_{1,t_0t_0} + y_1 = f_1
+\end{equation*}
+where $f_1$ is 
+\begin{equation*}
+    f_1 = -e^{it_0} \left[2iA' - iA+iA^2\bar A\right]
+\end{equation*}
+This is in fact, only half the solutions but the other is the complex conjugate of this term. We do not have to worry about it since it will yield the exact same result so we are only concerned with making sure this is set to zero. Dividng by $i$, we get 
+\begin{equation*}
+    2A' = A - A^2\bar A
+\end{equation*}
+If we represent $A(t_1)$ in polar form as $A(t_1) =  R(t_1) e^{i\theta(t_1)}$, then the equation becomes 
+\begin{equation*}
+    2R' +2Ri\theta' = R (1-R^2)
+\end{equation*}
+The imaginary parts imply that $2R\theta' = 0$, which gives $\theta' = 0$ (since we want a non-trivial solution for $R$). Therefore, the phase $\theta(t_1)$ is constant. This implies that the slow phase drift of the solution is constant relative to $\mathcal{O}(\varepsilon)$. Solving the $R$ equation gives us the general solution 
+\begin{equation*}
+    x(t) \sim \frac{2a\cos t}{\sqrt{a^2 +(4-a^2)e^{-\varepsilon t}}}
+\end{equation*}
+We can easily see that this decays to the limit cycle in Figure \ref{fig:rayleigh_limit_cycle}.
 \end{document}
 
